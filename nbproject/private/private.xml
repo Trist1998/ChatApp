@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/MainMenu.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/ServerDatabaseConnection.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/protocol/ClientMessageProtocol.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/protocol/ServerMessageProtocol.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/Login.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/protocol/Protocol.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/Server.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/ClientConnectionHandler.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/protocol/ProtocolProcessor.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/test/TestMessage.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/protocol/ServerProtocolProcessor.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/GenericChat.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/protocol/ProtocolParameters.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/message/Message.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/ServerConnectionHandler.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/ConnectionSwitch.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/protocol/ClientLoginProtocol.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/protocol/ServerLoginProtocol.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/protocol/ClientProtocolProcessor.java</file>
+        </group>
+    </open-files>
+</project-private>
