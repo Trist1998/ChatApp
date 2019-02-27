@@ -36,7 +36,7 @@ public class ServerConnectionHandler implements Runnable
     {
         try 
         {
-            if(ServerProtocolProcessor.processLogin(inputStream, this))
+            if(ServerProtocolProcessor.processInitialConnection(inputStream, this))
             {
                 ConnectionSwitch.addConnection(this); 
                 System.out.println("Waiting for data from " + username);
@@ -45,7 +45,7 @@ public class ServerConnectionHandler implements Runnable
                     ServerProtocolProcessor.processServerInputStream(inputStream);              
                 }
             }              
-            socket.close();          
+            close();          
         } 
         catch (IOException ex) 
         {
@@ -72,5 +72,12 @@ public class ServerConnectionHandler implements Runnable
     public void setUsername(String username) 
     {
         this.username = username;
+    }
+    
+    public void close() throws IOException
+    {
+        inputStream.close();
+        outputStream.close();
+        socket.close();
     }
 }

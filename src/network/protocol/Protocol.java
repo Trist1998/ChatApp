@@ -27,7 +27,7 @@ public class Protocol
         return true;
     }
     
-    public static boolean processInput(Scanner reader)
+    public static boolean processInput(Scanner reader)//reader.nextLine() should return the first parameter
     {
         while(reader.hasNextLine())
         {

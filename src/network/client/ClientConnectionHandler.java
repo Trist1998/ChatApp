@@ -9,7 +9,6 @@ import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import network.client.protocol.ClientLoginProtocol;
 import network.client.protocol.ClientProtocolProcessor;
 
@@ -19,20 +18,22 @@ public class ClientConnectionHandler implements Runnable
     private BufferedReader inputStream;
     private BufferedWriter outputStream;
     private String username;
-    private boolean loggedIn;
+    private String password;
+    
+    public ClientConnectionHandler(Socket socket,String username, String password) throws IOException
+    {
+        this.socket = socket;
+        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.username = username;
+        this.password = password;
+    }
     
     public ClientConnectionHandler(Socket socket) throws IOException
     {
         this.socket = socket;
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        username = JOptionPane.showInputDialog("Username");
-        loggedIn = false;                              
-        ClientNetworkManager.setUsername(username);
-        ClientNetworkManager.setConnection(this);
-//        ClientStateManager.setSocket(socket);
-//        ClientStateManager.setStreamWriter(outputStream);
-//        ClientStateManager.setStreamReader(inputStream);
     }
     
     public String getUsername()
@@ -45,16 +46,17 @@ public class ClientConnectionHandler implements Runnable
     {
         try 
         {      
-            ClientLoginProtocol.loginRequest(username, "password", this);
+            ClientLoginProtocol.loginRequest(username, password, this);
             if(ClientProtocolProcessor.processLogin(inputStream, this))
             {
-                loggedIn = true;
+                ClientNetworkManager.loginSuccesful();
                 while(socket.isConnected())
                 {
                     ClientProtocolProcessor.processInputStream(inputStream);              
                 }
-            } 
-            socket.close();          
+            }           
+            close();
+            ClientNetworkManager.connectionFailed();
         } 
         catch (IOException ex) 
         {
@@ -77,14 +79,11 @@ public class ClientConnectionHandler implements Runnable
             }
         }
     }
-
-    public void setUsername(String username) 
+    
+    public void close() throws IOException
     {
-        this.username = username;
-    }
-
-    public synchronized boolean isLoggedIn() 
-    {
-        return loggedIn;
+        inputStream.close();
+        outputStream.close();
+        socket.close();
     }
 }

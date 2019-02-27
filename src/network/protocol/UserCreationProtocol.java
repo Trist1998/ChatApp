@@ -1,9 +1,12 @@
 package network.protocol;
 
 import database.PasswordHelper;
+import database.User;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
 
 /**
@@ -13,7 +16,7 @@ import network.client.ClientNetworkManager;
 public class UserCreationProtocol extends Protocol
 {
     public static final String HEAD = "CREATE_USER";
-    public boolean createUser(String username, String password)
+    public static boolean createUser(String username, String password)
     {
         ProtocolParameters pp = new ProtocolParameters();
         pp.add("username", username);
@@ -21,7 +24,8 @@ public class UserCreationProtocol extends Protocol
         
         try
         {
-            send(HEAD, pp, ClientNetworkManager.getConnection());
+            ClientConnectionHandler conn = ClientNetworkManager.getNewConnection(ClientNetworkManager.SERVER_PORT);
+            send(HEAD, pp, conn);
             return true;
         } 
         catch (IOException ex)
@@ -29,5 +33,12 @@ public class UserCreationProtocol extends Protocol
             Logger.getLogger(UserCreationProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    public static boolean processInput(Scanner reader)
+    {
+        ProtocolParameters pp = new ProtocolParameters(reader);
+        User user = new User(pp.getParameter("username"), pp.getParameter("password"));    
+        return user.createUser();
     }
 }

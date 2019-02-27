@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.Message;
 import network.client.ClientConnectionHandler;
+import network.client.ClientNetworkManager;
 import network.protocol.Protocol;
 import network.protocol.ProtocolParameters;
 import network.server.protocol.ServerMessageProtocol;
@@ -20,8 +21,9 @@ public class ClientMessageProtocol extends Protocol
         super();
     }
 
-    public static boolean sendMessage(Message message, ClientConnectionHandler conn)
+    public static boolean sendMessage(Message message)
     {   
+        ClientConnectionHandler conn = ClientNetworkManager.getConnection();
         ProtocolParameters pp = new ProtocolParameters();
         pp.add("Sender", message.getSenderName());
         pp.add("Receiver", message.getReceiverName());

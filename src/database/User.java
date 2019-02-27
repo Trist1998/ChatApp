@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  *
  * @author Tristan
  */
-public class UserTable extends DatabaseTable
+public class User extends DatabaseTable
 {
     public static final String TABLE_NAME = "users";
     public static final String[] FIELDS = new String[]
@@ -17,8 +17,16 @@ public class UserTable extends DatabaseTable
                 "username",
                 "password"
             };
+    
+    private String username;
+    private String password;//hashed
 
 
+    public User(String username, String password)
+    {
+        this.username = username;
+        this.password = password;      
+    }
     @Override
     public String[] getFields()
     {
@@ -42,19 +50,44 @@ public class UserTable extends DatabaseTable
         return new PasswordHelper().authenticate(password, passwordToken);
     }
     
-    public boolean createUser(String username, String password)
+    public boolean createUser()
+    {
+        return createUser(username, password);
+    }
+    
+    private boolean createUser(String username, String password)
     {
         //TODO SQL injection check, better error reporting.
         try
         {
-            sendTableUpdate("INSERT INTO " + TABLE_NAME + " VALUES('"+ username +"', '" + new PasswordHelper().hash(password) + "')");
+            sendTableUpdate("INSERT INTO " + TABLE_NAME + " VALUES('"+ username +"', '" + password + "')");
             return true;
         }
         catch (SQLException ex)
         {
-            Logger.getLogger(UserTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    private void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    private void setPassword(String password)
+    {
+        this.password = password;
     }
                    
     
