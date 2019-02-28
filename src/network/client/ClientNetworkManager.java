@@ -19,7 +19,7 @@ public class ClientNetworkManager
     public static void openSocketClient(int portNumber, String username, String password) 
     {
         ClientNetworkManager.username = username;
-        hashedPassword = new PasswordHelper().hash(password);
+        hashedPassword = new PasswordHelper().clientPasswordHash(password);
         Socket myClient; // Declare Client's socket
         try 
         {

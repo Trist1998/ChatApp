@@ -20,7 +20,7 @@ public class UserCreationProtocol extends Protocol
     {
         ProtocolParameters pp = new ProtocolParameters();
         pp.add("username", username);
-        pp.add("password", new PasswordHelper().hash(password));
+        pp.add("password", new PasswordHelper().clientPasswordHash(password));
         
         try
         {
