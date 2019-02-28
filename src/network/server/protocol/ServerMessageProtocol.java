@@ -31,7 +31,7 @@ public class ServerMessageProtocol extends Protocol
     private static boolean forwardMessage(String head, ProtocolParameters pp) throws IOException
     {
         String output = buildProtocolString(head, pp);
-        ConnectionSwitch.switchProtocol(pp.getParameter("Receiver"), output);
+        ConnectionSwitch.switchProtocol(pp.getParameter("Sender"), pp.getParameter("Receiver"), output);
         return true;
     }
 }
