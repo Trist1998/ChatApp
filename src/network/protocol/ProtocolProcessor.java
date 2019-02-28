@@ -6,17 +6,17 @@ import network.ConnectionHandler;
 import static network.server.protocol.ServerProtocolProcessor.PROTOCOL_END;
 
 /**
- *
  * @author Tristan
  */
 public class ProtocolProcessor 
 {
     public static final String PROTOCOL_END = "END_PROTOCOL";
     
-    public static String parseInputStream(ConnectionHandler conn) throws IOException
+    public static ProtocolParameters parseInputStream(ConnectionHandler conn) throws IOException
     {
         BufferedReader reader = conn.getInputStream();
-        String output = "";
+        ProtocolParameters pp = new ProtocolParameters();
+        String parameter = "";
         for(;;)
         {
             String line;
@@ -28,14 +28,19 @@ public class ProtocolProcessor
             {
                 System.out.println("Connection Closed");
                 conn.close();
-                return "FAILED";
-            }
-            
+                return null;
+            }                         
             if(line.trim().equals(PROTOCOL_END))
                 break;
             else
-                output += line;
+                parameter += line;
+            if(line.contains(ProtocolParameters.PARAMETER_DELIMITER))
+            {
+                String p = parameter.replaceAll(ProtocolParameters.PARAMETER_DELIMITER, "");
+                pp.add(p.trim());
+                parameter = "";            
+            }
         }
-        return output;
+        return pp;
     }
 }

@@ -45,6 +45,7 @@ public class User extends DatabaseTable
         ResultSet rs = getObjectResultSet(sql);
         rs.first();
         String passwordToken = rs.getString("password");
+        rs.close();
         return new PasswordHelper().authenticate(password, passwordToken);
     }
     

@@ -8,16 +8,14 @@ import java.util.Scanner;
 public class ProtocolParameters 
 {
     private static final String HEAD_PARAMETER_NAME = "HEAD";
-    private static final String PARAMETER_DELIMITER = "#END#";
+    public static final String PARAMETER_DELIMITER = "#END#";
     private ArrayList<String> parameterNames;
     private HashMap<String, String> parameters;
-    private String head;
     
     public ProtocolParameters()
     {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
-        head = "";
     }
 
     public ProtocolParameters(Scanner reader)
@@ -37,14 +35,8 @@ public class ProtocolParameters
             String cleanPair = pair.trim();
             if(!cleanPair.contains(":"))
                 break;
-            
-            String name = cleanPair.substring(0, cleanPair.indexOf(":"));
-            String data = cleanPair.substring(cleanPair.indexOf(":") + 1);
-            parameterNames.add(name);
-            parameters.put(name, data.trim());
+            add(cleanPair);           
         }
-        
-        head = parameters.get(HEAD_PARAMETER_NAME);
     }
     
     public void add(String parameterName, String parameterValue)
@@ -61,7 +53,7 @@ public class ProtocolParameters
     @Override
     public String toString()
     {
-        String output = HEAD_PARAMETER_NAME + ":" + head + PARAMETER_DELIMITER + "\n";
+        String output = HEAD_PARAMETER_NAME + ":" + getHead() + PARAMETER_DELIMITER + "\n";
         for(String name: parameterNames)
         {
             output += name + ":" + parameters.get(name) + PARAMETER_DELIMITER + "\n";
@@ -71,12 +63,23 @@ public class ProtocolParameters
 
     public void setHead(String head)
     {
-        this.head = head;
+        parameters.put(HEAD_PARAMETER_NAME, head);
     }
     
     public String getHead()
     {
-        return head;
+        return parameters.get(HEAD_PARAMETER_NAME);
+    }
+
+    public void add(String line)
+    {
+        if(!line.equals(""))
+        {
+            String name = line.substring(0, line.indexOf(":"));
+            String data = line.substring(line.indexOf(":") + 1);
+            parameterNames.add(name);
+            parameters.put(name, data.trim());
+        }
     }
     
     

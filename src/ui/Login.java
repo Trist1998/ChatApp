@@ -135,13 +135,7 @@ public class Login extends javax.swing.JFrame
     {
         ClientNetworkManager.login(txtUsername.getText(), txtPassword.getText());
         
-        while(!ClientNetworkManager.isLoggedIn())
-        {
-            if(ClientNetworkManager.hasConnectionFailed())
-            {
-                return false;
-            }               
-        }
+        
         return true;
     }
 }

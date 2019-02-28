@@ -17,10 +17,7 @@ public class ClientNetworkManager
     private static boolean loggedIn;
 
     public static void openSocketClient(int portNumber, String username, String password) 
-    {
-        ClientNetworkManager.username = username;
-        hashedPassword = new PasswordHelper().clientPasswordHash(password);
-       
+    {      
         try 
         {
             Socket myClient = new Socket(HOST_NAME, portNumber);
@@ -50,8 +47,11 @@ public class ClientNetworkManager
 
     public static ClientConnectionHandler getConnection()
     {
-        if(connection != null)
-            openSocketClient(ClientNetworkManager.SERVER_PORT, username, hashedPassword);
+        if(connection == null)
+        {
+            openSocketAndWaitForConfirmation();
+        }
+            
             
         return connection;
     }
@@ -70,11 +70,26 @@ public class ClientNetworkManager
     {
         ClientNetworkManager.username = username;
     }
+
+    public static boolean login(String username, String password)
+    {      
+        ClientNetworkManager.username = username;
+        hashedPassword = new PasswordHelper().clientPasswordHash(password);
+        return openSocketAndWaitForConfirmation();
+    }
     
-    public static void login(String username, String password)
+    private static boolean openSocketAndWaitForConfirmation()
     {
         loggedIn = false;
-        openSocketClient(SERVER_PORT, username, password);
+        openSocketClient(SERVER_PORT, username, hashedPassword);      
+        while(!isLoggedIn())
+        {
+            if(hasConnectionFailed())
+            {
+                return false;
+            }               
+        }
+        return true;   
     }
     
     public synchronized static void loginSuccesful()

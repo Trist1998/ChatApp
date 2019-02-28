@@ -3,7 +3,6 @@ package network.server.protocol;
 
 import network.client.protocol.ClientLoginProtocol;
 import java.io.IOException;
-import java.util.Scanner;
 import network.ConnectionHandler;
 import network.protocol.ProtocolParameters;
 import network.protocol.ProtocolProcessor;
@@ -15,12 +14,9 @@ public class ServerProtocolProcessor extends ProtocolProcessor
     
     public static void processServerInputStream(ConnectionHandler conn) throws IOException 
     {
-        String protocol = parseInputStream(conn);
-        if(!protocol.equals("FAILED"))
+        ProtocolParameters pp = parseInputStream(conn);
+        if(pp != null)
         {
-            Scanner reader = new Scanner(protocol);
-            ProtocolParameters pp = new ProtocolParameters();
-            reader.close();
             String head = pp.getHead();
             System.out.println("We got data with the header of " + head);
             if(head.trim().equals(ServerMessageProtocol.HEAD_IDENTIFIER))
@@ -43,13 +39,10 @@ public class ServerProtocolProcessor extends ProtocolProcessor
     
     public static boolean processInitialConnection(ServerConnectionHandler conn) throws IOException 
     {
-        String protocol = parseInputStream(conn);
-        if(!protocol.equals("FAILED"))
+        ProtocolParameters pp = parseInputStream(conn);
+        if(pp != null)
         {
-            System.out.println(protocol.trim());
-            Scanner reader = new Scanner(protocol);
-            ProtocolParameters pp = new ProtocolParameters(reader);
-            reader.close();
+            System.out.println(pp.toString() + "toString");
             
             String head = pp.getHead();
             if(head.equals(ClientLoginProtocol.HEAD_LOGIN_REQUEST))
