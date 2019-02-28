@@ -14,9 +14,8 @@ public class ServerMessageProtocol extends Protocol
 {
     public static final String HEAD_IDENTIFIER = "MSG";
     
-    public static boolean processInput(Scanner reader)
+    public static boolean processInput(ProtocolParameters pp)
     {
-        ProtocolParameters pp = new ProtocolParameters(reader);
         try 
         {
             forwardMessage(HEAD_IDENTIFIER, pp);

@@ -10,17 +10,20 @@ public class ConnectionSwitch
 {
     private static HashMap<String, ServerConnectionHandler> activeConnections = new HashMap<>();
     
-    public synchronized static void addConnection(ServerConnectionHandler connection)
+    public synchronized static boolean addConnection(ServerConnectionHandler connection)
     {
         if(activeConnections.get(connection.getUsername()) == null)
+        {
             activeConnections.put(connection.getUsername(), connection);
-        else 
-            System.out.println("Already connected pls log out");
+            return true;
+        }
+        System.out.println("Already connected pls log out");
+        return false;
     }
     
     public static void switchProtocol(String receiverName, String text)
     {
-        ServerConnectionHandler connection = activeConnections.get(receiverName);
+        ServerConnectionHandler connection = activeConnections.get(receiverName);//add to protocol queue if not connected
         if(connection != null)
         {
             connection.send(text);

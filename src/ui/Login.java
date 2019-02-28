@@ -98,6 +98,7 @@ public class Login extends javax.swing.JFrame
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         if(attemptLogin())
         {
+            System.out.println("Opening main menu");
             //Open Chat
             TestMessage ts = new TestMessage();
             ts.setVisible(true);
@@ -133,16 +134,13 @@ public class Login extends javax.swing.JFrame
     private boolean attemptLogin() 
     {
         ClientNetworkManager.login(txtUsername.getText(), txtPassword.getText());
-        while(!ClientNetworkManager.hasConnectionFailed())
-        {}
         
         while(!ClientNetworkManager.isLoggedIn())
         {
             if(ClientNetworkManager.hasConnectionFailed())
             {
                 return false;
-            }
-                   
+            }               
         }
         return true;
     }

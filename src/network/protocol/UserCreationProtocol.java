@@ -35,9 +35,8 @@ public class UserCreationProtocol extends Protocol
         return false;
     }
     
-    public static boolean processInput(Scanner reader)
+    public static boolean processInput(ProtocolParameters pp)
     {
-        ProtocolParameters pp = new ProtocolParameters(reader);
         User user = new User(pp.getParameter("username"), pp.getParameter("password"));    
         return user.createUser();
     }

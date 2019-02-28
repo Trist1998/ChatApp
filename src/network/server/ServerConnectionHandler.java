@@ -30,7 +30,6 @@ public class ServerConnectionHandler extends ConnectionHandler
         {
             if(ServerProtocolProcessor.processInitialConnection(this))
             {
-                ConnectionSwitch.addConnection(this); 
                 System.out.println("Waiting for data from " + username);
                 while(isConnected())
                 {

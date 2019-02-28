@@ -17,9 +17,8 @@ public class ClientProtocolProcessor extends ProtocolProcessor
         Scanner reader = new Scanner(protocol);
         ProtocolParameters pp = new ProtocolParameters(reader);
         reader.close();   
-        String head = reader.nextLine();
-        
-        if(head.trim().equals(ClientMessageProtocol.HEAD_IDENTIFIER))
+        String head = pp.getHead();
+        if(head.equals(ClientMessageProtocol.HEAD_IDENTIFIER))
             runMessageInputProcess(pp);    
     }
     
@@ -44,9 +43,8 @@ public class ClientProtocolProcessor extends ProtocolProcessor
         
         String head = pp.getHead();
         if(head.equals(ServerLoginProtocol.HEAD_LOGIN_RESPONSE))
-        {
-            ClientLoginProtocol.processInput(pp);
-            return true;
+        {           
+            return ClientLoginProtocol.processInput(pp);
         }
         return false;
     }

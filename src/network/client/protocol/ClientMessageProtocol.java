@@ -2,7 +2,6 @@
 package network.client.protocol;
 
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.Message;
@@ -27,7 +26,7 @@ public class ClientMessageProtocol extends Protocol
         ProtocolParameters pp = new ProtocolParameters();
         pp.add("Sender", message.getSenderName());
         pp.add("Receiver", message.getReceiverName());
-        pp.add("text", message.getText());
+        pp.add("Text", message.getText());
         try 
         {
            send(HEAD_IDENTIFIER, pp, conn);
@@ -40,11 +39,10 @@ public class ClientMessageProtocol extends Protocol
         return false;
     }
     
-    public static boolean processInput(Scanner reader)
+    public static boolean processInput(ProtocolParameters pp)
     {
-        ProtocolParameters pp = new ProtocolParameters(reader);
         System.out.println(pp.getParameter("Sender"));
-        System.out.println(pp.getParameter("text"));
+        System.out.println(pp.getParameter("Text"));
         return true;
     }
 }

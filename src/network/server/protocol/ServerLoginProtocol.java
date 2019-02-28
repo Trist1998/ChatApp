@@ -11,6 +11,7 @@ import network.server.ServerConnectionHandler;
 import network.protocol.Protocol;
 import static network.protocol.Protocol.buildProtocolString;
 import network.protocol.ProtocolParameters;
+import network.server.ConnectionSwitch;
 
 /**
  * @author Tristan
@@ -35,9 +36,11 @@ public class ServerLoginProtocol extends Protocol
         {
             String username = pp.getParameter("Username");
             String password = pp.getParameter("Password");
+            conn.setUsername(username);
             ProtocolParameters responsePp = new ProtocolParameters();
             User user = new User(username, password);
-            if(user.authenticateLogin()) //Checks username and password
+            
+            if(user.authenticateLogin() && ConnectionSwitch.addConnection(conn)) //Checks username and password and if the user is currently logged in
             {
                 conn.setUsername(username);
                 responsePp.add("Confirmation", "Accepted");

@@ -41,7 +41,7 @@ public class ProtocolParameters
             String name = cleanPair.substring(0, cleanPair.indexOf(":"));
             String data = cleanPair.substring(cleanPair.indexOf(":") + 1);
             parameterNames.add(name);
-            parameters.put(name, data);
+            parameters.put(name, data.trim());
         }
         
         head = parameters.get(HEAD_PARAMETER_NAME);

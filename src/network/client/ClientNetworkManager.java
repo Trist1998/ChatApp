@@ -20,28 +20,30 @@ public class ClientNetworkManager
     {
         ClientNetworkManager.username = username;
         hashedPassword = new PasswordHelper().clientPasswordHash(password);
-        Socket myClient; // Declare Client's socket
+       
         try 
         {
-            myClient = new Socket(HOST_NAME, portNumber); // Port number must be >1023
-            new Thread(new ClientConnectionHandler(myClient, username, hashedPassword)).start();    
+            Socket myClient = new Socket(HOST_NAME, portNumber);
+            connection = new ClientConnectionHandler(myClient, username, hashedPassword);
+            new Thread(connection).start();
         } 
         catch (IOException e) 
         {
-            System.out.println(e); // Error message.
+            System.out.println(e);
         }
     }
     
+    //Used mainly for user creation protocol
     public static ClientConnectionHandler getNewConnection(int portNumber)
     {
         try 
         {
-            Socket myClient = new Socket(HOST_NAME, portNumber); // Port number must be >1023
+            Socket myClient = new Socket(HOST_NAME, portNumber);
             return new ClientConnectionHandler(myClient, username, hashedPassword);    
         } 
         catch (IOException e) 
         {
-            System.out.println(e); // Error message.
+            System.out.println(e);
         }
         return null;
     }
@@ -75,12 +77,13 @@ public class ClientNetworkManager
         openSocketClient(SERVER_PORT, username, password);
     }
     
-    public static void loginSuccesful()
+    public synchronized static void loginSuccesful()
     {
+        System.out.println("Login successful");
         loggedIn = true;
     }
     
-    public static boolean isLoggedIn() 
+    public synchronized static boolean isLoggedIn() 
     {
         return loggedIn;
     }
