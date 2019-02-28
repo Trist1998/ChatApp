@@ -1,39 +1,30 @@
 
 package network.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.ConnectionHandler;
 import network.client.protocol.ClientLoginProtocol;
 import network.client.protocol.ClientProtocolProcessor;
 
-public class ClientConnectionHandler implements Runnable
+public class ClientConnectionHandler extends ConnectionHandler
 {
-    private Socket socket;
-    private BufferedReader inputStream;
-    private BufferedWriter outputStream;
     private String username;
     private String password;
     
     public ClientConnectionHandler(Socket socket,String username, String password) throws IOException
     {
-        this.socket = socket;
-        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        super(socket);
         this.username = username;
         this.password = password;
     }
     
     public ClientConnectionHandler(Socket socket) throws IOException
     {
-        this.socket = socket;
-        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        super(socket);
     }
     
     public String getUsername()
@@ -47,43 +38,19 @@ public class ClientConnectionHandler implements Runnable
         try 
         {      
             ClientLoginProtocol.loginRequest(username, password, this);
-            if(ClientProtocolProcessor.processLogin(inputStream, this))
+            if(ClientProtocolProcessor.processLogin(this))
             {
                 ClientNetworkManager.loginSuccesful();
-                while(socket.isConnected())
+                while(isConnected())
                 {
-                    ClientProtocolProcessor.processInputStream(inputStream);              
+                    ClientProtocolProcessor.processInputStream(this);              
                 }
-            }           
-            close();
+            }
             ClientNetworkManager.connectionFailed();
         } 
         catch (IOException ex) 
         {
             Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public void send(String protocol) 
-    {
-        synchronized(outputStream)
-        {        
-            try 
-            {
-                outputStream.write(protocol);//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
-                outputStream.flush();
-            } 
-            catch (IOException ex) 
-            {
-                Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    public void close() throws IOException
-    {
-        inputStream.close();
-        outputStream.close();
-        socket.close();
     }
 }

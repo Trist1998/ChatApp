@@ -28,5 +28,10 @@ public class ConnectionSwitch
         else
             System.out.println(receiverName + " is not connected");
     }
+
+    public static void removeConnection(ServerConnectionHandler conn)
+    {
+        activeConnections.remove(conn.getUsername());
+    }
     
 }

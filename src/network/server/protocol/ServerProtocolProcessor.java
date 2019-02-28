@@ -2,73 +2,64 @@
 package network.server.protocol;
 
 import network.client.protocol.ClientLoginProtocol;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Scanner;
+import network.ConnectionHandler;
+import network.protocol.ProtocolParameters;
+import network.protocol.ProtocolProcessor;
 import network.protocol.UserCreationProtocol;
 import network.server.ServerConnectionHandler;
 
-public class ServerProtocolProcessor 
+public class ServerProtocolProcessor extends ProtocolProcessor
 {
-
-    public static final String PROTOCOL_END = "END_PROTOCOL";
     
-    public static String parseInputStream(BufferedReader reader) throws IOException
+    public static void processServerInputStream(ConnectionHandler conn) throws IOException 
     {
-        String output = "";
-        for(;;)
+        String protocol = parseInputStream(conn);
+        if(!protocol.equals("FAILED"))
         {
-                    
-            String line =  reader.readLine() + "\n";
-            if(line.trim().equals(PROTOCOL_END))
-                break;
-            else
-                output += line;
+            Scanner reader = new Scanner(protocol);
+            ProtocolParameters pp = new ProtocolParameters();
+            reader.close();
+            String head = pp.getHead();
+            System.out.println("We got data with the header of " + head);
+            if(head.trim().equals(ServerMessageProtocol.HEAD_IDENTIFIER))
+                runServerMessageInputProcess(pp);
         }
-        return output;
-    }
-
-    public static void processServerInputStream(BufferedReader br) throws IOException 
-    {
-        String protocol = parseInputStream(br);
-        Scanner reader = new Scanner(protocol);        
-        String head = reader.nextLine();
-        System.out.println("We got data with the header of " + head);
-        if(head.trim().equals(ServerMessageProtocol.HEAD_IDENTIFIER))
-            runServerMessageInputProcess(reader);
     }
     
     
-    private static void runServerMessageInputProcess(Scanner reader)
+    private static void runServerMessageInputProcess(ProtocolParameters pp)
     {
             new Thread(new Runnable()
             { 
                 public void run()
                 {
-                    ServerMessageProtocol.processInput(reader);
-                    reader.close();
+                    ServerMessageProtocol.processInput(pp);
                 }
             }
             ).start();   
     }
     
-    public static boolean processInitialConnection(BufferedReader br, ServerConnectionHandler conn) throws IOException 
+    public static boolean processInitialConnection(ServerConnectionHandler conn) throws IOException 
     {
-        String protocol = parseInputStream(br);
-        System.out.println(protocol);
-        Scanner reader = new Scanner(protocol);
-        
-        String head = reader.nextLine().trim();
-        if(head.equals(ClientLoginProtocol.HEAD_LOGIN_REQUEST))
+        String protocol = parseInputStream(conn);
+        if(!protocol.equals("FAILED"))
         {
-            if(ServerLoginProtocol.processInput(reader, conn))
+            System.out.println(protocol.trim());
+            Scanner reader = new Scanner(protocol);
+            ProtocolParameters pp = new ProtocolParameters(reader);
+            reader.close();
+            
+            String head = pp.getHead();
+            if(head.equals(ClientLoginProtocol.HEAD_LOGIN_REQUEST))
             {
-                return true;
-            }          
-        }
-        else if(head.equals(UserCreationProtocol.HEAD))
-        {
-            UserCreationProtocol.processInput(reader);
+                return ServerLoginProtocol.processInput(pp, conn);    
+            }
+            else if(head.equals(UserCreationProtocol.HEAD))
+            {
+                UserCreationProtocol.processInput(pp);
+            }           
         }
         return false;
     }

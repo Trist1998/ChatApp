@@ -39,20 +39,18 @@ public class User extends DatabaseTable
         return TABLE_NAME;
     }
     
-    public boolean authenticateLogin(String username, String password) throws SQLException
+    public boolean authenticateLogin() throws SQLException//Used to check login details
     {
         String sql = buildLoadAllWhereSQLString("username", username);
         ResultSet rs = getObjectResultSet(sql);
         rs.first();
         String passwordToken = rs.getString("password");
-        System.out.println(passwordToken + " token");
-        
         return new PasswordHelper().authenticate(password, passwordToken);
     }
     
     public boolean createUser()
     {
-        return createUser(username, password);
+        return createUser(username, new PasswordHelper().hash(password));
     }
     
     private boolean createUser(String username, String password)

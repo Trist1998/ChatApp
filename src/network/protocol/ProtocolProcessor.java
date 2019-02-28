@@ -2,6 +2,8 @@ package network.protocol;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import network.ConnectionHandler;
+import static network.server.protocol.ServerProtocolProcessor.PROTOCOL_END;
 
 /**
  *
@@ -9,14 +11,27 @@ import java.io.IOException;
  */
 public class ProtocolProcessor 
 {
-    public static String parseInputStream(BufferedReader reader) throws IOException
+    public static final String PROTOCOL_END = "END_PROTOCOL";
+    
+    public static String parseInputStream(ConnectionHandler conn) throws IOException
     {
+        BufferedReader reader = conn.getInputStream();
         String output = "";
         for(;;)
         {
-                    
-            String line =  reader.readLine() + "\n";
-            if(line.trim().equals(Protocol.PROTOCOL_END))
+            String line;
+            try
+            {
+                line = reader.readLine() + "\n";
+            } 
+            catch (IOException ex)
+            {
+                System.out.println("Connection Closed");
+                conn.close();
+                return "FAILED";
+            }
+            
+            if(line.trim().equals(PROTOCOL_END))
                 break;
             else
                 output += line;

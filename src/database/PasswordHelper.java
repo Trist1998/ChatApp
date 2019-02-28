@@ -40,6 +40,8 @@ public final class PasswordHelper
   private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 
   private static final int SIZE = 128;
+  
+  private static final byte[] DEFAULT_SALT = new byte[]{118, -9, -53, 73, -95, -94, 36, -121, 32, 28, 84, -3, 4, 3, 99, 5};
 
   private static final Pattern layout = Pattern.compile("\\$31\\$(\\d\\d?)\\$(.{43})");
 
@@ -78,8 +80,13 @@ public final class PasswordHelper
    */
   public String hash(char[] password)
   {
-    byte[] salt = new byte[SIZE / 8];
+    byte[] salt = new byte[SIZE / 8];    
     random.nextBytes(salt);
+    return hash(password, salt);
+  }
+  
+  public String hash(char[] password, byte[] salt)
+  {
     byte[] dk = pbkdf2(password, salt, 1 << cost);
     byte[] hash = new byte[salt.length + dk.length];
     System.arraycopy(salt, 0, hash, 0, salt.length);
@@ -123,6 +130,10 @@ public final class PasswordHelper
     }
   }
 
+    public String clientPasswordHash(String password)
+    {
+        return hash(password.toCharArray(), DEFAULT_SALT);
+    }
   /**
    * Hash a password in an immutable {@code String}. 
    * 

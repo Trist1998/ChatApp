@@ -2,46 +2,50 @@
 package network.client.protocol;
 
 import network.protocol.ProtocolProcessor;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Scanner;
 import network.client.ClientConnectionHandler;
+import network.protocol.ProtocolParameters;
 import network.server.protocol.ServerLoginProtocol;
 
 public class ClientProtocolProcessor extends ProtocolProcessor
 {
 
-    public static void processInputStream(BufferedReader br) throws IOException 
+    public static void processInputStream(ClientConnectionHandler conn) throws IOException 
     {
-        String protocol = parseInputStream(br);
-        Scanner reader = new Scanner(protocol);        
+        String protocol = parseInputStream(conn);
+        Scanner reader = new Scanner(protocol);
+        ProtocolParameters pp = new ProtocolParameters(reader);
+        reader.close();   
         String head = reader.nextLine();
         
         if(head.trim().equals(ClientMessageProtocol.HEAD_IDENTIFIER))
-            runMessageInputProcess(reader);    
+            runMessageInputProcess(pp);    
     }
     
-    private static void runMessageInputProcess(Scanner reader)
+    private static void runMessageInputProcess(ProtocolParameters pp)
     {
             new Thread(new Runnable()
             { 
                 public void run()
                 {
-                    ClientMessageProtocol.processInput(reader);
-                    reader.close();
+                    ClientMessageProtocol.processInput(pp);
                 }
             }
             ).start();   
     }
   
-    public static boolean processLogin(BufferedReader br, ClientConnectionHandler conn) throws IOException 
+    public static boolean processLogin(ClientConnectionHandler conn) throws IOException 
     {
-        String protocol = parseInputStream(br);
+        String protocol = parseInputStream(conn);
         Scanner reader = new Scanner(protocol);
-        String head = reader.nextLine();
+        ProtocolParameters pp = new ProtocolParameters(reader);
+        reader.close();
+        
+        String head = pp.getHead();
         if(head.equals(ServerLoginProtocol.HEAD_LOGIN_RESPONSE))
         {
-            ClientLoginProtocol.processInput(reader);
+            ClientLoginProtocol.processInput(pp);
             return true;
         }
         return false;

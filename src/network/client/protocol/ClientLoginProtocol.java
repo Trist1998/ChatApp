@@ -1,7 +1,6 @@
 package network.client.protocol;
 
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.client.ClientConnectionHandler;
@@ -33,9 +32,8 @@ public class ClientLoginProtocol extends Protocol
         super();
     }
     
-    public static boolean processInput(Scanner reader)
+    public static boolean processInput(ProtocolParameters pp)
     {
-        ProtocolParameters pp = new ProtocolParameters(reader);
         String confirmation = pp.getParameter("Confirmation");
         return confirmation.equals("Accepted");
     }

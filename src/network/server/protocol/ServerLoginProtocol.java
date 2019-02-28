@@ -2,11 +2,11 @@
 package network.server.protocol;
 
 
+import database.User;
 import java.io.IOException;
-import java.util.Scanner;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.client.protocol.ClientLoginProtocol;
 import network.server.ServerConnectionHandler;
 import network.protocol.Protocol;
 import static network.protocol.Protocol.buildProtocolString;
@@ -29,30 +29,30 @@ public class ServerLoginProtocol extends Protocol
         super();
     }
     
-    public static boolean processInput(Scanner reader, ServerConnectionHandler conn)
+    public static boolean processInput(ProtocolParameters pp, ServerConnectionHandler conn)
     {
         try 
         {
-            ProtocolParameters pp = new ProtocolParameters(reader);
             String username = pp.getParameter("Username");
-            conn.setUsername(username);
-            ProtocolParameters npp = new ProtocolParameters();
-            if(true) //TODO check username and password
+            String password = pp.getParameter("Password");
+            ProtocolParameters responsePp = new ProtocolParameters();
+            User user = new User(username, password);
+            if(user.authenticateLogin()) //Checks username and password
             {
+                conn.setUsername(username);
+                responsePp.add("Confirmation", "Accepted");
+                responsePp.add("Message", "Login Accepted");
                 
-                npp.add("Confirmation", "Accepted");
-                npp.add("Message", "Login Accepted");
-                
-                send(HEAD_LOGIN_RESPONSE, npp, conn);
+                send(HEAD_LOGIN_RESPONSE, responsePp, conn);
                 return true;
             }
-            npp.add("Confirmation", "Declined");
-            npp.add("Message", "Login details incorrect");
+            responsePp.add("Confirmation", "Declined");
+            responsePp.add("Message", "Login details incorrect");
             
-            send(HEAD_LOGIN_RESPONSE, npp, conn);
+            send(HEAD_LOGIN_RESPONSE, responsePp, conn);
             
         }
-        catch (IOException ex)
+        catch (IOException | SQLException ex)
         {
             Logger.getLogger(ServerLoginProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }

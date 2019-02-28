@@ -7,14 +7,17 @@ import java.util.Scanner;
 
 public class ProtocolParameters 
 {
+    private static final String HEAD_PARAMETER_NAME = "HEAD";
     private static final String PARAMETER_DELIMITER = "#END#";
     private ArrayList<String> parameterNames;
     private HashMap<String, String> parameters;
+    private String head;
     
     public ProtocolParameters()
     {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
+        head = "";
     }
 
     public ProtocolParameters(Scanner reader)
@@ -40,10 +43,9 @@ public class ProtocolParameters
             parameterNames.add(name);
             parameters.put(name, data);
         }
+        
+        head = parameters.get(HEAD_PARAMETER_NAME);
     }
-    
-    
-    
     
     public void add(String parameterName, String parameterValue)
     {
@@ -56,14 +58,25 @@ public class ProtocolParameters
         return parameters.get(name);
     }
     
+    @Override
     public String toString()
     {
-        String output = "";
+        String output = HEAD_PARAMETER_NAME + ":" + head + PARAMETER_DELIMITER + "\n";
         for(String name: parameterNames)
         {
             output += name + ":" + parameters.get(name) + PARAMETER_DELIMITER + "\n";
         }
         return output;             
+    }
+
+    public void setHead(String head)
+    {
+        this.head = head;
+    }
+    
+    public String getHead()
+    {
+        return head;
     }
     
     

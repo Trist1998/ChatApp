@@ -2,7 +2,6 @@
 package network.protocol;
 
 import java.io.IOException;
-import java.util.Scanner;
 import network.client.ClientConnectionHandler;
 
 
@@ -13,8 +12,8 @@ public class Protocol
     
     public static String buildProtocolString(String head, ProtocolParameters parameters)
     {
-        String output = head + "\n";
-        output += parameters.toString() + "\n";
+        parameters.setHead(head);
+        String output = parameters.toString() + "\n";
         output += PROTOCOL_END + "\n";
         
         return output;
@@ -27,13 +26,9 @@ public class Protocol
         return true;
     }
     
-    public static boolean processInput(Scanner reader)//reader.nextLine() should return the first parameter
+    public static boolean processInput(ProtocolParameters pp)//reader.nextLine() should return the first parameter
     {
-        while(reader.hasNextLine())
-        {
-            System.out.println(reader.nextLine());
-        }
-        
+        System.out.println(pp.toString());  
         return true;
     }
     
