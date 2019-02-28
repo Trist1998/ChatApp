@@ -16,6 +16,7 @@ public class TestMessage extends javax.swing.JFrame {
     public TestMessage()
     {
         initComponents();
+        ClientNetworkManager.login("trist", "211298");
         lblUsername.setText(ClientNetworkManager.getUsername());
     }
     

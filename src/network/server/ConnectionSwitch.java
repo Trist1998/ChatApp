@@ -1,6 +1,10 @@
 package network.server;
 
+import database.ProtocolQueue;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +25,7 @@ public class ConnectionSwitch
         return false;
     }
     
-    public static void switchProtocol(String receiverName, String text)
+    public static void switchProtocol(String senderName, String receiverName, String text)
     {
         ServerConnectionHandler connection = activeConnections.get(receiverName);//add to protocol queue if not connected
         if(connection != null)
@@ -29,7 +33,17 @@ public class ConnectionSwitch
             connection.send(text);
         }
         else
-            System.out.println(receiverName + " is not connected");
+        {
+            ProtocolQueue pq = new ProtocolQueue(senderName, receiverName, text);
+            try
+            {
+                pq.addToQueue();//TODO If successful send delivered to server notification to sender
+            } 
+            catch (SQLException ex)
+            {
+                Logger.getLogger(ConnectionSwitch.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public static void removeConnection(ServerConnectionHandler conn)

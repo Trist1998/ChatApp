@@ -4,7 +4,6 @@ package ui;
 import java.io.BufferedWriter;
 import javax.swing.JOptionPane;
 import network.client.ClientNetworkManager;
-import test.TestMessage;
 
 public class Login extends javax.swing.JFrame 
 {
@@ -100,8 +99,8 @@ public class Login extends javax.swing.JFrame
         {
             System.out.println("Opening main menu");
             //Open Chat
-            TestMessage ts = new TestMessage();
-            ts.setVisible(true);
+            MainMenu mm = new MainMenu();
+            mm.setVisible(true);
             this.dispose();
         }
         else
@@ -132,10 +131,7 @@ public class Login extends javax.swing.JFrame
 
 
     private boolean attemptLogin() 
-    {
-        ClientNetworkManager.login(txtUsername.getText(), txtPassword.getText());
-        
-        
-        return true;
+    {           
+        return ClientNetworkManager.login(txtUsername.getText(), txtPassword.getText());
     }
 }

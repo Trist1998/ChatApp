@@ -22,7 +22,29 @@ public abstract class DatabaseTable
 		return objectData;
 	}
 	
-	
+	public void insert(String[] fieldNames, String[] fields, String[] nonStringFields) throws SQLException
+        {
+            String sql = "INSERT INTO " + getTableName() + " (";
+            for (int i = 0; i < fieldNames.length; i++)
+            {
+                sql += fieldNames[i] + ((i == (fieldNames.length - 1))?"":", ");                
+            }
+            sql += ") VALUES(";
+            for (int i = 0; i < fields.length; i++)
+            {
+                sql += "'" + fields[i] + "'"+ ((i == (fields.length - 1))?"":", ");                
+            }
+            
+            for (int i = 0; i < nonStringFields.length; i++)
+            {
+                sql += "," + nonStringFields[i];                
+            }
+            sql += ")";
+            System.out.println(sql + " SQL");
+            
+            sendTableUpdate(sql);
+        }
+        
 	public String getLoadAllSQL()
 	{
 		return "SELECT * FROM " + getTableName();

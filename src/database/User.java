@@ -43,7 +43,8 @@ public class User extends DatabaseTable
     {
         String sql = buildLoadAllWhereSQLString("username", username);
         ResultSet rs = getObjectResultSet(sql);
-        rs.first();
+        if(!rs.next())
+            return false;
         String passwordToken = rs.getString("password");
         rs.close();
         return new PasswordHelper().authenticate(password, passwordToken);

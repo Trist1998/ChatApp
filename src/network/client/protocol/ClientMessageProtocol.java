@@ -4,6 +4,7 @@ package network.client.protocol;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import message.ChatManager;
 import message.Message;
 import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
@@ -41,8 +42,9 @@ public class ClientMessageProtocol extends Protocol
     
     public static boolean processInput(ProtocolParameters pp)
     {
-        System.out.println(pp.getParameter("Sender"));
-        System.out.println(pp.getParameter("Text"));
+        Message message = new Message(pp);
+        System.out.println("Got a message");
+        ChatManager.receiveMessage(message);
         return true;
     }
 }
