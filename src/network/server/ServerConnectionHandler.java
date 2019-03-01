@@ -1,8 +1,10 @@
 
 package network.server;
 
+import database.ServerDatabaseConnection;
 import java.io.IOException;
 import java.net.*;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.ConnectionHandler;
@@ -11,10 +13,12 @@ import network.server.protocol.ServerProtocolProcessor;
 public class ServerConnectionHandler extends ConnectionHandler
 {
     private String username;
+    private ServerDatabaseConnection databaseConnection;
     
-    public ServerConnectionHandler(ServerSocket ss) throws IOException
+    public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException
     {
         super(ss.accept());
+        databaseConnection = new ServerDatabaseConnection();
         username = "";
     }
     
@@ -48,5 +52,10 @@ public class ServerConnectionHandler extends ConnectionHandler
     public void setUsername(String username) 
     {
         this.username = username;
+    }
+
+    public ServerDatabaseConnection getDatabaseConnection() 
+    {
+       return databaseConnection;
     }
 }

@@ -15,21 +15,24 @@ import javax.swing.JOptionPane;
  */
 public class ServerDatabaseConnection 
 {
-    public static String host = "jdbc:derby://localhost:1527/ChatApp";
-    public static String uName = "root";
-    public static String uPass = "zxcvbnm";
+    public static final String host = "jdbc:derby://localhost:1527/ChatApp";
+    public static final String uName = "root";
+    public static final String uPass = "zxcvbnm";
+    public Connection connection;
     //public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-
-    public static void Update(String SQL) 
+    public ServerDatabaseConnection() throws SQLException
+    {
+        connection = DriverManager.getConnection(host, uName, uPass);
+    }
+            
+    public void update(String SQL) 
     {
         try 
         {
-            Connection con = DriverManager.getConnection(host, uName, uPass);
-            Statement stmt = con.createStatement();
+            Statement stmt = connection.createStatement();
 
             stmt.executeUpdate(SQL);
-            System.out.println("Sent");
-            con.close();          
+            System.out.println("Sent");          
         } 
         catch (SQLException ex) 
         {
@@ -38,7 +41,7 @@ public class ServerDatabaseConnection
         }
     }
 
-    public static ResultSet Query(String SQL) 
+    public ResultSet query(String SQL) 
     {
         Connection con;
         Statement stmt;

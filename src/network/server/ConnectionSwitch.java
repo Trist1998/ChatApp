@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import message.Message;
 
 /**
  *
@@ -25,16 +26,16 @@ public class ConnectionSwitch
         return false;
     }
     
-    public static void switchProtocol(String senderName, String receiverName, String text)
+    public static void switchProtocol(Message message)
     {
-        ServerConnectionHandler connection = activeConnections.get(receiverName);//add to protocol queue if not connected
+        ServerConnectionHandler connection = activeConnections.get(message.getReceiverName());//add to protocol queue if not connected
         if(connection != null)
         {
-            connection.send(text);
+            connection.send(message.getText());//In this context the text of the message should be the entire protocol
         }
         else
         {
-            ProtocolQueue pq = new ProtocolQueue(senderName, receiverName, text);
+            ProtocolQueue pq = new ProtocolQueue(message, connection.getDatabaseConnection());
             try
             {
                 pq.addToQueue();//TODO If successful send delivered to server notification to sender

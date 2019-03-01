@@ -2,7 +2,11 @@
 package network.server;
 import java.io.IOException;
 import java.net.*;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import network.client.ClientNetworkManager;
+
 public class Server 
 {
     public static void main(String[] args) 
@@ -25,6 +29,10 @@ public class Server
         catch (IOException e)
         {
             System.out.println(e); // Error message.
+        }   
+        catch (SQLException ex) 
+        {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.SQLException;
+import message.Message;
 
 /**
  *
@@ -15,11 +16,12 @@ public class ProtocolQueue extends DatabaseTable
     private String receiverName;
     private String text;
 
-    public ProtocolQueue(String senderName, String receiverName, String text)
+    public ProtocolQueue(Message message, ServerDatabaseConnection connection )
     {
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.text = text;
+        super(connection);
+        this.senderName = message.getSenderName();
+        this.receiverName = message.getReceiverName();
+        this.text = message.getText();
     }
     
     public void addToQueue() throws SQLException

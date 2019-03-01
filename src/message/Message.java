@@ -2,7 +2,9 @@
 package message;
 
 import java.sql.Date;
+import network.protocol.Protocol;
 import network.protocol.ProtocolParameters;
+import network.server.protocol.ServerMessageProtocol;
 
 public class Message 
 {
@@ -25,7 +27,6 @@ public class Message
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
     }
-
     
     public String getSenderName() 
     {
@@ -47,5 +48,9 @@ public class Message
         return received != null;
     }
     
+    public void setText(String text)
+    {
+        this.text = text;
+    }
     
 }

@@ -1,9 +1,9 @@
 package network.protocol;
 
 import database.PasswordHelper;
+import database.ServerDatabaseConnection;
 import database.User;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.client.ClientConnectionHandler;
@@ -35,9 +35,9 @@ public class UserCreationProtocol extends Protocol
         return false;
     }
     
-    public static boolean processInput(ProtocolParameters pp)
+    public static boolean processInput(ProtocolParameters pp, ServerDatabaseConnection connection)
     {
-        User user = new User(pp.getParameter("username"), pp.getParameter("password"));    
+        User user = new User(pp.getParameter("username"), pp.getParameter("password"), connection);    
         return user.createUser();
     }
 }

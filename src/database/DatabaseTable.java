@@ -11,7 +11,13 @@ public abstract class DatabaseTable
 	public abstract String[] getFields();
 	
 	public abstract String getTableName();
-
+        
+        public ServerDatabaseConnection connection;
+        
+        public DatabaseTable(ServerDatabaseConnection connection)
+        {
+            this.connection = connection;
+        }
         public HashMap<String, Object> getObjectData(ResultSet rs) throws SQLException 
 	{
 		HashMap<String, Object> objectData = new HashMap<>();
@@ -52,16 +58,16 @@ public abstract class DatabaseTable
 	
 	public String buildLoadAllWhereSQLString(String fieldName, String value)
 	{
-		return "SELECT * FROM " + getTableName() + " WHERE " + fieldName + " = '" + value + "'";
+            return "SELECT * FROM " + getTableName() + " WHERE " + fieldName + " = '" + value + "'";
 	}
 	
 	public ResultSet getObjectResultSet(String SQL) throws SQLException
 	{
-		return  ServerDatabaseConnection.Query(SQL);
+            return  connection.query(SQL);
 	}
         
         public void sendTableUpdate(String SQL) throws SQLException
 	{
-		ServerDatabaseConnection.Update(SQL);
+            connection.update(SQL);
 	}
 }

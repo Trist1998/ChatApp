@@ -22,8 +22,9 @@ public class User extends DatabaseTable
     private String password;//hashed
 
 
-    public User(String username, String password)
+    public User(String username, String password, ServerDatabaseConnection connection)
     {
+        super(connection);
         this.username = username;
         this.password = password;      
     }
