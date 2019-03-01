@@ -4,6 +4,7 @@ package network.server.protocol;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import message.Message;
 import network.server.ConnectionSwitch;
 import network.protocol.Protocol;
 import network.protocol.ProtocolParameters;
@@ -31,7 +32,9 @@ public class ServerMessageProtocol extends Protocol
     private static boolean forwardMessage(String head, ProtocolParameters pp) throws IOException
     {
         String output = buildProtocolString(head, pp);
-        ConnectionSwitch.switchProtocol(pp.getParameter("Sender"), pp.getParameter("Receiver"), output);
+        Message message = new Message(pp);
+        message.setText(output);
+        ConnectionSwitch.switchProtocol(message);
         return true;
     }
 }
