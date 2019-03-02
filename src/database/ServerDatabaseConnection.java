@@ -18,20 +18,19 @@ public class ServerDatabaseConnection
     public static final String host = "jdbc:derby://localhost:1527/ChatApp";
     public static final String uName = "root";
     public static final String uPass = "zxcvbnm";
-    public Connection connection;
+    public static Connection connection;
     //public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-    public ServerDatabaseConnection() throws SQLException
-    {
-        connection = DriverManager.getConnection(host, uName, uPass);
-    }
-            
-    public void update(String SQL) 
+
+    public static void update(String SQL) 
     {
         try 
         {
-            Statement stmt = connection.createStatement();
+            Connection con = DriverManager.getConnection(host, uName, uPass);
+            Statement stmt = con.createStatement();
 
             stmt.executeUpdate(SQL);
+            con.close();
+            stmt.close();
             System.out.println("Sent");          
         } 
         catch (SQLException ex) 
@@ -41,7 +40,7 @@ public class ServerDatabaseConnection
         }
     }
 
-    public ResultSet query(String SQL) 
+    public static ResultSet query(String SQL) 
     {
         Connection con;
         Statement stmt;
@@ -54,7 +53,7 @@ public class ServerDatabaseConnection
             stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
             rs = stmt.executeQuery(SQL);            
-
+            
             System.out.println("Query Done");
 
         } 
@@ -64,5 +63,15 @@ public class ServerDatabaseConnection
             JOptionPane.showMessageDialog(null, "Sum Ting Wong");
         }
         return rs;
+    }
+    
+    public static void closeQuery(ResultSet rs) throws SQLException
+    {
+        Connection con = rs.getStatement().getConnection();
+        Statement statement = rs.getStatement();
+        
+        con.close();
+        statement.close();
+        rs.close();
     }
 }

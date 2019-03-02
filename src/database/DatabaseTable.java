@@ -12,12 +12,7 @@ public abstract class DatabaseTable
 	
 	public abstract String getTableName();
         
-        public ServerDatabaseConnection connection;
         
-        public DatabaseTable(ServerDatabaseConnection connection)
-        {
-            this.connection = connection;
-        }
         public HashMap<String, Object> getObjectData(ResultSet rs) throws SQLException 
 	{
 		HashMap<String, Object> objectData = new HashMap<>();
@@ -61,13 +56,13 @@ public abstract class DatabaseTable
             return "SELECT * FROM " + getTableName() + " WHERE " + fieldName + " = '" + value + "'";
 	}
 	
-	public ResultSet getObjectResultSet(String SQL) throws SQLException
+	public ResultSet getObjectResultSet(String SQL) throws SQLException//Please remember to ServerDatabaseConnection.closeQuery(resultSetName)
 	{
-            return  connection.query(SQL);
+            return  ServerDatabaseConnection.query(SQL);
 	}
         
         public void sendTableUpdate(String SQL) throws SQLException
 	{
-            connection.update(SQL);
+            ServerDatabaseConnection.update(SQL);
 	}
 }

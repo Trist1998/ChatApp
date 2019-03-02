@@ -16,9 +16,8 @@ public class ProtocolQueue extends DatabaseTable
     private String receiverName;
     private String text;
 
-    public ProtocolQueue(Message message, ServerDatabaseConnection connection )
+    public ProtocolQueue(Message message)
     {
-        super(connection);
         this.senderName = message.getSenderName();
         this.receiverName = message.getReceiverName();
         this.text = message.getText();

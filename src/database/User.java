@@ -22,9 +22,8 @@ public class User extends DatabaseTable
     private String password;//hashed
 
 
-    public User(String username, String password, ServerDatabaseConnection connection)
+    public User(String username, String password)
     {
-        super(connection);
         this.username = username;
         this.password = password;      
     }
@@ -40,15 +39,24 @@ public class User extends DatabaseTable
         return TABLE_NAME;
     }
     
-    public boolean authenticateLogin() throws SQLException//Used to check login details
+    public boolean authenticateLogin()//Used to check login details
     {
         String sql = buildLoadAllWhereSQLString("username", username);
-        ResultSet rs = getObjectResultSet(sql);
-        if(!rs.next())
+        try
+        {
+            ResultSet rs = getObjectResultSet(sql);
+            if(!rs.next())
+                return false;
+            String passwordToken = rs.getString("password");
+            ServerDatabaseConnection.closeQuery(rs);
+            return new PasswordHelper().authenticate(password, passwordToken);
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.toString());
             return false;
-        String passwordToken = rs.getString("password");
-        rs.close();
-        return new PasswordHelper().authenticate(password, passwordToken);
+        }
+        
     }
     
     public boolean createUser()

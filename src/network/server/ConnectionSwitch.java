@@ -35,7 +35,7 @@ public class ConnectionSwitch
         }
         else
         {
-            ProtocolQueue pq = new ProtocolQueue(message, connection.getDatabaseConnection());
+            ProtocolQueue pq = new ProtocolQueue(message);
             try
             {
                 pq.addToQueue();//TODO If successful send delivered to server notification to sender

@@ -4,7 +4,7 @@ package network.client.protocol;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import message.ChatManager;
+import ui.ChatManager;
 import message.Message;
 import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;

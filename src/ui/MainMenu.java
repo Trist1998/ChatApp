@@ -1,8 +1,5 @@
 package ui;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import message.ChatManager;
 import network.client.ClientNetworkManager;
 
 /**
@@ -12,10 +9,12 @@ import network.client.ClientNetworkManager;
 public class MainMenu extends javax.swing.JFrame
 {
     private ChatManager manager;
+    private GenericChat currentChat;
     
     public MainMenu() 
     {
         initComponents();
+        pnlChatWindow.setLayout(new java.awt.BorderLayout());
         lblUsername.setText(ClientNetworkManager.getUsername());
         ChatManager.buildChatViews(this);
     }
@@ -33,16 +32,7 @@ public class MainMenu extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout pnlChatWindowLayout = new javax.swing.GroupLayout(pnlChatWindow);
-        pnlChatWindow.setLayout(pnlChatWindowLayout);
-        pnlChatWindowLayout.setHorizontalGroup(
-            pnlChatWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 627, Short.MAX_VALUE)
-        );
-        pnlChatWindowLayout.setVerticalGroup(
-            pnlChatWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        pnlChatWindow.setLayout(new javax.swing.BoxLayout(pnlChatWindow, javax.swing.BoxLayout.LINE_AXIS));
 
         jButton1.setText("Add chat");
 
@@ -90,47 +80,20 @@ public class MainMenu extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) 
+    
+    public synchronized void addChat(SideBarChat sideBarChat)
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainMenu().setVisible(true);
-            }
-        });
+        pnlChats.add(sideBarChat);
+        pnlChats.setVisible(true);
     }
     
-    public JScrollPane getChatsPanel()
+    public synchronized void setChat(GenericChat chat)
     {
-        return pnlChats;   
-    }
-    
-    public JPanel getChatWindow()
-    {
-        return pnlChatWindow;
+        if(currentChat != null)
+            pnlChatWindow.remove(currentChat);
+        
+        pnlChatWindow.add(chat);
+        chat.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

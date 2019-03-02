@@ -13,12 +13,10 @@ import network.server.protocol.ServerProtocolProcessor;
 public class ServerConnectionHandler extends ConnectionHandler
 {
     private String username;
-    private ServerDatabaseConnection databaseConnection;
     
     public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException
     {
         super(ss.accept());
-        databaseConnection = new ServerDatabaseConnection();
         username = "";
     }
     
@@ -53,9 +51,5 @@ public class ServerConnectionHandler extends ConnectionHandler
     {
         this.username = username;
     }
-
-    public ServerDatabaseConnection getDatabaseConnection() 
-    {
-       return databaseConnection;
-    }
+    
 }

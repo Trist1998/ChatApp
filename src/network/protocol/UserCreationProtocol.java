@@ -35,9 +35,9 @@ public class UserCreationProtocol extends Protocol
         return false;
     }
     
-    public static boolean processInput(ProtocolParameters pp, ServerDatabaseConnection connection)
+    public static boolean processInput(ProtocolParameters pp)
     {
-        User user = new User(pp.getParameter("username"), pp.getParameter("password"), connection);    
+        User user = new User(pp.getParameter("username"), pp.getParameter("password"));    
         return user.createUser();
     }
 }

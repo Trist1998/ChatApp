@@ -38,7 +38,7 @@ public class ServerLoginProtocol extends Protocol
             String password = pp.getParameter("Password");
             conn.setUsername(username);
             ProtocolParameters responsePp = new ProtocolParameters();
-            User user = new User(username, password, conn.getDatabaseConnection());
+            User user = new User(username, password);
             
             if(user.authenticateLogin() && ConnectionSwitch.addConnection(conn)) //Checks username and password and if the user is currently logged in
             {
