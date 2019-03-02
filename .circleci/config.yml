@@ -7,3 +7,8 @@ workflows:
     "Hello Workflow":
         jobs:
           - hello/hello-build
+general:
+          build_dir: src
+- run: 
+          name: ant -lib lib/ -buildfile build.xml
+          command: ant -lib lib/ -buildfile build.xml
