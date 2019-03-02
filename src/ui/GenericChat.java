@@ -18,7 +18,7 @@ public class GenericChat extends javax.swing.JPanel
         lblChatName.setText(chatName);
     }
     
-    public static void saveMessage(Message message)
+    public void saveMessage(Message message)
     {
         //TODO save message somewhere 
     }
