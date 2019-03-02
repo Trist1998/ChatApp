@@ -2,9 +2,7 @@
 package message;
 
 import java.sql.Date;
-import network.protocol.Protocol;
 import network.protocol.ProtocolParameters;
-import network.server.protocol.ServerMessageProtocol;
 
 public class Message 
 {
@@ -12,6 +10,7 @@ public class Message
     private String receiverName;
     private String text;
     private Date received;
+    private Date sent;
 
     public Message(String senderName, String receiverName, String text) 
     {
@@ -52,5 +51,27 @@ public class Message
     {
         this.text = text;
     }
+
+    public Date getReceived()
+    {
+        return received;
+    }
+
+    public void setReceived(Date received)
+    {
+        this.received = received;
+    }
+
+    public Date getSent()
+    {
+        return sent;
+    }
+
+    public void setSent(Date sent)
+    {
+        this.sent = sent;
+    }
+    
+    
     
 }

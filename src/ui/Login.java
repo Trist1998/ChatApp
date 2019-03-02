@@ -99,7 +99,8 @@ public class Login extends javax.swing.JFrame
         {
             System.out.println("Opening main menu");
             //Open Chat
-            MainMenu mm = new MainMenu();
+            MainMenu mm = new MainMenu();           
+            ChatManager.buildChatViews(mm);
             mm.setVisible(true);
             this.dispose();
         }
