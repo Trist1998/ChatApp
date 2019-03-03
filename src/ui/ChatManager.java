@@ -46,9 +46,7 @@ public class ChatManager
                 else
                     sideBarComp.receiveMessage(message);
             }
-        });
-        
-        
+        });     
     }
 
     public static void receiveResponse(String chatName, int messageId, int responseCode)

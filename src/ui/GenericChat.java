@@ -1,8 +1,11 @@
 package ui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import message.Message;
 import network.client.ClientNetworkManager;
@@ -24,6 +27,7 @@ public class GenericChat extends javax.swing.JPanel
         this.sidebar = sidebar;
         initComponents();
         lblChatName.setText(chatName);
+        //pnlMessages.setLayout(new GridLayout(0,1,5,5));
         pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS));
         waitingForResponse = new HashMap<>();
     }
@@ -45,12 +49,17 @@ public class GenericChat extends javax.swing.JPanel
     
     public void addMessage(Message message)//Use this method when loading the chat 
     { 
-        MessagePanel newMessage = new MessagePanel(message);
-        pnlMessages.add(newMessage);
+        MessagePanel newMessage = new MessagePanel(message, pnlMessages);
+        
+        pnlMessages.add(Box.createRigidArea(new Dimension(0,5)));
+             
         newMessage.setSize(newMessage.getPreferredSize());
         newMessage.setVisible(true);
+        
+        pnlMessages.add(newMessage);
         pnlMessages.revalidate();
         pnlMessages.repaint();
+        
         sidebar.setLastMessage(message);
         if(message.getId() > idCounter.get())
             idCounter.set(message.getId() + 1);
@@ -78,7 +87,8 @@ public class GenericChat extends javax.swing.JPanel
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         lblChatName = new javax.swing.JLabel();
@@ -95,9 +105,14 @@ public class GenericChat extends javax.swing.JPanel
         lblChatName.setFont(new java.awt.Font("Heiti SC", 1, 24)); // NOI18N
         lblChatName.setText("Chat Name");
 
-        pnlMessages.setBackground(new java.awt.Color(204, 204, 204));
+        pnlScrollMessages.setBackground(new java.awt.Color(153, 0, 0));
+
+        pnlMessages.setBackground(new java.awt.Color(255, 153, 255));
+        pnlMessages.setForeground(new java.awt.Color(51, 51, 255));
+        pnlMessages.setAlignmentX(0.0F);
+        pnlMessages.setAlignmentY(0.0F);
         pnlMessages.setOpaque(false);
-        pnlMessages.setLayout(new java.awt.BorderLayout());
+        pnlMessages.setLayout(new javax.swing.BoxLayout(pnlMessages, javax.swing.BoxLayout.LINE_AXIS));
         pnlScrollMessages.setViewportView(pnlMessages);
 
         txaMessage.setColumns(20);
@@ -108,8 +123,10 @@ public class GenericChat extends javax.swing.JPanel
         btnSend.setBackground(new java.awt.Color(204, 204, 204));
         btnSend.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnSend.setText("Send");
-        btnSend.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSend.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnSendActionPerformed(evt);
             }
         });
