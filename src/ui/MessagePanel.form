@@ -25,7 +25,7 @@
           <Group type="102" attributes="0">
               <Component id="lblDateTime" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="lblRead" min="-2" max="-2" attributes="0"/>
+              <Component id="lblState" min="-2" max="-2" attributes="0"/>
           </Group>
           <Component id="jScrollPane1" pref="244" max="32767" attributes="0"/>
       </Group>
@@ -37,7 +37,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblDateTime" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblRead" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblState" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -49,9 +49,9 @@
         <Property name="text" type="java.lang.String" value="lblDateTime"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblRead">
+    <Component class="javax.swing.JLabel" name="lblState">
       <Properties>
-        <Property name="text" type="java.lang.String" value="lblRead"/>
+        <Property name="text" type="java.lang.String" value="lblState"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">

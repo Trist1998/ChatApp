@@ -1,7 +1,5 @@
 package ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import message.Message;
 
 /**
@@ -24,7 +22,7 @@ public class SideBarChat extends javax.swing.JPanel
         initComponents();
         lblChatName.setText(chatName);
         mainMenu = mm;
-        this.chat = new GenericChat(chatName);
+        this.chat = new GenericChat(chatName, this);
     }
     
     public SideBarChat(String chatName, Message lastMessage, MainMenu mm)
@@ -34,7 +32,7 @@ public class SideBarChat extends javax.swing.JPanel
         lblLastMessage.setText(lastMessage.getText());
         lblLastMessageTime.setText("Date");
         mainMenu = mm;
-        this.chat = new GenericChat(chatName);
+        this.chat = new GenericChat(chatName, this);
     }
     
     public String getChatName()
@@ -107,15 +105,23 @@ public class SideBarChat extends javax.swing.JPanel
     private javax.swing.JLabel lblLastMessage;
     private javax.swing.JLabel lblLastMessageTime;
     // End of variables declaration//GEN-END:variables
-//    @Override
-//    public Dimension getPreferredSize()
-//    {
-//        return new Dimension(getWidth(),getHeight());
-//    }
+
     public void receiveMessage(Message message)
     {
-        lblLastMessage.setText(message.getText());
-        lblLastMessageTime.setText(new Date().toString());
+        setLastMessage(message);
         chat.receiveMessage(message);
+    }
+    public void setLastMessage(Message message)
+    {
+        lblLastMessage.setText(message.getText());
+        if(message.getSent() != null)
+            lblLastMessageTime.setText(message.getDateSentString());
+        else
+            lblLastMessage.setText("");
+    }
+
+    void receiveResponse(int messageId, int responseCode)
+    {
+        chat.receiveResponse(messageId, responseCode);
     }
 }
