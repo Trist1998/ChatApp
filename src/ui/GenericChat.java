@@ -78,8 +78,7 @@ public class GenericChat extends javax.swing.JPanel
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         lblChatName = new javax.swing.JLabel();
@@ -89,21 +88,28 @@ public class GenericChat extends javax.swing.JPanel
         txaMessage = new javax.swing.JTextArea();
         btnSend = new javax.swing.JButton();
 
-        lblChatName.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        setBackground(new java.awt.Color(229, 229, 229));
+
+        jPanel1.setBackground(new java.awt.Color(229, 229, 229));
+
+        lblChatName.setFont(new java.awt.Font("Heiti SC", 1, 24)); // NOI18N
         lblChatName.setText("Chat Name");
 
+        pnlMessages.setBackground(new java.awt.Color(204, 204, 204));
+        pnlMessages.setOpaque(false);
         pnlMessages.setLayout(new java.awt.BorderLayout());
         pnlScrollMessages.setViewportView(pnlMessages);
 
         txaMessage.setColumns(20);
+        txaMessage.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         txaMessage.setRows(4);
         jScrollPane2.setViewportView(txaMessage);
 
+        btnSend.setBackground(new java.awt.Color(204, 204, 204));
+        btnSend.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnSend.setText("Send");
-        btnSend.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendActionPerformed(evt);
             }
         });
@@ -113,20 +119,17 @@ public class GenericChat extends javax.swing.JPanel
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(pnlScrollMessages))
+                    .addComponent(pnlScrollMessages, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)))
+                        .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblChatName)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblChatName)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
