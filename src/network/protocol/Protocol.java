@@ -30,6 +30,7 @@ public class Protocol
     
     public static boolean processInput(ProtocolParameters pp)//reader.nextLine() should return the first parameter
     {
+        System.out.print("THIS PROCESS INPUT NEEDS TO BE IMPLEMENTED");
         System.out.println(pp.toString());  
         return true;
     }

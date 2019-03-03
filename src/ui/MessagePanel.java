@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import message.Message;
 import network.client.ClientNetworkManager;
+import network.server.ServerConnectionHandler;
 
 /**
  *
@@ -11,23 +12,51 @@ import network.client.ClientNetworkManager;
 public class MessagePanel extends javax.swing.JPanel
 {
     private Message message;
+    private int state;
     
     public MessagePanel(Message message)
     {
         this.message = message;
+        state = -1;
         initComponents();
         txaMessage.setText(message.getText());
+        lblDateTime.setText(message.getDateSentString());
         if(message.getSenderName().equals(ClientNetworkManager.getUsername()))
             this.setBackground(new Color(153,204,255));
+        setStateLabel();
     }
-
+    private void setStateLabel()
+    {
+        System.out.println("Hello");
+        switch (message.getState())
+        {
+            case ServerConnectionHandler.MESSAGE_DELIVERED:
+                lblState.setText("Delivered");
+                break;
+            case ServerConnectionHandler.MESSAGE_SAVED:
+                lblState.setText("Saved");
+                break;
+            case ServerConnectionHandler.MESSAGE_LOST:
+                lblState.setText("Lost");
+                break;
+            default:
+                lblState.setText("");
+                break;
+        }
+    }
+    public void receiveResponse(int responseCode)
+    {
+        message.setState(responseCode);
+        setStateLabel();
+        
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
     {
 
         lblDateTime = new javax.swing.JLabel();
-        lblRead = new javax.swing.JLabel();
+        lblState = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaMessage = new javax.swing.JTextArea();
 
@@ -36,7 +65,7 @@ public class MessagePanel extends javax.swing.JPanel
 
         lblDateTime.setText("lblDateTime");
 
-        lblRead.setText("lblRead");
+        lblState.setText("lblState");
 
         txaMessage.setEditable(false);
         txaMessage.setColumns(20);
@@ -51,7 +80,7 @@ public class MessagePanel extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lblDateTime)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblRead))
+                .addComponent(lblState))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -61,7 +90,7 @@ public class MessagePanel extends javax.swing.JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDateTime)
-                    .addComponent(lblRead)))
+                    .addComponent(lblState)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -69,7 +98,9 @@ public class MessagePanel extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDateTime;
-    private javax.swing.JLabel lblRead;
+    private javax.swing.JLabel lblState;
     private javax.swing.JTextArea txaMessage;
     // End of variables declaration//GEN-END:variables
+
+    
 }

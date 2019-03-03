@@ -46,8 +46,11 @@ public class ServerConnectionHandler extends ConnectionHandler
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
+    public static final int MESSAGE_DELIVERED = 2;
+    public static final int MESSAGE_SAVED = 1;
+    public static final int MESSAGE_LOST = 0;
     
-    public boolean send(ProtocolMessage protocol) throws SQLException 
+    public int send(ProtocolMessage protocol) 
     {
         BufferedWriter outputStream = getOutputStream();
         synchronized(outputStream)
@@ -56,14 +59,24 @@ public class ServerConnectionHandler extends ConnectionHandler
             {
                 outputStream.write(protocol.getText());//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
                 outputStream.flush();
-                return true;
+                return MESSAGE_DELIVERED;
             } 
             catch (IOException ex) 
             {
+                
                 if(!protocol.isAlreadySaved())
-                    new ProtocolQueue(protocol).addToQueue();
+                    try 
+                    {
+                        new ProtocolQueue(protocol).addToQueue();
+                        return MESSAGE_SAVED;
+                    } 
+                    catch (SQLException ex1) 
+                    {
+                        Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex1);
+                        return MESSAGE_LOST;
+                    }
                 Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                return MESSAGE_SAVED;
             }
         }      
     }

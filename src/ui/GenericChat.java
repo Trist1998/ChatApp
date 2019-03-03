@@ -1,5 +1,7 @@
 package ui;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BoxLayout;
 import message.Message;
@@ -13,14 +15,19 @@ public class GenericChat extends javax.swing.JPanel
 {
     private static AtomicInteger idCounter = new AtomicInteger();
     private String chatName;
+    private HashMap<Integer, MessagePanel> waitingForResponse;
+    private SideBarChat sidebar;
     
-    public GenericChat(String chatName) 
+    public GenericChat(String chatName, SideBarChat sidebar) 
     {
         this.chatName = chatName;
+        this.sidebar = sidebar;
         initComponents();
         lblChatName.setText(chatName);
         pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS));
+        waitingForResponse = new HashMap<>();
     }
+    
     public int getNextMessageId()
     {
         return idCounter.getAndIncrement();
@@ -44,12 +51,29 @@ public class GenericChat extends javax.swing.JPanel
         newMessage.setVisible(true);
         pnlMessages.revalidate();
         pnlMessages.repaint();
+        sidebar.setLastMessage(message);
+        if(message.getId() > idCounter.get())
+            idCounter.set(message.getId() + 1);
+        if(message.getSenderName().equals(ClientNetworkManager.getUsername()))
+            waitingForResponse.put(message.getId(), newMessage);
     }
     
     public synchronized void receiveMessage(Message message)
     {      
         addMessage(message);
         saveMessage(message);
+    }
+    
+    void receiveResponse(int messageId, int responseCode)
+    {
+        MessagePanel m = waitingForResponse.get(messageId);
+        if(m != null)
+        {
+            m.receiveResponse(responseCode);
+            if(responseCode == MessageProtocol.RESPONSE_READ)
+                waitingForResponse.remove(messageId);
+        }
+            
     }
     
     @SuppressWarnings("unchecked")
@@ -136,6 +160,7 @@ public class GenericChat extends javax.swing.JPanel
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
         Message message = new Message(getNextMessageId(), ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
+        message.setSent(new Date());
         MessageProtocol.sendMessage(message);
         saveMessage(message);
         addMessage(message);
