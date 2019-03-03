@@ -15,9 +15,7 @@ public class Message
 
     public Message(String senderName, String receiverName, String text) 
     {
-        //Hello
         this.senderName = senderName;
-        //Test Conflict
         this.receiverName = receiverName;
         this.text = text;
         received = null;
