@@ -1,7 +1,11 @@
 
 package message;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import network.protocol.ProtocolParameters;
 
 public class Message 
@@ -10,6 +14,7 @@ public class Message
     private String senderName;
     private String receiverName;
     private String text;
+    private int state;
     private Date received;
     private Date sent;
 
@@ -19,6 +24,7 @@ public class Message
         this.receiverName = receiverName;
         this.text = text;
         received = null;
+        state = -1;
     }
 
     public Message(ProtocolParameters pp)
@@ -27,6 +33,15 @@ public class Message
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
+        try
+        {
+            this.sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(pp.getParameter("DateSent"));
+        } 
+        catch (ParseException ex)
+        {
+            Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        state = -1;
     }
 
     public Message(int id, String senderName, String receiverName, String text)
@@ -36,7 +51,18 @@ public class Message
         this.receiverName = receiverName;
         this.text = text;
         received = null;
+        state = -1;
     }  
+    
+    public synchronized void setState(int responseCode)
+    {
+        state = Math.max(state, responseCode);
+    }
+    
+    public synchronized int getState()
+    {
+        return state;
+    }
 
     public int getId()
     {
@@ -82,6 +108,12 @@ public class Message
     {
         return sent;
     }
+    
+    public String getDateSentString()
+    {
+        return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").format(sent);
+    }
+                    
 
     public void setSent(Date sent)
     {
