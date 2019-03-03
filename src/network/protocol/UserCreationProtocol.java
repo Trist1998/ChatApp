@@ -1,7 +1,6 @@
 package network.protocol;
 
 import database.PasswordHelper;
-import database.ServerDatabaseConnection;
 import database.User;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,31 +16,38 @@ import network.server.ServerConnectionHandler;
 public class UserCreationProtocol extends Protocol
 {
     public static final String HEAD = "CREATE_USER";
+    public static final String ACTION_REQUEST = "REQUEST";
+    public static final String ACTION_RESPONSE = "RESPONSE";
+    
     public static boolean createUser(String username, String password)
     {
         ProtocolParameters pp = new ProtocolParameters();
+        pp.add(Protocol.PROTOCOL_ACTION, ACTION_REQUEST);
         pp.add("username", username);
         pp.add("password", new PasswordHelper().clientPasswordHash(password));
         
         try
         {
             ClientConnectionHandler conn = ClientNetworkManager.getNewConnection(ClientNetworkManager.SERVER_PORT);
-            send(HEAD, pp, conn);
-            return true;
+            if(conn != null)
+            {
+                send(HEAD, pp, conn);            
+                return true;//ClientProtocolProcessor.processNewUser(conn);
+            }
         } 
         catch (IOException ex)
         {
-            Logger.getLogger(UserCreationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserCreationProtocol.class.getName()).log(Level.SEVERE, null, ex);             
         }
-        return false;
+        return false; 
     }
     
     public static void processInput(ProtocolParameters pp, ServerConnectionHandler conn)
     {
         User user = new User(pp.getParameter("username"), pp.getParameter("password"));
         ProtocolParameters resPP = new ProtocolParameters();
-        resPP.add("HEAD", "RESPONSE");
-        resPP.add("Action", "CREATE_USER");
+        resPP.add(Protocol.PROTOCOL_HEAD, HEAD);
+        resPP.add(Protocol.PROTOCOL_ACTION, ACTION_RESPONSE);
         if(user.createUser())
         {          
             resPP.add("Confirmation", "Accepted");
@@ -52,5 +58,10 @@ public class UserCreationProtocol extends Protocol
             resPP.add("Message", "Something wrong XD");
         }
         conn.send(resPP.toString());           
+    }
+    
+    public static boolean processInput(ProtocolParameters pp)
+    {
+        return pp.getParameter("Confirmation").equals("Accepted");
     }
 }
