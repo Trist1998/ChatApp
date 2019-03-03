@@ -76,9 +76,15 @@ public class ProtocolParameters
         {
             String name = line.substring(0, line.indexOf(":"));
             String data = line.substring(line.indexOf(":") + 1);
-            parameterNames.add(name);
+            if(!name.equals(Protocol.PROTOCOL_HEAD))
+                parameterNames.add(name);
             parameters.put(name, data.trim());
         }
+    }
+
+    public void replace(String parameterName, String value)
+    {
+        parameters.replace(parameterName, value);
     }
     
     

@@ -17,16 +17,16 @@ public class ClientProtocolProcessor extends ProtocolProcessor
         ProtocolParameters pp  = parseInputStream(conn);  
         String head = pp.getHead();
         if(head.equals(MessageProtocol.HEAD))
-            runMessageInputProcess(pp);    
+            runMessageInputProcess(pp, conn);    
     }
     
-    private static void runMessageInputProcess(ProtocolParameters pp)
+    private static void runMessageInputProcess(ProtocolParameters pp, ConnectionHandler conn)
     {
             new Thread(new Runnable()
             { 
                 public void run()
                 {
-                    MessageProtocol.processInput(pp);
+                    MessageProtocol.processInput(pp, conn);
                 }
             }
             ).start();   

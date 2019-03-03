@@ -30,7 +30,7 @@ public abstract class ConnectionHandler implements Runnable
         closed = false;
     }
     
-    public void send(String protocol) 
+    public boolean send(String protocol) 
     {
         synchronized(outputStream)
         {        
@@ -38,10 +38,12 @@ public abstract class ConnectionHandler implements Runnable
             {
                 outputStream.write(protocol);//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
                 outputStream.flush();
+                return true;
             } 
             catch (IOException ex) 
             {
                 Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
         }
     }

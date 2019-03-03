@@ -26,12 +26,12 @@ public class ConnectionSwitch
         return false;
     }
     
-    public static void switchProtocol(ProtocolMessage message)
+    public static int switchProtocol(ProtocolMessage message)
     {
         ServerConnectionHandler connection = activeConnections.get(message.getReceiverName());//add to protocol queue if not connected
         if(connection != null)
         {
-            connection.send(message.getText());//In this context the text of the message should be the entire protocol
+            return connection.send(message);//In this context the text of the message should be the entire protocol
         }
         else
         {
@@ -39,10 +39,12 @@ public class ConnectionSwitch
             try
             {
                 pq.addToQueue();//TODO If successful send delivered to server notification to sender
+                return ServerConnectionHandler.MESSAGE_SAVED;//Message saved to database
             } 
             catch (SQLException ex)
             {
                 Logger.getLogger(ConnectionSwitch.class.getName()).log(Level.SEVERE, null, ex);
+                return ServerConnectionHandler.MESSAGE_LOST;//Means message hasn't been saved to database
             }
         }
     }
