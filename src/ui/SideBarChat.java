@@ -1,5 +1,7 @@
 package ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import message.Message;
 
 /**
@@ -112,6 +114,8 @@ public class SideBarChat extends javax.swing.JPanel
 //    }
     public void receiveMessage(Message message)
     {
+        lblLastMessage.setText(message.getText());
+        lblLastMessageTime.setText(new Date().toString());
         chat.receiveMessage(message);
     }
 }

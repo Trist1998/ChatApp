@@ -2,10 +2,13 @@
 package message;
 
 import java.sql.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 import network.protocol.ProtocolParameters;
 
 public class Message 
 {
+    private static AtomicInteger idCounter = new AtomicInteger();
+    private int id;
     private String senderName;
     private String receiverName;
     private String text;
@@ -25,6 +28,16 @@ public class Message
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
+    }
+    
+    public void reserveId()
+    {
+        id = idCounter.getAndIncrement();
+    }
+
+    public int getId()
+    {
+        return id;
     }
     
     public String getSenderName() 
@@ -70,8 +83,5 @@ public class Message
     public void setSent(Date sent)
     {
         this.sent = sent;
-    }
-    
-    
-    
+    }  
 }

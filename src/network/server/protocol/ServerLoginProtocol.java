@@ -4,7 +4,6 @@ package network.server.protocol;
 
 import database.User;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.server.ServerConnectionHandler;
@@ -55,7 +54,7 @@ public class ServerLoginProtocol extends Protocol
             send(HEAD_LOGIN_RESPONSE, responsePp, conn);
             
         }
-        catch (IOException | SQLException ex)
+        catch (IOException ex)
         {
             Logger.getLogger(ServerLoginProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }

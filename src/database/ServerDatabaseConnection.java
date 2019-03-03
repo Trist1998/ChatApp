@@ -30,8 +30,7 @@ public class ServerDatabaseConnection
 
             stmt.executeUpdate(SQL);
             con.close();
-            stmt.close();
-            System.out.println("Sent");          
+            stmt.close();         
         } 
         catch (SQLException ex) 
         {
@@ -49,13 +48,8 @@ public class ServerDatabaseConnection
         try 
         {
             con = DriverManager.getConnection(host, uName, uPass);
-
-            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-            rs = stmt.executeQuery(SQL);            
-            
-            System.out.println("Query Done");
-
+            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(SQL);                       
         } 
         catch (SQLException ex) 
         {

@@ -1,7 +1,9 @@
 package database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import message.Message;
+
+import message.ProtocolMessage;
 
 /**
  *
@@ -9,28 +11,24 @@ import message.Message;
  */
 public class ProtocolQueue extends DatabaseTable
 {
-    public static final String TABLE_NAME = "message_queue";
+    public static final String TABLE_NAME = "protocol_queue";
     public static final String[] FIELDS = new String[]{"senderName", "receiverName", "text", "sentTimestamp"};
     
-    private String senderName;
-    private String receiverName;
-    private String text;
+    private ProtocolMessage message;
 
-    public ProtocolQueue(Message message)
+    public ProtocolQueue(ProtocolMessage message)
     {
-        this.senderName = message.getSenderName();
-        this.receiverName = message.getReceiverName();
-        this.text = message.getText();
+        this.message = message;
     }
     
     public void addToQueue() throws SQLException
     {
-        addToQueue(senderName, receiverName, text);
+        addToQueue(message);
     }
             
-    public void addToQueue(String senderName, String receiverName, String text) throws SQLException
+    public void addToQueue(ProtocolMessage message) throws SQLException
     {
-        String[] fields = new String[]{senderName, receiverName, text};
+        String[] fields = new String[]{message.getSenderName(), message.getReceiverName(), message.getText()};
         String[] nonStringFields = new String[]{"CURRENT_TIMESTAMP"};
         insert(FIELDS, fields, nonStringFields);
     }
@@ -45,6 +43,11 @@ public class ProtocolQueue extends DatabaseTable
     public String getTableName()
     {
         return TABLE_NAME;
+    }
+    
+    public static ResultSet loadUnsentProtocols(String receiverName) throws SQLException
+    {
+        return getObjectResultSet("SELECT * FROM " + TABLE_NAME + " WHERE receiverName = '" + receiverName + "'");
     }
     
 }

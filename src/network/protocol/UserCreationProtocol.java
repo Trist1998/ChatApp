@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
+import network.server.ServerConnectionHandler;
 
 /**
  *
@@ -35,9 +36,21 @@ public class UserCreationProtocol extends Protocol
         return false;
     }
     
-    public static boolean processInput(ProtocolParameters pp)
+    public static void processInput(ProtocolParameters pp, ServerConnectionHandler conn)
     {
-        User user = new User(pp.getParameter("username"), pp.getParameter("password"));    
-        return user.createUser();
+        User user = new User(pp.getParameter("username"), pp.getParameter("password"));
+        ProtocolParameters resPP = new ProtocolParameters();
+        resPP.add("HEAD", "RESPONSE");
+        resPP.add("Action", "CREATE_USER");
+        if(user.createUser())
+        {          
+            resPP.add("Confirmation", "Accepted");
+        }
+        else
+        {
+            resPP.add("Confirmation", "Declined");
+            resPP.add("Message", "Something wrong XD");
+        }
+        conn.send(resPP.toString());           
     }
 }

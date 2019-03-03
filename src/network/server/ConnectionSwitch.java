@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import message.Message;
+import message.ProtocolMessage;
 
 /**
  *
@@ -26,7 +26,7 @@ public class ConnectionSwitch
         return false;
     }
     
-    public static void switchProtocol(Message message)
+    public static void switchProtocol(ProtocolMessage message)
     {
         ServerConnectionHandler connection = activeConnections.get(message.getReceiverName());//add to protocol queue if not connected
         if(connection != null)

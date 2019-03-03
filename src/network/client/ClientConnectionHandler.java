@@ -1,7 +1,6 @@
 
 package network.client;
 
-
 import java.io.IOException;
 import java.net.*;
 import java.util.logging.Level;
@@ -53,4 +52,6 @@ public class ClientConnectionHandler extends ConnectionHandler
             Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 }

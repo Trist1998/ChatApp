@@ -21,6 +21,7 @@ public class ServerProtocolProcessor extends ProtocolProcessor
             System.out.println("We got data with the header of " + head);
             if(head.trim().equals(ServerMessageProtocol.HEAD_IDENTIFIER))
                 runServerMessageInputProcess(pp);
+            //Add response protocol
         }
     }
     
@@ -42,16 +43,15 @@ public class ServerProtocolProcessor extends ProtocolProcessor
         ProtocolParameters pp = parseInputStream(conn);
         if(pp != null)
         {
-            System.out.println(pp.toString() + "toString");
-            
             String head = pp.getHead();
+            
             if(head.equals(ClientLoginProtocol.HEAD_LOGIN_REQUEST))
             {
                 return ServerLoginProtocol.processInput(pp, conn);    
             }
             else if(head.equals(UserCreationProtocol.HEAD))
             {
-                UserCreationProtocol.processInput(pp);
+                UserCreationProtocol.processInput(pp,conn);
             }           
         }
         return false;

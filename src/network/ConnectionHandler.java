@@ -29,7 +29,7 @@ public abstract class ConnectionHandler implements Runnable
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         closed = false;
     }
-
+    
     public void send(String protocol) 
     {
         synchronized(outputStream)
@@ -41,7 +41,7 @@ public abstract class ConnectionHandler implements Runnable
             } 
             catch (IOException ex) 
             {
-                Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -67,5 +67,10 @@ public abstract class ConnectionHandler implements Runnable
     public synchronized boolean isConnected()
     {
         return !closed;
+    }
+    
+    protected BufferedWriter getOutputStream()
+    {
+        return outputStream;
     }
 }

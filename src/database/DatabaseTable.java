@@ -56,7 +56,7 @@ public abstract class DatabaseTable
             return "SELECT * FROM " + getTableName() + " WHERE " + fieldName + " = '" + value + "'";
 	}
 	
-	public ResultSet getObjectResultSet(String SQL) throws SQLException//Please remember to ServerDatabaseConnection.closeQuery(resultSetName)
+	public static ResultSet getObjectResultSet(String SQL) throws SQLException//Please remember to ServerDatabaseConnection.closeQuery(resultSetName)
 	{
             return  ServerDatabaseConnection.query(SQL);
 	}
