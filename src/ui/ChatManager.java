@@ -22,7 +22,7 @@ public class ChatManager
     public synchronized static void createChat(String chatName)
     {
         SideBarChat newSideBarComp = new SideBarChat(chatName, mainMenu);
-        chats.put(newSideBarComp.getName(), newSideBarComp);
+        chats.put(newSideBarComp.getChatName(), newSideBarComp);
         mainMenu.addChat(newSideBarComp);
     }
     
@@ -35,8 +35,7 @@ public class ChatManager
     }
     
     public synchronized static void receiveMessage(Message message)
-    {
-        
+    {    
         SideBarChat sideBarComp = chats.get(message.getSenderName());
         SwingUtilities.invokeLater(new Runnable() 
         {
@@ -50,5 +49,12 @@ public class ChatManager
         });
         
         
+    }
+
+    public static void receiveResponse(String chatName, int messageId, int responseCode)
+    {
+        SideBarChat chat = chats.get(chatName);
+        if(chat != null)
+            chat.receiveResponse(messageId, responseCode);
     }
 }
