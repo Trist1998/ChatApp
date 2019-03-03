@@ -1,15 +1,17 @@
 package ui;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BoxLayout;
 import message.Message;
 import network.client.ClientNetworkManager;
-import network.client.protocol.ClientMessageProtocol;
+import network.protocol.MessageProtocol;
 
 /**
  * @author Tristan
  */
 public class GenericChat extends javax.swing.JPanel 
 {
+    private static AtomicInteger idCounter = new AtomicInteger();
     private String chatName;
     
     public GenericChat(String chatName) 
@@ -18,6 +20,10 @@ public class GenericChat extends javax.swing.JPanel
         initComponents();
         lblChatName.setText(chatName);
         pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS));
+    }
+    public int getNextMessageId()
+    {
+        return idCounter.getAndIncrement();
     }
     
     private void saveMessage(Message message)
@@ -126,8 +132,8 @@ public class GenericChat extends javax.swing.JPanel
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
-        Message message = new Message(ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
-        ClientMessageProtocol.sendMessage(message);
+        Message message = new Message(getNextMessageId(), ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
+        MessageProtocol.sendMessage(message);
         saveMessage(message);
         addMessage(message);
     }//GEN-LAST:event_btnSendActionPerformed

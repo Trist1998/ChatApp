@@ -11,6 +11,7 @@ import network.client.ClientNetworkManager;
 public class MessagePanel extends javax.swing.JPanel
 {
     private Message message;
+    
     public MessagePanel(Message message)
     {
         this.message = message;

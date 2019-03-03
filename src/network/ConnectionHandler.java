@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.client.ClientConnectionHandler;
 
 /**
  *
@@ -20,6 +19,7 @@ public abstract class ConnectionHandler implements Runnable
     private BufferedReader inputStream;
     private BufferedWriter outputStream;
     private boolean closed;
+    private String username;
     
     
     public ConnectionHandler(Socket socket) throws IOException
@@ -72,5 +72,15 @@ public abstract class ConnectionHandler implements Runnable
     protected BufferedWriter getOutputStream()
     {
         return outputStream;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+    
+    public String getUsername()
+    {
+        return username;
     }
 }

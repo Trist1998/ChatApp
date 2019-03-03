@@ -11,6 +11,7 @@ public class ChatManager
 {
     private static HashMap<String, SideBarChat> chats = new HashMap<>();  
     private static MainMenu mainMenu;
+    
 
     public static void buildChatViews(MainMenu mm)
     {

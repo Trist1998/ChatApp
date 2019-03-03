@@ -11,22 +11,14 @@ import java.util.logging.Logger;
 import message.ProtocolMessage;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
-import network.server.protocol.ServerMessageProtocol;
-import network.server.protocol.ServerProtocolProcessor;
+import network.protocol.MessageProtocol;
 
 public class ServerConnectionHandler extends ConnectionHandler
 {
-    private String username;
     
     public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException
     {
         super(ss.accept());
-        username = "";
-    }
-    
-    public String getUsername()
-    {
-        return username;
     }
 
     @Override
@@ -36,8 +28,8 @@ public class ServerConnectionHandler extends ConnectionHandler
         {
             if(ServerProtocolProcessor.processInitialConnection(this))
             {
-                ServerMessageProtocol.retrieveStoredMessages(username, this);
-                System.out.println("Waiting for data from " + username);
+                MessageProtocol.retrieveStoredMessages(getUsername(), this);
+                System.out.println("Waiting for data from " + getUsername());
                 while(isConnected())
                 {
                     ServerProtocolProcessor.processServerInputStream(this);
@@ -49,16 +41,10 @@ public class ServerConnectionHandler extends ConnectionHandler
         catch (IOException ex) 
         {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (SQLException ex)
+        } catch (SQLException ex)
         {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void setUsername(String username) 
-    {
-        this.username = username;
+        } 
     }
     
     public boolean send(ProtocolMessage protocol) throws SQLException 

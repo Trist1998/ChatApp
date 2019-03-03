@@ -3,7 +3,7 @@ package network.protocol;
 import java.io.BufferedReader;
 import java.io.IOException;
 import network.ConnectionHandler;
-import static network.server.protocol.ServerProtocolProcessor.PROTOCOL_END;
+import static network.server.ServerProtocolProcessor.PROTOCOL_END;
 
 /**
  * @author Tristan
