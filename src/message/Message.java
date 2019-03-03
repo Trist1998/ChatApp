@@ -17,6 +17,7 @@ public class Message
     {
         //Hello
         this.senderName = senderName;
+        //Test Conflict
         this.receiverName = receiverName;
         this.text = text;
         received = null;
