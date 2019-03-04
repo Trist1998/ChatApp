@@ -26,12 +26,12 @@ public class ChatManager
         mainMenu.addChat(newSideBarComp);
     }
     
-    public static void createChat(Message message)
+    private static void createChat(Message message)
     {
-        SideBarChat newSideBarComp = new SideBarChat(message.getSenderName(), mainMenu);
-        newSideBarComp.receiveMessage(message);
+        SideBarChat newSideBarComp = new SideBarChat(message.getSenderName(), mainMenu);      
         chats.put(newSideBarComp.getChatName(), newSideBarComp);      
-        mainMenu.addChat(newSideBarComp);    
+        mainMenu.addChat(newSideBarComp);
+        newSideBarComp.receiveMessage(message);
     }
     
     public synchronized static void receiveMessage(Message message)
@@ -46,7 +46,7 @@ public class ChatManager
                 else
                     sideBarComp.receiveMessage(message);
             }
-        });     
+        });          
     }
 
     public static void receiveResponse(String chatName, int messageId, int responseCode)

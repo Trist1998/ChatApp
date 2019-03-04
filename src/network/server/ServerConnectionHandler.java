@@ -63,7 +63,7 @@ public class ServerConnectionHandler extends ConnectionHandler
             } 
             catch (IOException ex) 
             {
-                
+                Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
                 if(!protocol.isAlreadySaved())
                     try 
                     {
@@ -74,10 +74,9 @@ public class ServerConnectionHandler extends ConnectionHandler
                     {
                         Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex1);
                         return MESSAGE_LOST;
-                    }
-                Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-                return MESSAGE_SAVED;
+                    }              
             }
+            return MESSAGE_LOST;
         }      
     }
     

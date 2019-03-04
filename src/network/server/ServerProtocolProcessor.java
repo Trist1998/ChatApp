@@ -21,7 +21,6 @@ public class ServerProtocolProcessor extends ProtocolProcessor
             System.out.println("We got data with the header of " + head);
             if(head.trim().equals(MessageProtocol.HEAD))
                 runServerMessageInputProcess(pp, conn);
-            //Add response protocol
         }
     }
     

@@ -6,7 +6,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import message.Message;
-import network.client.ClientNetworkManager;
 import network.server.ServerConnectionHandler;
 
 /**
@@ -57,7 +56,8 @@ public class MessagePanel extends javax.swing.JPanel
 
     private void setStateLabel() 
     {
-        switch (message.getState()) {
+        switch (message.getState()) 
+        {
             case ServerConnectionHandler.MESSAGE_DELIVERED:
                 lblState.setText("Delivered");
                 break;
@@ -85,7 +85,6 @@ public class MessagePanel extends javax.swing.JPanel
     {
         message.setState(responseCode);
         setStateLabel();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -116,6 +115,11 @@ public class MessagePanel extends javax.swing.JPanel
 
         lblDateTime.setFont(new java.awt.Font("Heiti SC", 0, 10)); // NOI18N
         lblDateTime.setText("lblDateTime");
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane1.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         txaMessage.setEditable(false);
         txaMessage.setColumns(20);

@@ -57,7 +57,7 @@ public class SideBarChat extends javax.swing.JPanel
         this.chat = new GenericChat(chatName, this);
     }
 
-    public String getChatName() 
+    public String getChatName()
     {
         return chat.getChatName();
     }
@@ -126,7 +126,6 @@ public class SideBarChat extends javax.swing.JPanel
 
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
-        System.out.println("Clicked This panel: " + chat.getChatName());
         mainMenu.setChat(chat);
     }//GEN-LAST:event_formMouseClicked
 
@@ -161,7 +160,7 @@ public class SideBarChat extends javax.swing.JPanel
         }
     }
 
-    void receiveResponse(int messageId, int responseCode) 
+    public void receiveResponse(int messageId, int responseCode) 
     {
         chat.receiveResponse(messageId, responseCode);
     }

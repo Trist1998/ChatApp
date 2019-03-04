@@ -107,7 +107,8 @@ public class GenericChat extends javax.swing.JPanel
         if (m != null) 
         {
             m.receiveResponse(responseCode);
-            if (responseCode == MessageProtocol.RESPONSE_READ) {
+            if (responseCode == MessageProtocol.RESPONSE_READ) 
+            {
                 waitingForResponse.remove(messageId);
             }
         }
