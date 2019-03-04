@@ -36,11 +36,14 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatApp Login");
         setBackground(new java.awt.Color(229, 229, 229));
-        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setMaximumSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1000, 600));
 
         jPanel1.setBackground(new java.awt.Color(244, 244, 244));
         jPanel1.setAlignmentX(0.0F);
         jPanel1.setAlignmentY(0.0F);
+        jPanel1.setBounds(new java.awt.Rectangle(0, 0, 1200, 600));
+        jPanel1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         jPanel1.setMaximumSize(new java.awt.Dimension(1000, 600));
         jPanel1.setMinimumSize(new java.awt.Dimension(1000, 600));
         jPanel1.setPreferredSize(new java.awt.Dimension(1000, 600));

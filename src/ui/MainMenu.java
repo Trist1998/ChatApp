@@ -43,13 +43,18 @@ public class MainMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatApp Main Menu");
         setBackground(new java.awt.Color(229, 229, 229));
-        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setPreferredSize(new java.awt.Dimension(1200, 600));
+        setBounds(new java.awt.Rectangle(0, 0, 1000, 600));
+        setMaximumSize(new java.awt.Dimension(1000, 600));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(244, 244, 244));
         jPanel1.setAlignmentX(0.0F);
         jPanel1.setAlignmentY(0.0F);
-        jPanel1.setMaximumSize(new java.awt.Dimension(1200, 600));
+        jPanel1.setBounds(new java.awt.Rectangle(0, 0, 1000, 600));
+        jPanel1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
+        jPanel1.setMaximumSize(new java.awt.Dimension(1000, 600));
         jPanel1.setPreferredSize(new java.awt.Dimension(1200, 600));
 
         pnlChatWindow.setBackground(new java.awt.Color(224, 239, 255));
@@ -95,7 +100,7 @@ public class MainMenu extends javax.swing.JFrame {
                                 .addGap(27, 27, 27))))
                     .addComponent(pnlChats, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlChatWindow, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE))
+                .addComponent(pnlChatWindow, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,11 +118,11 @@ public class MainMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, 1000, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
