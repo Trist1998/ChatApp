@@ -1,31 +1,42 @@
 package ui;
 
+// improts
 import java.util.HashMap;
 import javax.swing.SwingUtilities;
 import message.Message;
 
 /**
- * @author Tristan
+ * 
+ * @author @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class ChatManager
 {
-    private static HashMap<String, SideBarChat> chats = new HashMap<>();  
-    private static MainMenu mainMenu;
+    private static HashMap<String, SideBarChat> chats = new HashMap<>(); // Declare a HashMap called chats.  
+    private static MainMenu mainMenu; // Declare an instance of MainMenu.
     
 
+    
     public static void buildChatViews(MainMenu mm)
     {
         mainMenu = mm;
         //TODO load locally saved chats
     }
     
+    /**
+     * Creates a new side bar chat and adds it to the Main Menu form.
+     * @param chatName 
+     */
     public synchronized static void createChat(String chatName)
     {
         SideBarChat newSideBarComp = new SideBarChat(chatName, mainMenu);
         chats.put(newSideBarComp.getChatName(), newSideBarComp);
-        mainMenu.addChat(newSideBarComp);
+        mainMenu.addChat(newSideBarComp); // Add sidebar chat component to Main Menu form.
     }
     
+    /**
+     * Creates a new side bar chat and adds it to the Main Menu form.
+     * @param message 
+     */
     public synchronized static void createChat(Message message)
     {
         SideBarChat newSideBarComp = new SideBarChat(message.getSenderName(), message, mainMenu);
