@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BoxLayout;
+import javax.swing.UIManager;
 import message.Message;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageProtocol;
@@ -11,40 +12,44 @@ import network.protocol.MessageProtocol;
 /**
  * @author Tristan
  */
-public class GenericChat extends javax.swing.JPanel 
-{
+public class GenericChat extends javax.swing.JPanel {
+
     private static AtomicInteger idCounter = new AtomicInteger();
     private String chatName;
     private HashMap<Integer, MessagePanel> waitingForResponse;
     private SideBarChat sidebar;
-    
-    public GenericChat(String chatName, SideBarChat sidebar) 
-    {
+
+    public GenericChat(String chatName, SideBarChat sidebar) {
         this.chatName = chatName;
         this.sidebar = sidebar;
+        
         initComponents();
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         lblChatName.setText(chatName);
         pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS));
         waitingForResponse = new HashMap<>();
     }
-    
-    public int getNextMessageId()
-    {
+
+    public int getNextMessageId() {
         return idCounter.getAndIncrement();
     }
-    
-    private void saveMessage(Message message)
-    {
+
+    private void saveMessage(Message message) {
         //TODO save message somewhere 
     }
-    
-    public String getChatName()
-    {
-      return chatName;   
+
+    public String getChatName() {
+        return chatName;
     }
-    
+
     public void addMessage(Message message)//Use this method when loading the chat 
-    { 
+    {
         MessagePanel newMessage = new MessagePanel(message);
         pnlMessages.add(newMessage);
         newMessage.setSize(newMessage.getPreferredSize());
@@ -52,30 +57,30 @@ public class GenericChat extends javax.swing.JPanel
         pnlMessages.revalidate();
         pnlMessages.repaint();
         sidebar.setLastMessage(message);
-        if(message.getId() > idCounter.get())
+        if (message.getId() > idCounter.get()) {
             idCounter.set(message.getId() + 1);
-        if(message.getSenderName().equals(ClientNetworkManager.getUsername()))
+        }
+        if (message.getSenderName().equals(ClientNetworkManager.getUsername())) {
             waitingForResponse.put(message.getId(), newMessage);
+        }
     }
-    
-    public synchronized void receiveMessage(Message message)
-    {      
+
+    public synchronized void receiveMessage(Message message) {
         addMessage(message);
         saveMessage(message);
     }
-    
-    void receiveResponse(int messageId, int responseCode)
-    {
+
+    void receiveResponse(int messageId, int responseCode) {
         MessagePanel m = waitingForResponse.get(messageId);
-        if(m != null)
-        {
+        if (m != null) {
             m.receiveResponse(responseCode);
-            if(responseCode == MessageProtocol.RESPONSE_READ)
+            if (responseCode == MessageProtocol.RESPONSE_READ) {
                 waitingForResponse.remove(messageId);
+            }
         }
-            
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,7 +93,7 @@ public class GenericChat extends javax.swing.JPanel
         txaMessage = new javax.swing.JTextArea();
         btnSend = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(229, 229, 229));
+        setBackground(new java.awt.Color(244, 244, 244));
 
         jPanel1.setBackground(new java.awt.Color(229, 229, 229));
 

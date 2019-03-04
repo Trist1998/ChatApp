@@ -3,30 +3,35 @@ package ui;
 import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
 
 /**
  *
  * @author Tristan
  */
-public class MainMenu extends javax.swing.JFrame
-{
+public class MainMenu extends javax.swing.JFrame {
+
     private ChatManager manager;
     private GenericChat currentChat;
-    
-    public MainMenu() 
-    {
+
+    public MainMenu() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         lblUsername.setText(ClientNetworkManager.getUsername());
-        
+
         BoxLayout layout = new BoxLayout(pnlScrollChats, BoxLayout.Y_AXIS);
         pnlScrollChats.setLayout(layout);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         pnlChatWindow = new javax.swing.JPanel();
@@ -36,24 +41,47 @@ public class MainMenu extends javax.swing.JFrame
         pnlScrollChats = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ChatApp Main Menu");
+        setBackground(new java.awt.Color(229, 229, 229));
+        setBounds(new java.awt.Rectangle(0, 0, 1000, 600));
+        setMaximumSize(new java.awt.Dimension(1000, 600));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setResizable(false);
 
-        pnlChatWindow.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(244, 244, 244));
+        jPanel1.setAlignmentX(0.0F);
+        jPanel1.setAlignmentY(0.0F);
+        jPanel1.setBounds(new java.awt.Rectangle(0, 0, 1000, 600));
+        jPanel1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
+        jPanel1.setMaximumSize(new java.awt.Dimension(1000, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1200, 600));
+
+        pnlChatWindow.setBackground(new java.awt.Color(224, 239, 255));
+        pnlChatWindow.setAlignmentX(0.0F);
+        pnlChatWindow.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         pnlChatWindow.setLayout(new javax.swing.BoxLayout(pnlChatWindow, javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton1.setText("Add chat");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
+        jButton1.setText("Add Chat");
+        jButton1.setAlignmentY(0.0F);
+        jButton1.setBorder(null);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        lblUsername.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         lblUsername.setText("Username");
 
+        pnlChats.setBorder(null);
         pnlChats.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        pnlChats.setAlignmentX(0.0F);
+        pnlChats.setAlignmentY(0.0F);
 
-        pnlScrollChats.setBackground(new java.awt.Color(204, 255, 255));
+        pnlScrollChats.setBackground(new java.awt.Color(198, 240, 255));
+        pnlScrollChats.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         pnlScrollChats.setLayout(new java.awt.BorderLayout());
         pnlChats.setViewportView(pnlScrollChats);
 
@@ -63,16 +91,16 @@ public class MainMenu extends javax.swing.JFrame
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(23, 23, 23)
-                            .addComponent(lblUsername))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGap(121, 121, 121)
-                            .addComponent(jButton1)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUsername)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(27, 27, 27))))
                     .addComponent(pnlChats, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlChatWindow, javax.swing.GroupLayout.DEFAULT_SIZE, 860, Short.MAX_VALUE))
+                .addComponent(pnlChatWindow, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,9 +108,9 @@ public class MainMenu extends javax.swing.JFrame
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(lblUsername)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(pnlChats, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -90,11 +118,11 @@ public class MainMenu extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, 1000, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -106,25 +134,22 @@ public class MainMenu extends javax.swing.JFrame
         ChatManager.createChat(chatName);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    
-    public synchronized void addChat(SideBarChat sideBarChat)
-    {
-            System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());
-            
-            sideBarChat.setPreferredSize(new Dimension(pnlScrollChats.getWidth(), sideBarChat.getPreferredSize().height));
-            sideBarChat.setVisible(true);
-            pnlScrollChats.add(sideBarChat);
-            pnlScrollChats.revalidate();
-            pnlScrollChats.repaint();
+    public synchronized void addChat(SideBarChat sideBarChat) {
+        System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());
+
+        sideBarChat.setPreferredSize(new Dimension(pnlScrollChats.getWidth(), sideBarChat.getPreferredSize().height));
+        sideBarChat.setVisible(true);
+        pnlScrollChats.add(sideBarChat);
+        pnlScrollChats.revalidate();
+        pnlScrollChats.repaint();
     }
-    
-    public synchronized void setChat(GenericChat chat)
-    {
+
+    public synchronized void setChat(GenericChat chat) {
         //System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());     
-        if(currentChat != chat)
-        {
-            if(currentChat != null)
+        if (currentChat != chat) {
+            if (currentChat != null) {
                 pnlChatWindow.remove(currentChat);
+            }
             chat.setSize(pnlChatWindow.getWidth(), pnlChatWindow.getHeight());
             chat.setVisible(true);
             pnlChatWindow.add(chat);
@@ -132,7 +157,7 @@ public class MainMenu extends javax.swing.JFrame
             pnlChatWindow.repaint();
         }
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
