@@ -53,6 +53,12 @@ public class ChatManager
     {
         SideBarChat chat = chats.get(chatName);
         if(chat != null)
-            chat.receiveResponse(messageId, responseCode);
+            SwingUtilities.invokeLater(new Runnable() 
+            {
+                public void run() 
+                {
+                    chat.receiveResponse(messageId, responseCode);
+                }
+            });         
     }
 }
