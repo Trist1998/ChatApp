@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.Dimension;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -35,7 +36,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         pnlChatWindow = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnAddChat = new javax.swing.JButton();
         lblUsername = new javax.swing.JLabel();
         pnlChats = new javax.swing.JScrollPane();
         pnlScrollChats = new javax.swing.JPanel();
@@ -128,20 +129,21 @@ public class MainMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void btnAddChatActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddChatActionPerformed
+    {//GEN-HEADEREND:event_btnAddChatActionPerformed
         String chatName = JOptionPane.showInputDialog("Enter user name:");
         ChatManager.createChat(chatName);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnAddChatActionPerformed
 
-    public synchronized void addChat(SideBarChat sideBarChat) {
-        System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());
-
-        sideBarChat.setPreferredSize(new Dimension(pnlScrollChats.getWidth(), sideBarChat.getPreferredSize().height));
-        sideBarChat.setVisible(true);
-        pnlScrollChats.add(sideBarChat);
-        pnlScrollChats.revalidate();
-        pnlScrollChats.repaint();
+    
+    public synchronized void addChat(SideBarChat sideBarChat)
+    {
+            sideBarChat.setSize(new Dimension(pnlScrollChats.getWidth(), sideBarChat.getPreferredSize().height));
+            sideBarChat.setVisible(true);
+            pnlScrollChats.add(Box.createRigidArea(new Dimension(0,5)));
+            pnlScrollChats.add(sideBarChat);
+            pnlScrollChats.revalidate();
+            pnlScrollChats.repaint();
     }
 
     public synchronized void setChat(GenericChat chat) {
@@ -152,6 +154,7 @@ public class MainMenu extends javax.swing.JFrame {
             }
             chat.setSize(pnlChatWindow.getWidth(), pnlChatWindow.getHeight());
             chat.setVisible(true);
+            pnlChatWindow.setLayout(new BoxLayout(pnlChatWindow,0));
             pnlChatWindow.add(chat);
             pnlChatWindow.revalidate();
             pnlChatWindow.repaint();
@@ -160,7 +163,7 @@ public class MainMenu extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAddChat;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel pnlChatWindow;
