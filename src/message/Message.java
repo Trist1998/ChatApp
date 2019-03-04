@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.client.ClientNetworkManager;
 import network.protocol.ProtocolParameters;
 
 public class Message 
@@ -44,7 +43,7 @@ public class Message
         }
         state = -1;
     }
-    
+
     public Message(int id, String senderName, String receiverName, String text)
     {
         this.id = id;
@@ -53,12 +52,7 @@ public class Message
         this.text = text;
         received = null;
         state = -1;
-    } 
-    
-    public boolean isUserAlsoSender()
-    {
-         return getSenderName().equals(ClientNetworkManager.getUsername());
-    }
+    }  
     
     public synchronized void setState(int responseCode)
     {
@@ -118,16 +112,6 @@ public class Message
     public String getDateSentString()
     {
         return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").format(sent);
-    }
-    
-    public String getDisplayDateSentString()
-    {
-            Date date = getSent();
-            Date now = new Date();
-            if(now.getDate() == date.getDate() && now.getMonth() == date.getMonth())
-                return new SimpleDateFormat("HH:mm").format(date);
-            else
-                return new SimpleDateFormat("dd/MM HH:mm").format(date);
     }
                     
 
