@@ -19,16 +19,20 @@ public class CreateUser extends javax.swing.JFrame
     {
         initComponents();
         this.setLocationRelativeTo(null);
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         txtUsername = new javax.swing.JTextField();
@@ -39,7 +43,7 @@ public class CreateUser extends javax.swing.JFrame
         txtPassword = new javax.swing.JPasswordField();
         txtConfirm = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatApp Create User");
@@ -70,8 +74,10 @@ public class CreateUser extends javax.swing.JFrame
 
         btnSubmit.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnSubmit.setText("Submit");
-        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSubmit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnSubmitActionPerformed(evt);
             }
         });
@@ -82,11 +88,13 @@ public class CreateUser extends javax.swing.JFrame
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/Screenshot 2019-03-04 at 14.19.35.png"))); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
-        jButton1.setText("Back");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        btnBack.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnBackActionPerformed(evt);
             }
         });
 
@@ -95,7 +103,7 @@ public class CreateUser extends javax.swing.JFrame
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(btnBack)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(330, Short.MAX_VALUE)
@@ -133,8 +141,8 @@ public class CreateUser extends javax.swing.JFrame
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addComponent(btnSubmit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(btnBack)
                 .addGap(27, 27, 27))
         );
 
@@ -171,16 +179,16 @@ public class CreateUser extends javax.swing.JFrame
              
     }//GEN-LAST:event_btnSubmitActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
+    {//GEN-HEADEREND:event_btnBackActionPerformed
         Login l = new Login();
         l.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSubmit;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

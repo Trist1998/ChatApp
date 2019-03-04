@@ -1,20 +1,23 @@
 package ui;
 
-import java.io.BufferedWriter;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
 
-public class Login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame
+{
 
-    BufferedWriter bw;
 
-    public Login() {
+    public Login() 
+    {
         initComponents();
         this.setLocationRelativeTo(null);
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
 
