@@ -1,20 +1,20 @@
 package ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import message.Message;
-import network.client.ClientNetworkManager;
 import network.server.ServerConnectionHandler;
 
 /**
  *
  * @author Tristan
  */
-public class MessagePanel extends javax.swing.JPanel
+public class MessagePanel extends javax.swing.JPanel 
 {
+
     private Message message;
     private int state;
     
@@ -25,27 +25,38 @@ public class MessagePanel extends javax.swing.JPanel
         state = -1;
         
         initComponents();
+        
+        try 
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
         txaMessage.setSize(pnlContainer.getWidth(), getContentHeight(message.getText()));
         txaMessage.setText(message.getText());
-        lblDateTime.setText(message.getDateSentString());
+        lblDateTime.setText(message.getDisplayDateSentString());
         setMaximumSize(new Dimension(parent.getWidth(), pnlContainer.getPreferredSize().height));
         pnlContainer.setMaximumSize(new Dimension(getWidth() - 100, getPreferredSize().height));
         
-        setAlignmentX(Component.LEFT_ALIGNMENT);
-        if(message.getSenderName().equals(ClientNetworkManager.getUsername()))
+        
+        if(message.isUserAlsoSender())
         {
-            setAlignmentX(Component.RIGHT_ALIGNMENT);
             Color colour = new Color(153,204,255);
-            pnlContainer.setBackground(colour);
+            //pnlContainer.setBackground(colour);
             txaMessage.setBackground(colour);
         }
-            
+        else
+        {
+            txaMessage.setBackground(new Color(150,255,200));
+        }
         setStateLabel();
     }
-    private void setStateLabel()
+
+    private void setStateLabel() 
     {
-        System.out.println("Hello");
-        switch (message.getState())
+        switch (message.getState()) 
         {
             case ServerConnectionHandler.MESSAGE_DELIVERED:
                 lblState.setText("Delivered");
@@ -74,62 +85,81 @@ public class MessagePanel extends javax.swing.JPanel
     {
         message.setState(responseCode);
         setStateLabel();
-        
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
     {
 
         pnlContainer = new javax.swing.JPanel();
+        lblState = new javax.swing.JLabel();
+        lblDateTime = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaMessage = new javax.swing.JTextArea();
-        lblDateTime = new javax.swing.JLabel();
-        lblState = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(153, 255, 153));
-        setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        setForeground(new java.awt.Color(153, 255, 153));
+        setBackground(new java.awt.Color(244, 244, 244));
+        setForeground(new java.awt.Color(244, 244, 244));
         setToolTipText("");
+        setAlignmentX(0.0F);
         setAlignmentY(0.0F);
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setMinimumSize(new java.awt.Dimension(162, 64));
+        setName(""); // NOI18N
 
+        pnlContainer.setBackground(new java.awt.Color(222, 222, 222));
+        pnlContainer.setMinimumSize(new java.awt.Dimension(170, 70));
+        pnlContainer.setPreferredSize(new java.awt.Dimension(170, 70));
+
+        lblState.setFont(new java.awt.Font("Heiti SC", 0, 10)); // NOI18N
+        lblState.setText("lblState");
+
+        lblDateTime.setFont(new java.awt.Font("Heiti SC", 0, 10)); // NOI18N
+        lblDateTime.setText("lblDateTime");
+
+        jScrollPane1.setBorder(null);
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane1.setViewportBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         txaMessage.setEditable(false);
         txaMessage.setColumns(20);
+        txaMessage.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         txaMessage.setLineWrap(true);
         txaMessage.setRows(1);
-        txaMessage.setBorder(null);
-        txaMessage.setMaximumSize(new java.awt.Dimension(500, 500));
         jScrollPane1.setViewportView(txaMessage);
-
-        lblDateTime.setText("lblDateTime");
-
-        lblState.setText("lblState");
 
         javax.swing.GroupLayout pnlContainerLayout = new javax.swing.GroupLayout(pnlContainer);
         pnlContainer.setLayout(pnlContainerLayout);
         pnlContainerLayout.setHorizontalGroup(
             pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
             .addGroup(pnlContainerLayout.createSequentialGroup()
+                .addComponent(lblState)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(lblDateTime)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblState))
+                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         pnlContainerLayout.setVerticalGroup(
             pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContainerLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDateTime)
-                    .addComponent(lblState)))
+                    .addComponent(lblState)
+                    .addComponent(lblDateTime))
+                .addContainerGap())
         );
 
-        add(pnlContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 2, -1, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlContainer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -141,5 +171,4 @@ public class MessagePanel extends javax.swing.JPanel
     private javax.swing.JTextArea txaMessage;
     // End of variables declaration//GEN-END:variables
 
-    
 }
