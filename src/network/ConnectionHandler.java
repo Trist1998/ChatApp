@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public abstract class ConnectionHandler implements Runnable {
+public abstract class ConnectionHandler implements Runnable 
+{
 
     // Variables
     private Socket socket;
@@ -31,7 +32,8 @@ public abstract class ConnectionHandler implements Runnable {
      * @param socket
      * @throws IOException
      */
-    public ConnectionHandler(Socket socket) throws IOException {
+    public ConnectionHandler(Socket socket) throws IOException 
+    {
         this.socket = socket;
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -44,13 +46,18 @@ public abstract class ConnectionHandler implements Runnable {
      * @param protocol
      * @return
      */
-    public boolean send(String protocol) {
-        synchronized (outputStream) {
-            try {
+    public boolean send(String protocol) 
+    {
+        synchronized (outputStream) 
+        {
+            try 
+            {
                 outputStream.write(protocol);//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
                 outputStream.flush(); 
                 return true;
-            } catch (IOException ex) {
+            } 
+            catch (IOException ex)
+            {
                 Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
@@ -62,7 +69,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @throws IOException
      */
-    public synchronized void close() throws IOException {
+    public synchronized void close() throws IOException 
+    {
         inputStream.close();
         outputStream.close();
         socket.close();
@@ -74,7 +82,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @return
      */
-    public BufferedReader getInputStream() {
+    public BufferedReader getInputStream() 
+    {
         return inputStream;
     }
 
@@ -83,7 +92,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @return
      */
-    public Socket getSocket() {
+    public Socket getSocket() 
+    {
         return socket;
     }
 
@@ -92,7 +102,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @return
      */
-    public synchronized boolean isConnected() {
+    public synchronized boolean isConnected() 
+    {
         return !closed;
     }
 
@@ -101,7 +112,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @return
      */
-    protected BufferedWriter getOutputStream() {
+    protected BufferedWriter getOutputStream()
+    {
         return outputStream;
     }
 
@@ -110,7 +122,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @param username
      */
-    public void setUsername(String username) {
+    public void setUsername(String username)
+    {
         this.username = username;
     }
 
@@ -119,7 +132,8 @@ public abstract class ConnectionHandler implements Runnable {
      *
      * @return
      */
-    public String getUsername() {
+    public String getUsername() 
+    {
         return username;
     }
 }
