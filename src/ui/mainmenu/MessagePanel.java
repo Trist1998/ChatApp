@@ -1,4 +1,4 @@
-package ui;
+package ui.mainmenu;
 
 // Imports
 import java.awt.Color;
@@ -60,14 +60,15 @@ public class MessagePanel extends javax.swing.JPanel
     /**
      * Set the state label based on message state. (Delivered, saved, lost).
      */
-    private void setStateLabel() {
-        System.out.println("Hello");
-        switch (message.getState()) {
+    private void setStateLabel()
+    {
+        switch (message.getState()) 
+        {
             case ServerConnectionHandler.MESSAGE_DELIVERED:
                 lblState.setText("Delivered");
                 break;
             case ServerConnectionHandler.MESSAGE_SAVED:
-                lblState.setText("Saved");
+                lblState.setText("...");
                 break;
             case ServerConnectionHandler.MESSAGE_LOST:
                 lblState.setText("Lost");
@@ -93,7 +94,8 @@ public class MessagePanel extends javax.swing.JPanel
         return dummyEditorPane.getPreferredSize().height;
     }
     
-    public void receiveResponse(int responseCode){
+    public void receiveResponse(int responseCode)
+    {
         message.setState(responseCode);
         setStateLabel();
     }

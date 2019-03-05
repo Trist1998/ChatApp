@@ -1,6 +1,7 @@
-package ui;
+package ui.mainmenu;
 
 // Imports
+import ui.mainmenu.MainMenu;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
@@ -21,11 +22,15 @@ public class SideBarChat extends javax.swing.JPanel
     /**
      * Parameterized Constructor for SideBarChat class, creates a chat on the side of the Main Menu form with no content.
      */
-    public SideBarChat(String chatName, MainMenu mm) {
+    public SideBarChat(String chatName, MainMenu mm) 
+    {
         initComponents(); // Initialise GUI components.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
-        } catch (Exception e) {
+        } 
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         lblChatName.setText(chatName);
@@ -38,11 +43,15 @@ public class SideBarChat extends javax.swing.JPanel
     /**
      * Parameterized Constructor for SideBarChat class, creates a chat on the side of the Main Menu form with content of the last message.
      */
-    public SideBarChat(String chatName, Message lastMessage, MainMenu mm) {
+    public SideBarChat(String chatName, Message lastMessage, MainMenu mm)
+    {
         initComponents(); // Initialise GUI components.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
         lblChatName.setText(chatName); // Set chat name label to chat name parameter.
@@ -57,7 +66,8 @@ public class SideBarChat extends javax.swing.JPanel
      *
      * @return
      */
-    public String getChatName() {
+    public String getChatName() 
+    {
         return chat.getChatName(); // Get the chat name of chat and return it.
     }
 
@@ -75,7 +85,6 @@ public class SideBarChat extends javax.swing.JPanel
         setAlignmentY(0.0F);
         setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         setMaximumSize(new java.awt.Dimension(275, 90));
-        setMinimumSize(null);
         setPreferredSize(new java.awt.Dimension(275, 90));
         addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -145,7 +154,8 @@ public class SideBarChat extends javax.swing.JPanel
      *
      * @param message
      */
-    public void receiveMessage(Message message) {
+    public void receiveMessage(Message message) 
+    {
         setLastMessage(message); // Sets last message of chat to message.
         chat.receiveMessage(message); // Adds message to chat.
     }
@@ -174,7 +184,8 @@ public class SideBarChat extends javax.swing.JPanel
      * @param messageId
      * @param responseCode
      */
-    void receiveResponse(int messageId, int responseCode) {
+    public void receiveResponse(int messageId, int responseCode) 
+    {
         chat.receiveResponse(messageId, responseCode);
     }
 }

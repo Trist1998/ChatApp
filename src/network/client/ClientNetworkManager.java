@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ClientNetworkManager 
 {
     public static final int SERVER_PORT = 9999;
-    public static final String HOST_NAME = "196.24.176.236";
+    public static final String HOST_NAME = "localhost";
     
     private static ClientConnectionHandler connection;
     private static String username;

@@ -14,7 +14,8 @@ import network.protocol.ProtocolParameters;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class Message {
+public class Message 
+{
 
     // Variables
     private int id;
@@ -33,7 +34,8 @@ public class Message {
      * @param receiverName
      * @param text
      */
-    public Message(String senderName, String receiverName, String text) {
+    public Message(String senderName, String receiverName, String text)
+    {
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.text = text;
@@ -47,14 +49,18 @@ public class Message {
      *
      * @param pp
      */
-    public Message(ProtocolParameters pp) {
+    public Message(ProtocolParameters pp)
+    {
         this.id = Integer.parseInt(pp.getParameter("Id"));
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
-        try {
+        try 
+        {
             this.sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(pp.getParameter("DateSent"));
-        } catch (ParseException ex) {
+        }
+        catch (ParseException ex)
+        {
             Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
         }
         state = -1;
@@ -69,7 +75,8 @@ public class Message {
      * @param receiverName
      * @param text
      */
-    public Message(int id, String senderName, String receiverName, String text) {
+    public Message(int id, String senderName, String receiverName, String text) 
+    {
         this.id = id;
         this.senderName = senderName;
         this.receiverName = receiverName;
@@ -93,7 +100,8 @@ public class Message {
      *
      * @return
      */
-    public synchronized int getState() {
+    public synchronized int getState()
+    {
         return state;
     }
 
@@ -102,7 +110,8 @@ public class Message {
      *
      * @return
      */
-    public int getId() {
+    public int getId() 
+    {
         return id;
     }
 
@@ -111,7 +120,8 @@ public class Message {
      *
      * @return
      */
-    public String getSenderName() {
+    public String getSenderName()
+    {
         return senderName;
     }
 
@@ -120,7 +130,8 @@ public class Message {
      *
      * @return
      */
-    public String getReceiverName() {
+    public String getReceiverName() 
+    {
         return receiverName;
     }
 
@@ -129,7 +140,8 @@ public class Message {
      *
      * @return
      */
-    public String getText() {
+    public String getText()
+    {
         return text;
     }
 
@@ -138,7 +150,8 @@ public class Message {
      *
      * @return
      */
-    public boolean isReceived() {
+    public boolean isReceived() 
+    {
         return received != null;
     }
 
@@ -147,7 +160,8 @@ public class Message {
      *
      * @param text
      */
-    public void setText(String text) {
+    public void setText(String text)
+    {
         this.text = text;
     }
 
@@ -156,7 +170,8 @@ public class Message {
      *
      * @return
      */
-    public Date getReceived() {
+    public Date getReceived()
+    {
         return received;
     }
 
@@ -165,7 +180,8 @@ public class Message {
      *
      * @param received
      */
-    public void setReceived(Date received) {
+    public void setReceived(Date received)
+    {
         this.received = received;
     }
 
@@ -174,7 +190,8 @@ public class Message {
      *
      * @return
      */
-    public Date getSent() {
+    public Date getSent()
+    {
         return sent;
     }
 
@@ -183,7 +200,8 @@ public class Message {
      *
      * @return
      */
-    public String getDateSentString() {
+    public String getDateSentString() 
+    {
         return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").format(sent);
     }
     
@@ -203,7 +221,8 @@ public class Message {
      *
      * @param sent
      */
-    public void setSent(Date sent) {
+    public void setSent(Date sent)
+    {
         this.sent = sent;
     }
 }

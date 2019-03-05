@@ -1,26 +1,26 @@
 package network.client;
 
 // Imports
-import network.protocol.ProtocolProcessor;
+import network.protocol.NetworkMessageListener;
 import java.io.IOException;
 import network.ConnectionHandler;
-import network.protocol.LoginProtocol;
-import network.protocol.MessageProtocol;
+import network.protocol.LoginNetworkManager;
+import network.protocol.MessageNetworkManager;
+import network.protocol.UserCreationNetworkManager;
 import network.protocol.ProtocolParameters;
-import network.protocol.UserCreationProtocol;
 
 /**
  * 
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ClientProtocolProcessor extends ProtocolProcessor
+public class ClientProtocolProcessor extends NetworkMessageListener
 {
 
     public static void processInputStream(ClientConnectionHandler conn) throws IOException 
     {
         ProtocolParameters pp  = parseInputStream(conn);  
         String head = pp.getHead();
-        if(head.equals(MessageProtocol.HEAD))
+        if(head.equals(MessageNetworkManager.HEAD))
             runMessageInputProcess(pp, conn);    
     }
     
@@ -30,7 +30,7 @@ public class ClientProtocolProcessor extends ProtocolProcessor
             { 
                 public void run()
                 {
-                    MessageProtocol.processInput(pp, conn);
+                    MessageNetworkManager.processInput(pp, conn);
                 }
             }
             ).start();   
@@ -41,9 +41,9 @@ public class ClientProtocolProcessor extends ProtocolProcessor
         ProtocolParameters pp = parseInputStream(conn);
       
         String head = pp.getHead();
-        if(head.equals(LoginProtocol.HEAD))
+        if(head.equals(LoginNetworkManager.HEAD))
         {           
-            return LoginProtocol.processInput(pp, conn, false);
+            return LoginNetworkManager.processInput(pp, conn, false);
         }
         return false;
     }
@@ -53,9 +53,9 @@ public class ClientProtocolProcessor extends ProtocolProcessor
         ProtocolParameters pp = parseInputStream(conn);
       
         String head = pp.getHead();
-        if(head.equals(UserCreationProtocol.HEAD))
+        if(head.equals(UserCreationNetworkManager.HEAD))
         {
-            return UserCreationProtocol.processInput(pp);
+            return UserCreationNetworkManager.processInput(pp);
         }
         return false;
     }

@@ -14,7 +14,7 @@ import network.server.ServerConnectionHandler;
  * UserCreationProtocol class is used to in creation of users.
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class UserCreationProtocol extends Protocol
+public class UserCreationNetworkManager extends NetworkMessageHandler
 {
     // Variables
     public static final String HEAD = "CREATE_USER";
@@ -30,7 +30,7 @@ public class UserCreationProtocol extends Protocol
     public static boolean createUser(String username, String password)
     {
         ProtocolParameters pp = new ProtocolParameters();
-        pp.add(Protocol.PROTOCOL_ACTION, ACTION_REQUEST);
+        pp.add(NetworkMessageHandler.PROTOCOL_ACTION, ACTION_REQUEST);
         pp.add("username", username);
         pp.add("password", new PasswordHelper().clientPasswordHash(password));
         
@@ -45,7 +45,7 @@ public class UserCreationProtocol extends Protocol
         } 
         catch (IOException ex)
         {
-            Logger.getLogger(UserCreationProtocol.class.getName()).log(Level.SEVERE, null, ex);             
+            Logger.getLogger(UserCreationNetworkManager.class.getName()).log(Level.SEVERE, null, ex);             
         }
         return false; 
     }
@@ -59,8 +59,8 @@ public class UserCreationProtocol extends Protocol
     {
         User user = new User(pp.getParameter("username"), pp.getParameter("password"));
         ProtocolParameters resPP = new ProtocolParameters();
-        resPP.add(Protocol.PROTOCOL_HEAD, HEAD);
-        resPP.add(Protocol.PROTOCOL_ACTION, ACTION_RESPONSE);
+        resPP.add(NetworkMessageHandler.PROTOCOL_HEAD, HEAD);
+        resPP.add(NetworkMessageHandler.PROTOCOL_ACTION, ACTION_RESPONSE);
         if(user.createUser())
         {          
             resPP.add("Confirmation", "Accepted");

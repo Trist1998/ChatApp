@@ -1,4 +1,4 @@
-package ui;
+package ui.mainmenu;
 
 // Imports
 import java.awt.Color;
@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
+import ui.ChatManager;
 
 /**
  * MainMenu class allows a user to send and receive messages to other users of the ChatApp.
@@ -18,7 +19,6 @@ import network.client.ClientNetworkManager;
 public class MainMenu extends javax.swing.JFrame 
 {
 
-    private ChatManager manager; // Declare new instance of ChatManager.
     private GenericChat currentChat; // Declare new instance of GenericChat.
     
     /**
@@ -28,9 +28,12 @@ public class MainMenu extends javax.swing.JFrame
     {
         initComponents(); // Initialise GUI components.
         this.setLocationRelativeTo(null); // Set frame to center of screen.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
         
@@ -56,7 +59,6 @@ public class MainMenu extends javax.swing.JFrame
         setTitle("ChatApp Main Menu");
         setBackground(new java.awt.Color(229, 229, 229));
         setBounds(new java.awt.Rectangle(0, 0, 1000, 600));
-        setMaximumSize(new java.awt.Dimension(1000, 600));
         setMinimumSize(new java.awt.Dimension(1000, 600));
         setResizable(false);
 
@@ -170,9 +172,11 @@ public class MainMenu extends javax.swing.JFrame
      * When a user selects a chat, it will be displayed on the MainMenu form.
      * @param chat 
      */
-    public synchronized void setChat(GenericChat chat) {
+    public synchronized void setChat(GenericChat chat) 
+    {
         //System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());     
-        if (currentChat != chat) {
+        if (currentChat != chat) 
+        {
             if (currentChat != null) 
             {
                 pnlChatWindow.remove(currentChat);                              

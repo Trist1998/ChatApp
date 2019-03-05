@@ -1,5 +1,7 @@
 package ui;
 
+import ui.mainmenu.SideBarChat;
+import ui.mainmenu.MainMenu;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.SwingUtilities;
 import message.Message;
@@ -50,11 +52,16 @@ public class ChatManager
     public synchronized static void receiveMessage(Message message) 
     {
         SideBarChat sideBarComp = chats.get(message.getSenderName());
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                if (sideBarComp == null) {
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                if (sideBarComp == null) 
+                {
                     ChatManager.createChat(message);
-                } else {
+                } 
+                else 
+                {
                     sideBarComp.receiveMessage(message);
                 }
             }
@@ -79,8 +86,5 @@ public class ChatManager
                 }
             });         
     }
-    public void donothing()
-    {
-        
-    }
+
 }

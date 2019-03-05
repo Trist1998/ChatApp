@@ -8,10 +8,11 @@ import network.ConnectionHandler;
  * Protocol class is a parent class to all protocols. Defines all protocol structures.
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class Protocol {
+public class NetworkMessageHandler
+{
 
     // Variables
-    public static final String PROTOCOL_HEAD = "Head";//Determines which class processes the protocol
+    public static final String PROTOCOL_HEAD = "Head";//During processing on the receivers Determines which class processes the protocol
     public static final String PROTOCOL_ACTION = "Action";//Determines what action inside the processing class
     public static final String PROTOCOL_END = "END_PROTOCOL";
 
@@ -21,7 +22,8 @@ public class Protocol {
      * @param parameters
      * @return 
      */
-    public static String buildProtocolString(String head, ProtocolParameters parameters) {
+    public static String buildProtocolString(String head, ProtocolParameters parameters) 
+    {
         parameters.setHead(head);
         String output = parameters.toString() + "\n";
         output += PROTOCOL_END + "\n";
@@ -37,7 +39,8 @@ public class Protocol {
      * @return
      * @throws IOException 
      */
-    public static boolean send(String head, ProtocolParameters parameters, ConnectionHandler conn) throws IOException {
+    public static boolean send(String head, ProtocolParameters parameters, ConnectionHandler conn) throws IOException 
+    {
         String output = buildProtocolString(head, parameters);
         conn.send(output);
         return true;

@@ -1,7 +1,7 @@
 package ui;
 
-// Imports 
-import java.io.BufferedWriter;
+// Imports
+import ui.mainmenu.MainMenu;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
@@ -14,10 +14,8 @@ import network.client.ClientNetworkManager;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class Login extends javax.swing.JFrame {
-
-    BufferedWriter bw; // Declare an instance of a BufferedWriter.
-
+public class Login extends javax.swing.JFrame 
+{
     /**
      * Non-Parameterized Constructor for Login Class, creates the Login Form.
      */
@@ -26,16 +24,20 @@ public class Login extends javax.swing.JFrame {
         initComponents(); // Initialise GUI components.
         this.setLocationRelativeTo(null); // Set frame to center of screen.
         jPanel1.getRootPane().setDefaultButton(btnLogin); // Set default button to login, allows user to hit enter.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         txtUsername = new javax.swing.JTextField();
@@ -55,7 +57,6 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(244, 244, 244));
         jPanel1.setAlignmentX(0.0F);
         jPanel1.setAlignmentY(0.0F);
-        jPanel1.setBounds(new java.awt.Rectangle(0, 0, 1200, 600));
         jPanel1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         jPanel1.setMaximumSize(new java.awt.Dimension(1000, 600));
         jPanel1.setMinimumSize(new java.awt.Dimension(1000, 600));
@@ -70,8 +71,10 @@ public class Login extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         jButton1.setText("Sign Up");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -81,13 +84,15 @@ public class Login extends javax.swing.JFrame {
 
         btnLogin.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnLogin.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnLoginActionPerformed(evt);
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/Screenshot 2019-03-04 at 14.19.35.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/resources/Screenshot 2019-03-04 at 14.19.35.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,7 +132,7 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnLogin))
@@ -164,7 +169,8 @@ public class Login extends javax.swing.JFrame {
             ChatManager.buildChatViews(mm); // Load locally saved chats onto Main Menu.
             mm.setVisible(true); // Display MainMenu form.
             this.dispose(); // Close this form.
-        } else 
+        } 
+        else 
         {
             JOptionPane.showMessageDialog(null, "Login Failed"); // Error message.
         }
@@ -185,10 +191,12 @@ public class Login extends javax.swing.JFrame {
      * Main method, runs the the Login thread.
      * @param args 
      */
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+    public static void main(String args[]) 
+    {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run() 
+            {
                 new Login().setVisible(true); // Display Login form.
             }
         });

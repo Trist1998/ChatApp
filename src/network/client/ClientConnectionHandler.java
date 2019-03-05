@@ -6,15 +6,16 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.ConnectionHandler;
-import network.protocol.LoginProtocol;
+import network.protocol.LoginNetworkManager;
 
 /**
  * ClientConnectionHandler class is a connection handler for the client.
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ClientConnectionHandler extends ConnectionHandler {
-
+public class ClientConnectionHandler extends ConnectionHandler
+{
+    
     private String password;
 
     /**
@@ -25,7 +26,8 @@ public class ClientConnectionHandler extends ConnectionHandler {
      * @param password
      * @throws IOException
      */
-    public ClientConnectionHandler(Socket socket, String username, String password) throws IOException {
+    public ClientConnectionHandler(Socket socket, String username, String password) throws IOException 
+    {
         super(socket);
         setUsername(username);
         this.password = password;
@@ -37,7 +39,8 @@ public class ClientConnectionHandler extends ConnectionHandler {
      * @param socket
      * @throws IOException
      */
-    public ClientConnectionHandler(Socket socket) throws IOException {
+    public ClientConnectionHandler(Socket socket) throws IOException 
+    {
         super(socket);
     }
 
@@ -45,17 +48,23 @@ public class ClientConnectionHandler extends ConnectionHandler {
      * Create listener thread for the socket. Once connection established sends the login details. 
      */
     @Override
-    public void run() {
-        try {
-            LoginProtocol.loginRequest(getUsername(), password, this);
-            if (ClientProtocolProcessor.processLogin(this)) {
+    public void run() 
+    {
+        try
+        {
+            LoginNetworkManager.loginRequest(getUsername(), password, this);
+            if (ClientProtocolProcessor.processLogin(this)) 
+            {
                 ClientNetworkManager.loginSuccesful();
-                while (isConnected()) {
+                while (isConnected()) 
+                {
                     ClientProtocolProcessor.processInputStream(this);
                 }
             }
             ClientNetworkManager.connectionFailed();
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

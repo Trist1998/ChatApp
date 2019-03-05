@@ -1,10 +1,11 @@
 package ui;
 
 //Imports
+import ui.mainmenu.MainMenu;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
-import network.protocol.UserCreationProtocol;
+import network.protocol.UserCreationNetworkManager;
 
 /**
  * CreateUser class create a form that allows a user to register to ChatApp
@@ -22,7 +23,8 @@ public class CreateUser extends javax.swing.JFrame
         initComponents(); // Initialise GUI components.
         this.setLocationRelativeTo(null); // Set frame to center of screen.
         jPanel1.getRootPane().setDefaultButton(btnSubmit); // Set default button to signup, allows user to hit enter.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } 
         catch (Exception e) 
@@ -172,7 +174,7 @@ public class CreateUser extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnSubmitActionPerformed
         String username = txtUsername.getText(); // Get username.
         String password = txtPassword.getText(); // get password.
-        UserCreationProtocol.createUser(username, password); // Call the user creation protocol.
+        UserCreationNetworkManager.createUser(username, password); // Call the user creation protocol.
         if(ClientNetworkManager.login(username, password)) // Attempt to login user.
         {
             JOptionPane.showMessageDialog(null, "User Created!");          

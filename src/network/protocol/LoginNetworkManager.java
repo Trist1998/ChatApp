@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
-import static network.protocol.Protocol.send;
 import network.server.ConnectionSwitch;
 import network.server.ServerConnectionHandler;
 
@@ -16,7 +15,8 @@ import network.server.ServerConnectionHandler;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class LoginProtocol extends Protocol {
+public class LoginNetworkManager extends NetworkMessageHandler 
+{
 
     // Variables
     public static final String HEAD = "LOGIN";
@@ -28,7 +28,8 @@ public class LoginProtocol extends Protocol {
     /**
      * Parameterized Constructor for LoginProtocol class. Creates new protocol.
      */
-    public LoginProtocol() {
+    public LoginNetworkManager() 
+    {
         super();
     }
 
@@ -41,10 +42,14 @@ public class LoginProtocol extends Protocol {
      * @param server
      * @return
      */
-    public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn, boolean server) {
-        if (pp.getParameter(PROTOCOL_ACTION).equals(ACTION_REQUEST) && server) {
+    public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn, boolean server) 
+    {
+        if (pp.getParameter(PROTOCOL_ACTION).equals(ACTION_REQUEST) && server)
+        {
             return processServerLogin(pp, conn);
-        } else if (pp.getParameter(PROTOCOL_ACTION).equals(ACTION_RESPONSE) && !server) {
+        } 
+        else if (pp.getParameter(PROTOCOL_ACTION).equals(ACTION_RESPONSE) && !server) 
+        {
             return processClientLoginResponse(pp);
         }
         return false;
@@ -63,10 +68,13 @@ public class LoginProtocol extends Protocol {
         pp.add(PROTOCOL_ACTION, ACTION_REQUEST);
         pp.add("Username", username);
         pp.add("Password", password);
-        try {
+        try 
+        {
             send(HEAD, pp, conn);
-        } catch (IOException ex) {
-            Logger.getLogger(LoginProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(LoginNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,7 +86,8 @@ public class LoginProtocol extends Protocol {
      * @return
      */
     private static boolean processServerLogin(ProtocolParameters pp, ConnectionHandler conn) {
-        try {
+        try 
+        {
             String username = pp.getParameter("Username");
             String password = pp.getParameter("Password");
             conn.setUsername(username);
@@ -100,8 +109,10 @@ public class LoginProtocol extends Protocol {
 
             send(HEAD, responsePp, conn);
 
-        } catch (IOException ex) {
-            Logger.getLogger(LoginProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(LoginNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -112,7 +123,8 @@ public class LoginProtocol extends Protocol {
      * @param pp
      * @return
      */
-    private static boolean processClientLoginResponse(ProtocolParameters pp) {
+    private static boolean processClientLoginResponse(ProtocolParameters pp) 
+    {
         String confirmation = pp.getParameter("Confirmation");
         return confirmation.equals("Accepted");
     }

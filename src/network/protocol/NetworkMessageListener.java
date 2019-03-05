@@ -4,13 +4,12 @@ package network.protocol;
 import java.io.BufferedReader;
 import java.io.IOException;
 import network.ConnectionHandler;
-import static network.server.ServerProtocolProcessor.PROTOCOL_END;
 
 /**
- * ProtocolProcessor class used to listen to protocols.
+ * NetworkMessageListener class used to listen to Network messages.
  * @author Tristan Wood, Alex Priscu, Zubair Wieners
  */
-public class ProtocolProcessor 
+public class NetworkMessageListener 
 {
     public static final String PROTOCOL_END = "END_PROTOCOL";
     

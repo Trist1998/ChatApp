@@ -9,7 +9,8 @@ import java.util.Scanner;
  * ProtocolParameters class is a container of protocol parameters.
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ProtocolParameters {
+public class ProtocolParameters 
+{
 
     // Variables
     public static final String PARAMETER_DELIMITER = "#END#";
@@ -19,7 +20,8 @@ public class ProtocolParameters {
     /**
      * Non-Parameterized Constructor for ProtocolParameters class, creates empty.
      */
-    public ProtocolParameters() {
+    public ProtocolParameters() 
+    {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
     }
@@ -28,19 +30,23 @@ public class ProtocolParameters {
      * Parameterized Constructor for ProtocolParameters class, used to build ProtocolParameters.
      * @param reader
      */
-    public ProtocolParameters(Scanner reader) {
+    public ProtocolParameters(Scanner reader) 
+    {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
         String in = "";
-        while (reader.hasNextLine()) {
+        while (reader.hasNextLine()) 
+        {
             in += reader.nextLine() + "\n";
         }
 
         String[] pairs = in.split(PARAMETER_DELIMITER);
 
-        for (String pair : pairs) {
+        for (String pair : pairs) 
+        {
             String cleanPair = pair.trim();
-            if (!cleanPair.contains(":")) {
+            if (!cleanPair.contains(":")) 
+            {
                 break;
             }
             add(cleanPair);
@@ -52,7 +58,8 @@ public class ProtocolParameters {
      * @param parameterName
      * @param parameterValue
      */
-    public void add(String parameterName, String parameterValue) {
+    public void add(String parameterName, String parameterValue) 
+    {
         parameterNames.add(parameterName);
         parameters.put(parameterName, parameterValue);
     }
@@ -62,7 +69,8 @@ public class ProtocolParameters {
      * @param name
      * @return
      */
-    public String getParameter(String name) {
+    public String getParameter(String name) 
+    {
         return parameters.get(name);
     }
 
@@ -71,9 +79,11 @@ public class ProtocolParameters {
      * @return
      */
     @Override
-    public String toString() {
-        String output = Protocol.PROTOCOL_HEAD + ":" + getHead() + PARAMETER_DELIMITER + "\n";
-        for (String name : parameterNames) {
+    public String toString() 
+    {
+        String output = NetworkMessageHandler.PROTOCOL_HEAD + ":" + getHead() + PARAMETER_DELIMITER + "\n";
+        for (String name : parameterNames) 
+        {
             output += name + ":" + parameters.get(name) + PARAMETER_DELIMITER + "\n";
         }
         return output;
@@ -83,27 +93,32 @@ public class ProtocolParameters {
      * Sets head of protocol. 
      * @param head
      */
-    public void setHead(String head) {
-        parameters.put(Protocol.PROTOCOL_HEAD, head);
+    public void setHead(String head) 
+    {
+        parameters.put(NetworkMessageHandler.PROTOCOL_HEAD, head);
     }
 
     /**
      * Gets head of protocol. 
      * @return
      */
-    public String getHead() {
-        return parameters.get(Protocol.PROTOCOL_HEAD);
+    public String getHead() 
+    {
+        return parameters.get(NetworkMessageHandler.PROTOCOL_HEAD);
     }
 
     /**
      * Converts line into protocol parameters. 
      * @param line
      */
-    public void add(String line) {
-        if (!line.equals("")) {
+    public void add(String line) 
+    {
+        if (!line.equals("")) 
+        {
             String name = line.substring(0, line.indexOf(":"));
             String data = line.substring(line.indexOf(":") + 1);
-            if (!name.equals(Protocol.PROTOCOL_HEAD)) {
+            if (!name.equals(NetworkMessageHandler.PROTOCOL_HEAD)) 
+            {
                 parameterNames.add(name);
             }
             parameters.put(name, data.trim());
@@ -115,7 +130,8 @@ public class ProtocolParameters {
      * @param parameterName
      * @param value
      */
-    public void replace(String parameterName, String value) {
+    public void replace(String parameterName, String value) 
+    {
         parameters.replace(parameterName, value);
     }
 

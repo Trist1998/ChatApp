@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import message.ProtocolMessage;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
-import network.protocol.MessageProtocol;
+import network.protocol.MessageNetworkManager;
 
 /**
  * ServerConnectionHandler class is the connection Handler for server connections.
@@ -33,20 +33,28 @@ public class ServerConnectionHandler extends ConnectionHandler {
      * Listens to inputStream while connection is open.
      */
     @Override
-    public void run() {
-        try {
-            if (ServerProtocolProcessor.processInitialConnection(this)) {
-                MessageProtocol.retrieveStoredMessages(getUsername(), this);
+    public void run() 
+    {
+        try 
+        {
+            if (ServerProtocolProcessor.processInitialConnection(this)) 
+            {
+                MessageNetworkManager.retrieveStoredMessages(getUsername(), this);
                 System.out.println("Waiting for data from " + getUsername());
-                while (isConnected()) {
+                while (isConnected()) 
+                {
                     ServerProtocolProcessor.processServerInputStream(this);
                 }
             }
             ConnectionSwitch.removeConnection(this);
             close();
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) 
+        {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -59,10 +67,13 @@ public class ServerConnectionHandler extends ConnectionHandler {
      * @param protocol
      * @return
      */
-    public int send(ProtocolMessage protocol) {
+    public int send(ProtocolMessage protocol) 
+    {
         BufferedWriter outputStream = getOutputStream();
-        synchronized (outputStream) {
-            try {
+        synchronized (outputStream) 
+        {
+            try 
+            {
                 outputStream.write(protocol.getText());//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
                 outputStream.flush();
                 return MESSAGE_DELIVERED;
@@ -75,7 +86,9 @@ public class ServerConnectionHandler extends ConnectionHandler {
                     {
                         new ProtocolQueue(protocol).addToQueue();
                         return MESSAGE_SAVED;
-                    } catch (SQLException ex1) {
+                    } 
+                    catch (SQLException ex1)
+                    {
                         Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex1);
                         return MESSAGE_LOST;
                     }              

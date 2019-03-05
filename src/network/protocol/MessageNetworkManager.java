@@ -14,18 +14,17 @@ import message.ProtocolMessage;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
-import static network.protocol.Protocol.buildProtocolString;
-import static network.protocol.Protocol.send;
 import network.server.ConnectionSwitch;
 import network.server.ServerConnectionHandler;
 import ui.ChatManager;
 
 /**
- * MessageProtocol class is used to send and process messages.
+ * MessageNetworkManager class is used to send and process messages.
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class MessageProtocol extends Protocol {
+public class MessageNetworkManager extends NetworkMessageHandler 
+{
 
     // Variables 
     public static final String HEAD = "MSG";
@@ -40,7 +39,8 @@ public class MessageProtocol extends Protocol {
      * @param message
      * @return
      */
-    public static boolean sendMessage(Message message) {
+    public static boolean sendMessage(Message message) 
+    {
         ClientConnectionHandler conn = ClientNetworkManager.getConnection();
         ProtocolParameters pp = new ProtocolParameters();
         pp.add(PROTOCOL_ACTION, ACTION_SEND);
@@ -49,11 +49,14 @@ public class MessageProtocol extends Protocol {
         pp.add("Receiver", message.getReceiverName());
         pp.add("Text", message.getText());
         pp.add("DateSent", message.getDateSentString());
-        try {
+        try 
+        {
             send(HEAD, pp, conn);
             return true;
-        } catch (IOException ex) {
-            Logger.getLogger(MessageProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -65,8 +68,10 @@ public class MessageProtocol extends Protocol {
      * @param conn
      * @return
      */
-    public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn) {
-        switch (pp.getParameter(Protocol.PROTOCOL_ACTION)) {
+    public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn) 
+    {
+        switch (pp.getParameter(NetworkMessageHandler.PROTOCOL_ACTION)) 
+        {
             case ACTION_SEND:
                 return processServerInput(pp, (ServerConnectionHandler) conn);
             case ACTION_RECEIVE:
@@ -86,7 +91,8 @@ public class MessageProtocol extends Protocol {
      * @param pp
      * @return
      */
-    public static boolean processClientInput(ProtocolParameters pp) {
+    public static boolean processClientInput(ProtocolParameters pp) 
+    {
         Message message = new Message(pp);
         ChatManager.receiveMessage(message);
         return true;
@@ -99,13 +105,17 @@ public class MessageProtocol extends Protocol {
      * @param conn
      * @return
      */
-    public static boolean processServerInput(ProtocolParameters pp, ServerConnectionHandler conn) {
-        try {
+    public static boolean processServerInput(ProtocolParameters pp, ServerConnectionHandler conn) 
+    {
+        try 
+        {
             int responseCode = forwardMessage(HEAD, pp);
             sendResponse(responseCode, pp, conn);
             return true;
-        } catch (IOException ex) {
-            Logger.getLogger(MessageProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return false;
@@ -119,7 +129,8 @@ public class MessageProtocol extends Protocol {
      * @param conn
      * @throws IOException
      */
-    public static void sendResponse(int responseCode, ProtocolParameters pp, ServerConnectionHandler conn) throws IOException {
+    public static void sendResponse(int responseCode, ProtocolParameters pp, ServerConnectionHandler conn) throws IOException 
+    {
         ProtocolParameters rPP = new ProtocolParameters();
         rPP.add(PROTOCOL_ACTION, ACTION_RESPONSE);
         rPP.add("MessageId", pp.getParameter("Id"));
@@ -136,7 +147,8 @@ public class MessageProtocol extends Protocol {
      * @return
      * @throws IOException
      */
-    private static int forwardMessage(String head, ProtocolParameters pp) throws IOException {
+    private static int forwardMessage(String head, ProtocolParameters pp) throws IOException 
+    {
         pp.replace("Action", ACTION_RECEIVE);
         String output = buildProtocolString(head, pp);
         ProtocolMessage message = new ProtocolMessage(pp);
@@ -151,11 +163,14 @@ public class MessageProtocol extends Protocol {
      * @throws SQLException
      * @throws IOException
      */
-    public static void retrieveStoredMessages(String username, ServerConnectionHandler conn) throws SQLException, IOException {
+    public static void retrieveStoredMessages(String username, ServerConnectionHandler conn) throws SQLException, IOException 
+    {
         ResultSet rs = ProtocolQueue.loadUnsentProtocols(username);
-        while (rs.next()) {
+        while (rs.next()) 
+        {
             ProtocolMessage message = new ProtocolMessage(rs);
-            if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED) {
+            if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED) 
+            {
                 ProtocolParameters pp = new ProtocolParameters(new Scanner(message.getText()));
                 sendResponse(ServerConnectionHandler.MESSAGE_DELIVERED, pp, conn);
                 rs.deleteRow();
@@ -170,7 +185,8 @@ public class MessageProtocol extends Protocol {
      * @param pp
      * @return
      */
-    private static boolean processResponse(ProtocolParameters pp) {
+    private static boolean processResponse(ProtocolParameters pp) 
+    {
         int messageId = Integer.parseInt(pp.getParameter("MessageId"));
         int responseCode = Integer.parseInt(pp.getParameter("ResponseCode"));
         String chatName = pp.getParameter("Receiver");

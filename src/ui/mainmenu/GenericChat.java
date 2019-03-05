@@ -1,6 +1,8 @@
-package ui;
+package ui.mainmenu;
 
 // imports
+import ui.mainmenu.SideBarChat;
+import ui.mainmenu.MessagePanel;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Date;
@@ -13,7 +15,7 @@ import javax.swing.JScrollBar;
 import javax.swing.UIManager;
 import message.Message;
 import network.client.ClientNetworkManager;
-import network.protocol.MessageProtocol;
+import network.protocol.MessageNetworkManager;
 
 /**
  * GenericChat class displays an exchange of text messages between two users on a GUI form.
@@ -33,13 +35,17 @@ public class GenericChat extends javax.swing.JPanel
      * @param chatName
      * @param sidebar 
      */
-    public GenericChat(String chatName, SideBarChat sidebar) {
+    public GenericChat(String chatName, SideBarChat sidebar) 
+    {
         this.chatName = chatName; // Set the chat name to chat name parameter.
         this.sidebar = sidebar; // Set sidebar chat to passed in sidebar parameter.
         initComponents(); // Initialise GUI components.
-        try {
+        try 
+        {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
-        } catch (Exception e) {
+        } 
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         
@@ -52,7 +58,8 @@ public class GenericChat extends javax.swing.JPanel
      * Get the ID of the next message.
      * @return 
      */
-    public int getNextMessageId() {
+    public int getNextMessageId() 
+    {
         return idCounter.getAndIncrement(); // Return message ID counter and increment it.
     }
 
@@ -60,7 +67,8 @@ public class GenericChat extends javax.swing.JPanel
      * Saves messages in chat.
      * @param message 
      */
-    private void saveMessage(Message message) {
+    private void saveMessage(Message message) 
+    {
         //TODO save message somewhere 
     }
 
@@ -68,7 +76,8 @@ public class GenericChat extends javax.swing.JPanel
      * Return the name of the chat.
      * @return 
      */
-    public String getChatName() {
+    public String getChatName() 
+    {
         return chatName; // Return chat name.
     }
     
@@ -122,12 +131,13 @@ public class GenericChat extends javax.swing.JPanel
      * @param messageId
      * @param responseCode
      */
-    void receiveResponse(int messageId, int responseCode) {
+    public void receiveResponse(int messageId, int responseCode) 
+    {
         MessagePanel m = waitingForResponse.get(messageId);
         if (m != null) 
         {
             m.receiveResponse(responseCode);
-            if (responseCode == MessageProtocol.RESPONSE_READ) 
+            if (responseCode == MessageNetworkManager.RESPONSE_READ) 
             {
                 waitingForResponse.remove(messageId);
             }
@@ -234,7 +244,7 @@ public class GenericChat extends javax.swing.JPanel
     {//GEN-HEADEREND:event_btnSendActionPerformed
         Message message = new Message(getNextMessageId(), ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
         message.setSent(new Date());
-        MessageProtocol.sendMessage(message);
+        MessageNetworkManager.sendMessage(message);
         saveMessage(message);
         addMessage(message);
     }//GEN-LAST:event_btnSendActionPerformed

@@ -11,7 +11,8 @@ import network.protocol.ProtocolParameters;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ProtocolMessage {
+public class ProtocolMessage
+{
 
     // Variables
     private String senderName;
@@ -28,7 +29,8 @@ public class ProtocolMessage {
      * @param receiverName
      * @param text
      */
-    public ProtocolMessage(String senderName, String receiverName, String text) {
+    public ProtocolMessage(String senderName, String receiverName, String text) 
+    {
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.text = text;
@@ -41,7 +43,8 @@ public class ProtocolMessage {
      * @param rs
      * @throws SQLException
      */
-    public ProtocolMessage(ResultSet rs) throws SQLException {
+    public ProtocolMessage(ResultSet rs) throws SQLException 
+    {
         this.senderName = rs.getString("senderName");
         this.receiverName = rs.getString("receiverName");
         this.text = rs.getString("text");
@@ -55,7 +58,8 @@ public class ProtocolMessage {
      *
      * @param pp
      */
-    public ProtocolMessage(ProtocolParameters pp) {
+    public ProtocolMessage(ProtocolParameters pp) 
+    {
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.toString();
@@ -66,7 +70,8 @@ public class ProtocolMessage {
      *
      * @return
      */
-    public String getSenderName() {
+    public String getSenderName()
+    {
         return senderName;
     }
 
@@ -75,7 +80,8 @@ public class ProtocolMessage {
      *
      * @return
      */
-    public String getReceiverName() {
+    public String getReceiverName() 
+    {
         return receiverName;
     }
 
@@ -84,7 +90,8 @@ public class ProtocolMessage {
      *
      * @return
      */
-    public String getText() {
+    public String getText() 
+    {
         return text;
     }
 
@@ -93,7 +100,8 @@ public class ProtocolMessage {
      *
      * @return
      */
-    public boolean isAlreadySaved() {
+    public boolean isAlreadySaved()
+    {
         return alreadySaved;
     }
 
@@ -102,7 +110,8 @@ public class ProtocolMessage {
      *
      * @param text
      */
-    public void setText(String text) {
+    public void setText(String text) 
+    {
         this.text = text;
     }
 
@@ -111,7 +120,8 @@ public class ProtocolMessage {
      *
      * @return
      */
-    public Date getSent() {
+    public Date getSent() 
+    {
         return sent;
     }
 
@@ -120,7 +130,8 @@ public class ProtocolMessage {
      *
      * @param sent
      */
-    public void setSent(Date sent) {
+    public void setSent(Date sent) 
+    {
         this.sent = sent;
     }
 }
