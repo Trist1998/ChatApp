@@ -1,7 +1,7 @@
 package network.protocol;
 
 // Imports 
-import database.ProtocolQueue;
+import database.NetworkMessageQueue;
 import database.ServerDatabaseConnection;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.Message;
-import message.ProtocolMessage;
+import message.NetworkMessage;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
@@ -151,7 +151,7 @@ public class MessageNetworkManager extends NetworkMessageHandler
     {
         pp.replace("Action", ACTION_RECEIVE);
         String output = buildProtocolString(head, pp);
-        ProtocolMessage message = new ProtocolMessage(pp);
+        NetworkMessage message = new NetworkMessage(pp);
         message.setText(output);
         return ConnectionSwitch.switchProtocol(message);
     }
@@ -165,10 +165,10 @@ public class MessageNetworkManager extends NetworkMessageHandler
      */
     public static void retrieveStoredMessages(String username, ServerConnectionHandler conn) throws SQLException, IOException 
     {
-        ResultSet rs = ProtocolQueue.loadUnsentProtocols(username);
+        ResultSet rs = NetworkMessageQueue.loadUnsentProtocols(username);
         while (rs.next()) 
         {
-            ProtocolMessage message = new ProtocolMessage(rs);
+            NetworkMessage message = new NetworkMessage(rs);
             if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED) 
             {
                 ProtocolParameters pp = new ProtocolParameters(new Scanner(message.getText()));

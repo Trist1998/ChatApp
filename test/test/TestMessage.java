@@ -3,7 +3,7 @@ package test;
 import javax.swing.JOptionPane;
 import network.client.ClientNetworkManager;
 import ui.ChatManager;
-import ui.MainMenu;
+import ui.mainmenu.MainMenu;
 
 /**
  *

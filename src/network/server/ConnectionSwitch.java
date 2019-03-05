@@ -1,12 +1,12 @@
 package network.server;
 
 // Imports
-import database.ProtocolQueue;
+import database.NetworkMessageQueue;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import message.ProtocolMessage;
+import message.NetworkMessage;
 
 /**
  * ConnectionSwitch class is a server side object that is used to send messages to receiver's connection handler.
@@ -37,7 +37,7 @@ public class ConnectionSwitch
      * @param message
      * @return 
      */
-    public static int switchProtocol(ProtocolMessage message)
+    public static int switchProtocol(NetworkMessage message)
     {
         ServerConnectionHandler connection = activeConnections.get(message.getReceiverName());//add to protocol queue if not connected
         if(connection != null)
@@ -46,7 +46,7 @@ public class ConnectionSwitch
         }
         else
         {
-            ProtocolQueue pq = new ProtocolQueue(message);
+            NetworkMessageQueue pq = new NetworkMessageQueue(message);
             try
             {
                 pq.addToQueue();//TODO If successful send delivered to server notification to sender
