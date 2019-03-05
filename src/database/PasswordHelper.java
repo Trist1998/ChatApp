@@ -9,16 +9,17 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 /**
+ * Borrowed Code for hashing passwords
  * Hash passwords for storage, and test passwords against password tokens.
  *
  * Instances of this class can be used concurrently by multiple threads.
  *
  * @author erickson
+ * adapted for this project by Tristan
  * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
  */
 public final class PasswordHelper {
@@ -45,7 +46,8 @@ public final class PasswordHelper {
 
     private final int cost;
 
-    public PasswordHelper() {
+    public PasswordHelper() 
+    {
         this(DEFAULT_COST);
     }
 
@@ -55,14 +57,16 @@ public final class PasswordHelper {
      * @param cost the exponential computational cost of hashing a password, 0
      * to 30
      */
-    public PasswordHelper(int cost) {
+    public PasswordHelper(int cost) 
+    {
         iterations(cost);
         /* Validate cost */
         this.cost = cost;
         this.random = new SecureRandom();
     }
 
-    private static int iterations(int cost) {
+    private static int iterations(int cost)
+    {
         if ((cost < 0) || (cost > 30)) {
             throw new IllegalArgumentException("cost: " + cost);
         }
@@ -75,13 +79,15 @@ public final class PasswordHelper {
      * @return a secure authentication token to be stored for later
      * authentication
      */
-    public String hash(char[] password) {
+    public String hash(char[] password) 
+    {
         byte[] salt = new byte[SIZE / 8];
         random.nextBytes(salt);
         return hash(password, salt);
     }
 
-    public String hash(char[] password, byte[] salt) {
+    public String hash(char[] password, byte[] salt)
+    {
         byte[] dk = pbkdf2(password, salt, 1 << cost);
         byte[] hash = new byte[salt.length + dk.length];
         System.arraycopy(salt, 0, hash, 0, salt.length);
@@ -95,7 +101,8 @@ public final class PasswordHelper {
      *
      * @return true if the password and token match
      */
-    public boolean authenticate(char[] password, String token) {
+    public boolean authenticate(char[] password, String token) 
+    {
         Matcher m = layout.matcher(token);
         if (!m.matches()) {
             throw new IllegalArgumentException("Invalid token format");
@@ -111,7 +118,8 @@ public final class PasswordHelper {
         return zero == 0;
     }
 
-    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations) {
+    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations)
+    {
         KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
         try {
             SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
@@ -123,7 +131,8 @@ public final class PasswordHelper {
         }
     }
 
-    public String clientPasswordHash(String password) {
+    public String clientPasswordHash(String password) 
+    {
         return hash(password.toCharArray(), DEFAULT_SALT);
     }
 
@@ -137,7 +146,8 @@ public final class PasswordHelper {
      * @deprecated Use {@link #hash(char[])} instead
      */
     @Deprecated
-    public String hash(String password) {
+    public String hash(String password) 
+    {
         return hash(password.toCharArray());
     }
 
@@ -149,7 +159,8 @@ public final class PasswordHelper {
      * @see #hash(String)
      */
     @Deprecated
-    public boolean authenticate(String password, String token) {
+    public boolean authenticate(String password, String token) 
+    {
         return authenticate(password.toCharArray(), token);
     }
 

@@ -1,14 +1,14 @@
 package network.server;
 
 // Imports
-import database.ProtocolQueue;
+import database.NetworkMessageQueue;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import message.ProtocolMessage;
+import message.NetworkMessage;
 import network.ConnectionHandler;
 import network.client.ClientConnectionHandler;
 import network.protocol.MessageNetworkManager;
@@ -67,7 +67,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
      * @param protocol
      * @return
      */
-    public int send(ProtocolMessage protocol) 
+    public int send(NetworkMessage protocol) 
     {
         BufferedWriter outputStream = getOutputStream();
         synchronized (outputStream) 
@@ -84,7 +84,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
                 if(!protocol.isAlreadySaved())
                     try 
                     {
-                        new ProtocolQueue(protocol).addToQueue();
+                        new NetworkMessageQueue(protocol).addToQueue();
                         return MESSAGE_SAVED;
                     } 
                     catch (SQLException ex1)

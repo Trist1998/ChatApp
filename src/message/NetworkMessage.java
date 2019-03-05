@@ -11,7 +11,7 @@ import network.protocol.ProtocolParameters;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ProtocolMessage
+public class NetworkMessage
 {
 
     // Variables
@@ -29,7 +29,7 @@ public class ProtocolMessage
      * @param receiverName
      * @param text
      */
-    public ProtocolMessage(String senderName, String receiverName, String text) 
+    public NetworkMessage(String senderName, String receiverName, String text) 
     {
         this.senderName = senderName;
         this.receiverName = receiverName;
@@ -43,7 +43,7 @@ public class ProtocolMessage
      * @param rs
      * @throws SQLException
      */
-    public ProtocolMessage(ResultSet rs) throws SQLException 
+    public NetworkMessage(ResultSet rs) throws SQLException 
     {
         this.senderName = rs.getString("senderName");
         this.receiverName = rs.getString("receiverName");
@@ -58,7 +58,7 @@ public class ProtocolMessage
      *
      * @param pp
      */
-    public ProtocolMessage(ProtocolParameters pp) 
+    public NetworkMessage(ProtocolParameters pp) 
     {
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
