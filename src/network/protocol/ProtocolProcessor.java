@@ -1,17 +1,25 @@
 package network.protocol;
 
+// Imports
 import java.io.BufferedReader;
 import java.io.IOException;
 import network.ConnectionHandler;
 import static network.server.ServerProtocolProcessor.PROTOCOL_END;
 
 /**
- * @author Tristan
+ * ProtocolProcessor class used to listen to protocols.
+ * @author Tristan Wood, Alex Priscu, Zubair Wieners
  */
 public class ProtocolProcessor 
 {
     public static final String PROTOCOL_END = "END_PROTOCOL";
     
+    /**
+     * Listens for incoming protocol and converts to protocol parameters. 
+     * @param conn
+     * @return
+     * @throws IOException 
+     */
     public static ProtocolParameters parseInputStream(ConnectionHandler conn) throws IOException
     {
         BufferedReader reader = conn.getInputStream();

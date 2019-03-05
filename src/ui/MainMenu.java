@@ -1,5 +1,6 @@
 package ui;
 
+// Imports
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,24 +12,29 @@ import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
 
 /**
- *
- * @author Tristan
+ * MainMenu class allows a user to send and receive messages to other users of the ChatApp.
+ * @author @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class MainMenu extends javax.swing.JFrame {
+public class MainMenu extends javax.swing.JFrame 
+{
 
-    private ChatManager manager;
-    private GenericChat currentChat;
-
+    private ChatManager manager; // Declare new instance of ChatManager.
+    private GenericChat currentChat; // Declare new instance of GenericChat.
+    
+    /**
+     * Non-Parameterized Constructor for MainMenu Class create the Main Menu form.
+     */
     public MainMenu() 
     {
-        initComponents();
-        this.setLocationRelativeTo(null);
+        initComponents(); // Initialise GUI components.
+        this.setLocationRelativeTo(null); // Set frame to center of screen.
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
         } catch (Exception e) {
             e.printStackTrace();
         }
-        lblUsername.setText(ClientNetworkManager.getUsername());
+        
+        lblUsername.setText(ClientNetworkManager.getUsername()); // Set label to username.
 
         BoxLayout layout = new BoxLayout(pnlChats, BoxLayout.Y_AXIS);
         pnlChats.setLayout(layout);
@@ -160,8 +166,11 @@ public class MainMenu extends javax.swing.JFrame {
             pnlChats.repaint();
     }
 
-    public synchronized void setChat(GenericChat chat) 
-    {
+    /**
+     * When a user selects a chat, it will be displayed on the MainMenu form.
+     * @param chat 
+     */
+    public synchronized void setChat(GenericChat chat) {
         //System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());     
         if (currentChat != chat) {
             if (currentChat != null) 

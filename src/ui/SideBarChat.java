@@ -1,35 +1,31 @@
 package ui;
 
+// Imports
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
 import message.Message;
 
 /**
+ * SideBarChat class is used to create and display chats on the MainMenu so that
+ * a user may see past chats and select which one to display.
  *
- * @author Tristan
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class SideBarChat extends javax.swing.JPanel
 {
 
-    /**
-     * Creates new form SideBarChat
-     *
-     * @param chatName
-     * @param lastMessage
-     */
-    private MainMenu mainMenu;
-    private GenericChat chat;
+    private MainMenu mainMenu; // Declare an instance of MainMenu.
+    private GenericChat chat; // Declare an instance of GenericChat.
 
-    public SideBarChat(String chatName, MainMenu mm) 
-    {
-        initComponents();
-        try 
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } 
-        catch (Exception e) 
-        {
+    /**
+     * Parameterized Constructor for SideBarChat class, creates a chat on the side of the Main Menu form with no content.
+     */
+    public SideBarChat(String chatName, MainMenu mm) {
+        initComponents(); // Initialise GUI components.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
+        } catch (Exception e) {
             e.printStackTrace();
         }
         lblChatName.setText(chatName);
@@ -39,27 +35,30 @@ public class SideBarChat extends javax.swing.JPanel
         this.chat = new GenericChat(chatName, this);
     }
 
-    public SideBarChat(String chatName, Message lastMessage, MainMenu mm) 
-    {
-        initComponents();
-        try 
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } 
-        catch (Exception e) 
-        {
+    /**
+     * Parameterized Constructor for SideBarChat class, creates a chat on the side of the Main Menu form with content of the last message.
+     */
+    public SideBarChat(String chatName, Message lastMessage, MainMenu mm) {
+        initComponents(); // Initialise GUI components.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        lblChatName.setText(chatName);
-        lblLastMessage.setText(lastMessage.getText());
-        lblLastMessageTime.setText(lastMessage.getDateSentString());
-        mainMenu = mm;
-        this.chat = new GenericChat(chatName, this);
+        lblChatName.setText(chatName); // Set chat name label to chat name parameter.
+        lblLastMessage.setText(lastMessage.getText()); // Set last message label to the body of text of the messsage's text.
+        lblLastMessageTime.setText("Date"); // Set the message time label.
+        mainMenu = mm; // Set MainMenu to MainMenu parameter.
+        this.chat = new GenericChat(chatName, this); // Instantiate GenericChat with the passed in chat name.
     }
 
-    public String getChatName()
-    {
-        return chat.getChatName();
+    /**
+     * Returns the chat name of the side bar chat selected.
+     *
+     * @return
+     */
+    public String getChatName() {
+        return chat.getChatName(); // Get the chat name of chat and return it.
     }
 
     @SuppressWarnings("unchecked")
@@ -124,6 +123,11 @@ public class SideBarChat extends javax.swing.JPanel
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Sets the MainMenu display to chat selected.
+     *
+     * @param evt
+     */
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
         mainMenu.setChat(chat);
@@ -136,10 +140,14 @@ public class SideBarChat extends javax.swing.JPanel
     private javax.swing.JLabel lblLastMessageTime;
     // End of variables declaration//GEN-END:variables
 
-    public void receiveMessage(Message message) 
-    {
-        setLastMessage(message);
-        chat.receiveMessage(message);
+    /**
+     * Adds received message to chat and sets as last message.
+     *
+     * @param message
+     */
+    public void receiveMessage(Message message) {
+        setLastMessage(message); // Sets last message of chat to message.
+        chat.receiveMessage(message); // Adds message to chat.
     }
 
     public void setLastMessage(Message message) 
@@ -160,8 +168,13 @@ public class SideBarChat extends javax.swing.JPanel
         }
     }
 
-    public void receiveResponse(int messageId, int responseCode) 
-    {
+    /**
+     * Get response from chat with the given message ID and response code.
+     *
+     * @param messageId
+     * @param responseCode
+     */
+    void receiveResponse(int messageId, int responseCode) {
         chat.receiveResponse(messageId, responseCode);
     }
 }

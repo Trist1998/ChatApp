@@ -1,23 +1,34 @@
 package ui;
 
+// Imports 
+import java.io.BufferedWriter;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
 
-public class Login extends javax.swing.JFrame
-{
+/**
+ * Login Class class is used to display a GUI that allows the user to
+ * login or sign up toChatApp. If a user successfully enters their details and
+ * clicks the login button, the MainMenu form will display. Alternatively the
+ * user may click the sign up button to register.
+ *
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
+ */
+public class Login extends javax.swing.JFrame {
 
+    BufferedWriter bw; // Declare an instance of a BufferedWriter.
 
+    /**
+     * Non-Parameterized Constructor for Login Class, creates the Login Form.
+     */
     public Login() 
     {
-        initComponents();
-        this.setLocationRelativeTo(null);
-        try 
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } 
-        catch (Exception e) 
-        {
+        initComponents(); // Initialise GUI components.
+        this.setLocationRelativeTo(null); // Set frame to center of screen.
+        jPanel1.getRootPane().setDefaultButton(btnLogin); // Set default button to login, allows user to hit enter.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -139,31 +150,46 @@ public class Login extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+/**
+ * If the Login Button is clicked checks if able to login and establish connection, then displays the main menu with chats.
+ * @param evt 
+ */
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        if (attemptLogin()) {
-            System.out.println("Opening main menu");
+        if (attemptLogin()) // Check to see if possible to login and connect.
+        {
+            System.out.println("Opening main menu"); // Successful login.
+            
             //Open Chat
-            MainMenu mm = new MainMenu();
-            ChatManager.buildChatViews(mm);
-            mm.setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Login Failed");
+            MainMenu mm = new MainMenu(); // Declare and instantiate new instance of MainMenu.
+            ChatManager.buildChatViews(mm); // Load locally saved chats onto Main Menu.
+            mm.setVisible(true); // Display MainMenu form.
+            this.dispose(); // Close this form.
+        } else 
+        {
+            JOptionPane.showMessageDialog(null, "Login Failed"); // Error message.
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    /**
+     * If the Sign Up button is clicked, display the Create User form where a user can sign up.
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        CreateUser newAccount = new CreateUser();
-        newAccount.setVisible(true);
-        this.dispose();
+        CreateUser newAccount = new CreateUser(); // Declare and instantiate new instance of CreateUser.
+        newAccount.setVisible(true); // Display CreateUser form.
+        this.dispose(); // Close this form.
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Main method, runs the the Login thread.
+     * @param args 
+     */
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login().setVisible(true); // Display Login form.
             }
         });
     }
@@ -179,7 +205,12 @@ public class Login extends javax.swing.JFrame
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private boolean attemptLogin() {
+    /**
+     * Checks to see if able to login and connect.
+     * @return 
+     */
+    private boolean attemptLogin() 
+    {
         return ClientNetworkManager.login(txtUsername.getText(), txtPassword.getText());
     }
 }

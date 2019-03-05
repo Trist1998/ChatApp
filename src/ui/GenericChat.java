@@ -1,5 +1,6 @@
 package ui;
 
+// imports
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Date;
@@ -15,51 +16,60 @@ import network.client.ClientNetworkManager;
 import network.protocol.MessageProtocol;
 
 /**
- * @author Tristan
+ * GenericChat class displays an exchange of text messages between two users on a GUI form.
+ * It allows the user to type a message and send it in the chat.
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class GenericChat extends javax.swing.JPanel 
 {
 
-    private static AtomicInteger idCounter = new AtomicInteger();
-    private String chatName;
-    private HashMap<Integer, MessagePanel> waitingForResponse;
-    private SideBarChat sidebar;
+    private static AtomicInteger idCounter = new AtomicInteger(); // Declare and instantiate new Atomic Integer for the ID counter.
+    private String chatName; // // Declare string that stores chat name.
+    private HashMap<Integer, MessagePanel> waitingForResponse; // Declare a HashMap called waitingForResponse.
+    private SideBarChat sidebar; // Declare a SideBarChat object
 
-    public GenericChat(String chatName, SideBarChat sidebar) 
-    {
-        this.chatName = chatName;
-        this.sidebar = sidebar;
-        
-        initComponents();
-        
-        try 
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } 
-        catch (Exception e) 
-        {
+    /**
+     * Parameterized Constructor for GenericChat class, creates a chat form to be display on the Main Menu form.
+     * @param chatName
+     * @param sidebar 
+     */
+    public GenericChat(String chatName, SideBarChat sidebar) {
+        this.chatName = chatName; // Set the chat name to chat name parameter.
+        this.sidebar = sidebar; // Set sidebar chat to passed in sidebar parameter.
+        initComponents(); // Initialise GUI components.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Adapt and optimize look and feel depending on OS.
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
-        lblChatName.setText(chatName);
-        //pnlMessages.setLayout(new GridLayout(0,1,5,5));
-        pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS));
-        waitingForResponse = new HashMap<>();
+        lblChatName.setText(chatName); // Set chat name to chat name parameter. 
+        pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS)); // Set message panel layout.
+        waitingForResponse = new HashMap<>(); // Initialise HashMap.
     }
 
-    public int getNextMessageId() 
-    {
-        return idCounter.getAndIncrement();
+    /**
+     * Get the ID of the next message.
+     * @return 
+     */
+    public int getNextMessageId() {
+        return idCounter.getAndIncrement(); // Return message ID counter and increment it.
     }
 
-    private void saveMessage(Message message) 
-    {
+    /**
+     * Saves messages in chat.
+     * @param message 
+     */
+    private void saveMessage(Message message) {
         //TODO save message somewhere 
     }
 
-    public String getChatName()
-    {
-        return chatName;
+    /**
+     * Return the name of the chat.
+     * @return 
+     */
+    public String getChatName() {
+        return chatName; // Return chat name.
     }
     
     public void addMessage(Message message)//Use this method when loading the chat 
@@ -95,14 +105,24 @@ public class GenericChat extends javax.swing.JPanel
         sb.setValue( sb.getMaximum());
     }
 
+    /**
+     * Adds received message to chat.
+     *
+     * @param message
+     */
     public synchronized void receiveMessage(Message message) 
     {
         addMessage(message);
         saveMessage(message);
     }
 
-    void receiveResponse(int messageId, int responseCode) 
-    {
+     /**
+     * Get response from chat with the given message ID and response code.
+     *
+     * @param messageId
+     * @param responseCode
+     */
+    void receiveResponse(int messageId, int responseCode) {
         MessagePanel m = waitingForResponse.get(messageId);
         if (m != null) 
         {
@@ -206,6 +226,10 @@ public class GenericChat extends javax.swing.JPanel
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * If send button clicked, gets text entered, saves as a message and sends it.
+     * @param evt 
+     */
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
         Message message = new Message(getNextMessageId(), ClientNetworkManager.getUsername(), chatName, txaMessage.getText());

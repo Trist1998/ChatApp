@@ -1,77 +1,126 @@
 package message;
 
+// Imports
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import network.protocol.ProtocolParameters;
 
 /**
+ * ProtocolMessage class is used to build protocol messages.
  *
- * @author Tristan
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ProtocolMessage
-{
+public class ProtocolMessage {
+
+    // Variables
     private String senderName;
     private String receiverName;
     private String text;
     private Date sent;
     private boolean alreadySaved;
 
-    public ProtocolMessage(String senderName, String receiverName, String text) 
-    {
+    /**
+     * Parameterized Constructor for ProtocolMessage class, builds a protocol
+     * message with parameters passed in.
+     *
+     * @param senderName
+     * @param receiverName
+     * @param text
+     */
+    public ProtocolMessage(String senderName, String receiverName, String text) {
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.text = text;
     }
-    
-    public ProtocolMessage(ResultSet rs) throws SQLException
-    {
+
+    /**
+     * Parameterized Constructor for ProtocolMessage class, builds a protocol
+     * message with result set.
+     *
+     * @param rs
+     * @throws SQLException
+     */
+    public ProtocolMessage(ResultSet rs) throws SQLException {
         this.senderName = rs.getString("senderName");
         this.receiverName = rs.getString("receiverName");
         this.text = rs.getString("text");
         sent = rs.getDate("sentTimestamp");
         alreadySaved = true;
     }
-    
-    public ProtocolMessage(ProtocolParameters pp)
-    {
+
+    /**
+     * Parameterized Constructor for ProtocolMessage class, builds a protocol
+     * message with protocol parameters.
+     *
+     * @param pp
+     */
+    public ProtocolMessage(ProtocolParameters pp) {
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.toString();
     }
-    
-    public String getSenderName() 
-    {
+
+    /**
+     * Get sender name.
+     *
+     * @return
+     */
+    public String getSenderName() {
         return senderName;
     }
 
-    public String getReceiverName() 
-    {
+    /**
+     * Get receiver name.
+     *
+     * @return
+     */
+    public String getReceiverName() {
         return receiverName;
     }
 
-    public String getText() 
-    {
+    /**
+     * Get text of protocol message.
+     *
+     * @return
+     */
+    public String getText() {
         return text;
     }
 
-    public boolean isAlreadySaved() 
-    {
+    /**
+     * Check if it is already saved.
+     *
+     * @return
+     */
+    public boolean isAlreadySaved() {
         return alreadySaved;
     }
-    
-    public void setText(String text)
-    {
+
+    /**
+     * Set text of protocol massage.
+     *
+     * @param text
+     */
+    public void setText(String text) {
         this.text = text;
     }
 
-    public Date getSent()
-    {
+    /**
+     * Get date and time of when protocol message sent.
+     *
+     * @return
+     */
+    public Date getSent() {
         return sent;
     }
 
-    public void setSent(Date sent)
-    {
+    /**
+     * Set date and time of when protocol message sent.
+     *
+     * @param sent
+     */
+    public void setSent(Date sent) {
         this.sent = sent;
     }
 }

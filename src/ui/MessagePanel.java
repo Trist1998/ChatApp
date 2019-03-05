@@ -1,5 +1,6 @@
 package ui;
 
+// Imports
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JEditorPane;
@@ -9,8 +10,10 @@ import message.Message;
 import network.server.ServerConnectionHandler;
 
 /**
+ * MessagePanel class create a panel form to display an actual message in the
+ * chat.
  *
- * @author Tristan
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class MessagePanel extends javax.swing.JPanel 
 {
@@ -54,10 +57,12 @@ public class MessagePanel extends javax.swing.JPanel
         setStateLabel();
     }
 
-    private void setStateLabel() 
-    {
-        switch (message.getState()) 
-        {
+    /**
+     * Set the state label based on message state. (Delivered, saved, lost).
+     */
+    private void setStateLabel() {
+        System.out.println("Hello");
+        switch (message.getState()) {
             case ServerConnectionHandler.MESSAGE_DELIVERED:
                 lblState.setText("Delivered");
                 break;
@@ -72,6 +77,13 @@ public class MessagePanel extends javax.swing.JPanel
                 break;
         }
     }
+
+    /**
+     * Sets the message state based on the response code.
+     *
+     * @param responseCode
+     */
+
     public int getContentHeight(String content)
     {
         JEditorPane dummyEditorPane=new JEditorPane();
@@ -81,8 +93,7 @@ public class MessagePanel extends javax.swing.JPanel
         return dummyEditorPane.getPreferredSize().height;
     }
     
-    public void receiveResponse(int responseCode)
-    {
+    public void receiveResponse(int responseCode){
         message.setState(responseCode);
         setStateLabel();
     }

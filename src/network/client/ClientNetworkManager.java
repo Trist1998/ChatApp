@@ -1,21 +1,30 @@
-
 package network.client;
 
+// Imports
 import database.PasswordHelper;
 import java.io.IOException;
 import java.net.Socket;
 
-
+/**
+ * ClientNetworkManager class is used to establish a socket and connection. 
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
+ */
 public class ClientNetworkManager 
 {
     public static final int SERVER_PORT = 9999;
-    public static final String HOST_NAME = "localhost";
+    public static final String HOST_NAME = "196.24.176.236";
     
     private static ClientConnectionHandler connection;
     private static String username;
     private static String hashedPassword;
     private static boolean loggedIn;
 
+    /**
+     * Creates a socket on port number, sends it to connection handler.
+     * @param portNumber
+     * @param username
+     * @param password 
+     */
     public static void openSocketClient(int portNumber, String username, String password) 
     {      
         try 

@@ -1,6 +1,6 @@
-
 package message;
 
+// Imports
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,8 +9,14 @@ import java.util.logging.Logger;
 import network.client.ClientNetworkManager;
 import network.protocol.ProtocolParameters;
 
-public class Message 
-{
+/**
+ * Message class is used to build messages.
+ *
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
+ */
+public class Message {
+
+    // Variables
     private int id;
     private String senderName;
     private String receiverName;
@@ -19,8 +25,15 @@ public class Message
     private Date received;
     private Date sent;
 
-    public Message(String senderName, String receiverName, String text) 
-    {
+    /**
+     * Parameterized Constructor for Message class, builds message with passed
+     * in parameters.
+     *
+     * @param senderName
+     * @param receiverName
+     * @param text
+     */
+    public Message(String senderName, String receiverName, String text) {
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.text = text;
@@ -28,25 +41,35 @@ public class Message
         state = -1;
     }
 
-    public Message(ProtocolParameters pp)
-    {
+    /**
+     * Parameterized Constructor for Message class, takes in Protocol Parameters
+     * to build message.
+     *
+     * @param pp
+     */
+    public Message(ProtocolParameters pp) {
         this.id = Integer.parseInt(pp.getParameter("Id"));
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
-        try
-        {
+        try {
             this.sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(pp.getParameter("DateSent"));
-        } 
-        catch (ParseException ex)
-        {
+        } catch (ParseException ex) {
             Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
         }
         state = -1;
     }
-    
-    public Message(int id, String senderName, String receiverName, String text)
-    {
+
+    /**
+     * Parameterized Constructor for Message class, takes passed in parameters
+     * to build message.
+     *
+     * @param id
+     * @param senderName
+     * @param receiverName
+     * @param text
+     */
+    public Message(int id, String senderName, String receiverName, String text) {
         this.id = id;
         this.senderName = senderName;
         this.receiverName = receiverName;
@@ -64,59 +87,103 @@ public class Message
     {
         state = Math.max(state, responseCode);
     }
-    
-    public synchronized int getState()
-    {
+
+    /**
+     * Get state of message.
+     *
+     * @return
+     */
+    public synchronized int getState() {
         return state;
     }
 
-    public int getId()
-    {
+    /**
+     * Get ID of message.
+     *
+     * @return
+     */
+    public int getId() {
         return id;
     }
-    
-    public String getSenderName() 
-    {
+
+    /**
+     * Get sender of message name.
+     *
+     * @return
+     */
+    public String getSenderName() {
         return senderName;
     }
 
-    public String getReceiverName() 
-    {
+    /**
+     * Get receiver of message name.
+     *
+     * @return
+     */
+    public String getReceiverName() {
         return receiverName;
     }
 
-    public String getText() 
-    {
+    /**
+     * get text of message.
+     *
+     * @return
+     */
+    public String getText() {
         return text;
     }
 
-    public boolean isReceived() 
-    {
+    /**
+     * Check if message is received.
+     *
+     * @return
+     */
+    public boolean isReceived() {
         return received != null;
     }
-    
-    public void setText(String text)
-    {
+
+    /**
+     * Set text of message.
+     *
+     * @param text
+     */
+    public void setText(String text) {
         this.text = text;
     }
 
-    public Date getReceived()
-    {
+    /**
+     * Get the date and time of message when received.
+     *
+     * @return
+     */
+    public Date getReceived() {
         return received;
     }
 
-    public void setReceived(Date received)
-    {
+    /**
+     * Set the date and time of message when received.
+     *
+     * @param received
+     */
+    public void setReceived(Date received) {
         this.received = received;
     }
 
-    public Date getSent()
-    {
+    /**
+     * Get the date and time of message when sent.
+     *
+     * @return
+     */
+    public Date getSent() {
         return sent;
     }
-    
-    public String getDateSentString()
-    {
+
+    /**
+     * Get the date and time of message when sent in a string format.
+     *
+     * @return
+     */
+    public String getDateSentString() {
         return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").format(sent);
     }
     
@@ -131,8 +198,12 @@ public class Message
     }
                     
 
-    public void setSent(Date sent)
-    {
+    /**
+     * Set the date and time of message when sent.
+     *
+     * @param sent
+     */
+    public void setSent(Date sent) {
         this.sent = sent;
-    }  
+    }
 }

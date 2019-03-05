@@ -5,25 +5,34 @@ import javax.swing.SwingUtilities;
 import message.Message;
 
 /**
- * @author Tristan
+ *
+ * @author @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class ChatManager
 {
-    private static ConcurrentHashMap<String, SideBarChat> chats = new ConcurrentHashMap<>();  
-    private static MainMenu mainMenu;
-    
+    private static ConcurrentHashMap<String, SideBarChat> chats = new ConcurrentHashMap<>(); // Declare a HashMap called chats.  
+    private static MainMenu mainMenu; // Declare an instance of MainMenu.
 
-    public static void buildChatViews(MainMenu mm)
+    /**
+     * Loads locally saved messages to the ui
+     * @param mm
+     */
+    public static void buildChatViews(MainMenu mm) 
     {
         mainMenu = mm;
         //TODO load locally saved chats
     }
-    
-    public static void createChat(String chatName)
+
+    /**
+     * Creates a new side bar chat and adds it to the Main Menu form.
+     *
+     * @param chatName
+     */
+    public synchronized static void createChat(String chatName) 
     {
         SideBarChat newSideBarComp = new SideBarChat(chatName, mainMenu);
         chats.put(newSideBarComp.getChatName(), newSideBarComp);
-        mainMenu.addChat(newSideBarComp);
+        mainMenu.addChat(newSideBarComp); // Add sidebar chat component to Main Menu form.
     }
     
     private static void createChat(Message message)
@@ -33,23 +42,32 @@ public class ChatManager
         mainMenu.addChat(newSideBarComp);
         newSideBarComp.receiveMessage(message);
     }
-    
-    public synchronized static void receiveMessage(Message message)
-    {    
+
+    /**
+     * Adds message to chat.
+     * @param message 
+     */
+    public synchronized static void receiveMessage(Message message) 
+    {
         SideBarChat sideBarComp = chats.get(message.getSenderName());
-        SwingUtilities.invokeLater(new Runnable() 
-        {
-            public void run() 
-            {
-                if(sideBarComp == null)
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (sideBarComp == null) {
                     ChatManager.createChat(message);
-                else
+                } else {
                     sideBarComp.receiveMessage(message);
+                }
             }
         });          
     }
 
-    public static void receiveResponse(String chatName, int messageId, int responseCode)
+    /**
+     * Receives response of message, to update message state.
+     * @param chatName
+     * @param messageId
+     * @param responseCode 
+     */
+    public static void receiveResponse(String chatName, int messageId, int responseCode) 
     {
         SideBarChat chat = chats.get(chatName);
         if(chat != null)
@@ -60,5 +78,9 @@ public class ChatManager
                     chat.receiveResponse(messageId, responseCode);
                 }
             });         
+    }
+    public void donothing()
+    {
+        
     }
 }

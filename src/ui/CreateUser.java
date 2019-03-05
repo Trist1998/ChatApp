@@ -1,26 +1,28 @@
 package ui;
 
+//Imports
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
 import network.protocol.UserCreationProtocol;
 
 /**
- *
- * @author Tristan
+ * CreateUser class create a form that allows a user to register to ChatApp
+ * and become an authenticated user.
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class CreateUser extends javax.swing.JFrame
 {
 
     /**
-     * Creates new form CreateUser
+     * Non-Parameterized Constructor for CreateUser class, creates a CreateUser form.
      */
     public CreateUser()
     {
-        initComponents();
-        this.setLocationRelativeTo(null);
-        try 
-        {
+        initComponents(); // Initialise GUI components.
+        this.setLocationRelativeTo(null); // Set frame to center of screen.
+        jPanel1.getRootPane().setDefaultButton(btnSubmit); // Set default button to signup, allows user to hit enter.
+        try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } 
         catch (Exception e) 
@@ -162,28 +164,36 @@ public class CreateUser extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * If the submit is clicked get the entered credentials and try create user.
+     * @param evt 
+     */
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSubmitActionPerformed
     {//GEN-HEADEREND:event_btnSubmitActionPerformed
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        UserCreationProtocol.createUser(username, password); 
-        if(ClientNetworkManager.login(username, password))//Very hacky way of doing this but it should do for now
+        String username = txtUsername.getText(); // Get username.
+        String password = txtPassword.getText(); // get password.
+        UserCreationProtocol.createUser(username, password); // Call the user creation protocol.
+        if(ClientNetworkManager.login(username, password)) // Attempt to login user.
         {
             JOptionPane.showMessageDialog(null, "User Created!");          
-            MainMenu mm = new MainMenu();
-            mm.setVisible(true);
-            this.dispose();
+            MainMenu mm = new MainMenu(); // Instantiate new Main Menu form.
+            mm.setVisible(true); // Display the Main Menu form. 
+            this.dispose(); // Close this form.
         }
         else
             JOptionPane.showMessageDialog(null, "User creation failed");
              
     }//GEN-LAST:event_btnSubmitActionPerformed
 
+    /**
+     * If the back button is clicked, return to the Main Menu form.
+     * @param evt 
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
     {//GEN-HEADEREND:event_btnBackActionPerformed
-        Login l = new Login();
-        l.setVisible(true);
-        this.dispose();
+        Login l = new Login(); // // Instantiate new Login form.
+        l.setVisible(true); //Display the Login form.
+        this.dispose(); // Close this form.
     }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
