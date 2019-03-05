@@ -1,6 +1,12 @@
 package ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 import javax.swing.SwingUtilities;
 import message.Message;
 
@@ -13,11 +19,47 @@ public class ChatManager
     private static MainMenu mainMenu;
     
 
-    public static void buildChatViews(MainMenu mm)
+    public static void buildChatViews(MainMenu mm) throws ParseException
     {
         mainMenu = mm;
-        //TODO load locally saved chats
+        
+        File file = new File("ChatAppMessages");
+        String dlim = "---DELIMITER---";
+
+        try
+        {
+            Scanner csv = new Scanner(file);
+
+            while(csv.hasNext())
+            {
+                String s = csv.nextLine();
+                String[] line = s.split(dlim);
+                
+                int id = Integer.parseInt(line[0]);
+                String senderName = line[1];
+                String receiverName = line[2];
+                String text = line[3];
+                int state = Integer.parseInt(line[4]);
+                Date received =  new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(line[5]);
+                Date sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(line[6]);
+                
+                Message message = new Message(id, senderName, receiverName, text, state, received, sent);
+                receiveMessage(message);
+                
+                
+            }
+            csv.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File not found");
+        }
+        
+        
+        
     }
+    
+   
     
     public synchronized static void createChat(String chatName)
     {

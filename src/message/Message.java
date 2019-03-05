@@ -54,6 +54,18 @@ public class Message
         state = -1;
     }  
     
+    public Message(int id, String senderName, String receiverName, String text, int state, Date received, Date sent)
+    {
+        this.id = id;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.text = text;
+        this.state = state;
+        this.received = received;
+        this.sent = sent;
+        
+    }
+    
     public synchronized void setState(int responseCode)
     {
         state = Math.max(state, responseCode);

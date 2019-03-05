@@ -2,6 +2,9 @@ package ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,7 +42,27 @@ public class GenericChat extends javax.swing.JPanel
     
     private void saveMessage(Message message)
     {
-        //TODO save message somewhere 
+        String dlim = "---DELIMITER---";
+        int id = message.getId();
+        String senderName = message.getSenderName();
+        String receiverName = message.getReceiverName();
+        String text = message.getText();
+        int state = message.getState();
+        Date received = message.getReceived();
+        Date sent = message.getSent();
+        
+        try
+        {
+            PrintWriter nord = new PrintWriter(new FileWriter ("ChatAppMessages", true));
+            nord.print(id+dlim+senderName+dlim+receiverName+dlim+text+dlim+state+dlim
+            +received+dlim+sent+"\n");
+      
+            nord.close();
+        }
+        catch(IOException ex)
+        {
+            System.out.println("Error writing to file");
+        }
     }
     
     public String getChatName()
