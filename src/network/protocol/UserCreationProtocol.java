@@ -1,5 +1,6 @@
 package network.protocol;
 
+// Imports
 import database.PasswordHelper;
 import database.User;
 import java.io.IOException;
@@ -10,15 +11,22 @@ import network.client.ClientNetworkManager;
 import network.server.ServerConnectionHandler;
 
 /**
- *
- * @author Tristan
+ * UserCreationProtocol class is used to in creation of users.
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class UserCreationProtocol extends Protocol
 {
+    // Variables
     public static final String HEAD = "CREATE_USER";
     public static final String ACTION_REQUEST = "REQUEST";
     public static final String ACTION_RESPONSE = "RESPONSE";
     
+    /**
+     * Attempts to create user.
+     * @param username
+     * @param password
+     * @return 
+     */
     public static boolean createUser(String username, String password)
     {
         ProtocolParameters pp = new ProtocolParameters();
@@ -42,6 +50,11 @@ public class UserCreationProtocol extends Protocol
         return false; 
     }
     
+    /**
+     * Processes protocol parameters.
+     * @param pp
+     * @param conn 
+     */
     public static void processInput(ProtocolParameters pp, ServerConnectionHandler conn)
     {
         User user = new User(pp.getParameter("username"), pp.getParameter("password"));
@@ -60,6 +73,11 @@ public class UserCreationProtocol extends Protocol
         conn.send(resPP.toString());           
     }
     
+    /**
+     * 
+     * @param pp
+     * @return 
+     */
     public static boolean processInput(ProtocolParameters pp)
     {
         return pp.getParameter("Confirmation").equals("Accepted");

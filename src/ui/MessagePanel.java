@@ -1,5 +1,6 @@
 package ui;
 
+// Imports
 import java.awt.Color;
 import javax.swing.UIManager;
 import message.Message;
@@ -7,8 +8,10 @@ import network.client.ClientNetworkManager;
 import network.server.ServerConnectionHandler;
 
 /**
+ * MessagePanel class create a panel form to display an actual message in the
+ * chat.
  *
- * @author Tristan
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class MessagePanel extends javax.swing.JPanel {
 
@@ -32,6 +35,9 @@ public class MessagePanel extends javax.swing.JPanel {
         setStateLabel();
     }
 
+    /**
+     * Set the state label based on message state. (Delivered, saved, lost).
+     */
     private void setStateLabel() {
         System.out.println("Hello");
         switch (message.getState()) {
@@ -50,10 +56,14 @@ public class MessagePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Sets the message state based on the response code.
+     *
+     * @param responseCode
+     */
     public void receiveResponse(int responseCode) {
         message.setState(responseCode);
         setStateLabel();
-
     }
 
     @SuppressWarnings("unchecked")

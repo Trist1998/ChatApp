@@ -66,7 +66,7 @@ public class ServerDatabaseConnection {
     }
 
     /**
-     * Close connection, statments and result set.
+     * Close connection, statements and result set.
      *
      * @param rs
      * @throws SQLException

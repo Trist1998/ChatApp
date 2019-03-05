@@ -1,5 +1,6 @@
 package network;
 
+// Imports
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,79 +11,115 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * ConnectionHandler used to manage input and output streams of sockets as well
+ * as write from output streams.
  *
- * @author Tristan
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public abstract class ConnectionHandler implements Runnable
-{
+public abstract class ConnectionHandler implements Runnable {
+
+    // Variables
     private Socket socket;
     private BufferedReader inputStream;
     private BufferedWriter outputStream;
     private boolean closed;
     private String username;
-    
-    
-    public ConnectionHandler(Socket socket) throws IOException
-    {
+
+    /**
+     * Parameterized Constructor for ProtocolMessage class, creates input and output stream for a socket.
+     *
+     * @param socket
+     * @throws IOException
+     */
+    public ConnectionHandler(Socket socket) throws IOException {
         this.socket = socket;
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         closed = false;
     }
-    
-    public boolean send(String protocol) 
-    {
-        synchronized(outputStream)
-        {        
-            try 
-            {
+
+    /**
+     * Write to outputStream.
+     *
+     * @param protocol
+     * @return
+     */
+    public boolean send(String protocol) {
+        synchronized (outputStream) {
+            try {
                 outputStream.write(protocol);//Remember to put + ProtocolProcessor.PROTOCOL_END + "\n"; where the String is built
-                outputStream.flush();
+                outputStream.flush(); 
                 return true;
-            } 
-            catch (IOException ex) 
-            {
+            } catch (IOException ex) {
                 Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
         }
     }
-    
-    public synchronized void close() throws IOException
-    {
+
+    /**
+     * Close the in and out streams and the socket.
+     *
+     * @throws IOException
+     */
+    public synchronized void close() throws IOException {
         inputStream.close();
         outputStream.close();
         socket.close();
         closed = true;
     }
-    
-    public BufferedReader getInputStream()
-    {
+
+    /**
+     * Get the input stream.
+     *
+     * @return
+     */
+    public BufferedReader getInputStream() {
         return inputStream;
     }
-    
-    public Socket getSocket()
-    {
+
+    /**
+     * Get the socket.
+     *
+     * @return
+     */
+    public Socket getSocket() {
         return socket;
     }
-    
-    public synchronized boolean isConnected()
-    {
+
+    /**
+     * Check if connection is not closed.
+     *
+     * @return
+     */
+    public synchronized boolean isConnected() {
         return !closed;
     }
-    
-    protected BufferedWriter getOutputStream()
-    {
+
+    /**
+     * Get output stream.
+     *
+     * @return
+     */
+    protected BufferedWriter getOutputStream() {
         return outputStream;
     }
 
-    public void setUsername(String username)
-    {
+    /**
+     * Set username.
+     *
+     * @param username
+     */
+    public void setUsername(String username) {
         this.username = username;
     }
-    
-    public String getUsername()
-    {
+
+    /**
+     * Get username.
+     *
+     * @return
+     */
+    public String getUsername() {
         return username;
     }
 }

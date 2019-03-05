@@ -1,91 +1,122 @@
-
 package network.protocol;
 
+// Imports
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ProtocolParameters 
-{
+/**
+ * ProtocolParameters class is a container of protocol parameters.
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
+ */
+public class ProtocolParameters {
+
+    // Variables
     public static final String PARAMETER_DELIMITER = "#END#";
     private ArrayList<String> parameterNames;
     private HashMap<String, String> parameters;
-    
-    public ProtocolParameters()
-    {
+
+    /**
+     * Non-Parameterized Constructor for ProtocolParameters class, creates empty.
+     */
+    public ProtocolParameters() {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
     }
 
-    public ProtocolParameters(Scanner reader)
-    {
+    /**
+     * Parameterized Constructor for ProtocolParameters class, used to build ProtocolParameters.
+     * @param reader
+     */
+    public ProtocolParameters(Scanner reader) {
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
         String in = "";
-        while(reader.hasNextLine())
-        {
-            in += reader.nextLine() + "\n";         
+        while (reader.hasNextLine()) {
+            in += reader.nextLine() + "\n";
         }
-        
+
         String[] pairs = in.split(PARAMETER_DELIMITER);
-                
-        for(String pair: pairs)
-        {     
+
+        for (String pair : pairs) {
             String cleanPair = pair.trim();
-            if(!cleanPair.contains(":"))
+            if (!cleanPair.contains(":")) {
                 break;
-            add(cleanPair);           
+            }
+            add(cleanPair);
         }
     }
-    
-    public void add(String parameterName, String parameterValue)
-    {
+
+    /**
+     * Adds a parameter to the object.
+     * @param parameterName
+     * @param parameterValue
+     */
+    public void add(String parameterName, String parameterValue) {
         parameterNames.add(parameterName);
         parameters.put(parameterName, parameterValue);
     }
 
-    public String getParameter(String name) 
-    {
+    /**
+     * Gets parameter value from name.
+     * @param name
+     * @return
+     */
+    public String getParameter(String name) {
         return parameters.get(name);
     }
-    
+
+    /**
+     * Returns protocol string.
+     * @return
+     */
     @Override
-    public String toString()
-    {
+    public String toString() {
         String output = Protocol.PROTOCOL_HEAD + ":" + getHead() + PARAMETER_DELIMITER + "\n";
-        for(String name: parameterNames)
-        {
+        for (String name : parameterNames) {
             output += name + ":" + parameters.get(name) + PARAMETER_DELIMITER + "\n";
         }
-        return output;             
+        return output;
     }
 
-    public void setHead(String head)
-    {
+    /**
+     * Sets head of protocol. 
+     * @param head
+     */
+    public void setHead(String head) {
         parameters.put(Protocol.PROTOCOL_HEAD, head);
     }
-    
-    public String getHead()
-    {
+
+    /**
+     * Gets head of protocol. 
+     * @return
+     */
+    public String getHead() {
         return parameters.get(Protocol.PROTOCOL_HEAD);
     }
 
-    public void add(String line)
-    {
-        if(!line.equals(""))
-        {
+    /**
+     * Converts line into protocol parameters. 
+     * @param line
+     */
+    public void add(String line) {
+        if (!line.equals("")) {
             String name = line.substring(0, line.indexOf(":"));
             String data = line.substring(line.indexOf(":") + 1);
-            if(!name.equals(Protocol.PROTOCOL_HEAD))
+            if (!name.equals(Protocol.PROTOCOL_HEAD)) {
                 parameterNames.add(name);
+            }
             parameters.put(name, data.trim());
         }
     }
 
-    public void replace(String parameterName, String value)
-    {
+    /**
+     * Updates parameter value.
+     * @param parameterName
+     * @param value
+     */
+    public void replace(String parameterName, String value) {
         parameters.replace(parameterName, value);
     }
-    
-    
+
 }

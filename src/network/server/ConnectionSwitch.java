@@ -1,5 +1,6 @@
 package network.server;
 
+// Imports
 import database.ProtocolQueue;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -8,13 +9,18 @@ import java.util.logging.Logger;
 import message.ProtocolMessage;
 
 /**
- *
- * @author Tristan
+ * ConnectionSwitch class is a server side object that is used to send messages to receiver's connection handler.
+ * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
 public class ConnectionSwitch
 {
     private static HashMap<String, ServerConnectionHandler> activeConnections = new HashMap<>();
     
+    /**
+     * Adds connection to activeConnections.
+     * @param connection
+     * @return 
+     */
     public synchronized static boolean addConnection(ServerConnectionHandler connection)
     {
         if(activeConnections.get(connection.getUsername()) == null)
@@ -26,6 +32,11 @@ public class ConnectionSwitch
         return false;
     }
     
+    /**
+     * Pushes messages to receiver's connection.
+     * @param message
+     * @return 
+     */
     public static int switchProtocol(ProtocolMessage message)
     {
         ServerConnectionHandler connection = activeConnections.get(message.getReceiverName());//add to protocol queue if not connected
@@ -49,6 +60,10 @@ public class ConnectionSwitch
         }
     }
 
+    /**
+     * Removes closed connection from activeConnections.
+     * @param conn 
+     */
     public static void removeConnection(ServerConnectionHandler conn)
     {
         activeConnections.remove(conn.getUsername());
