@@ -1,6 +1,7 @@
 package network.server;
 
 // Imports
+import file.FileNetworkManager;
 import java.io.IOException;
 import network.ConnectionHandler;
 import network.protocol.LoginNetworkManager;
@@ -28,13 +29,14 @@ public class ServerProtocolProcessor extends NetworkMessageListener
         
         if (pp != null) 
         {
-            String head = pp.getHead();
+            String head = pp.getHead().trim();
             System.out.println("We got data with the header of " + head);
-            if (head.trim().equals(MessageNetworkManager.HEAD))
+            if (head.equals(MessageNetworkManager.HEAD))
             {
                 runServerMessageInputProcess(pp, conn);
             }
-            //Add response protocol
+            else if(head.equals(FileNetworkManager.HEAD))
+                runServerFileInputProcess(pp, conn);
         }
     }
 
@@ -50,6 +52,17 @@ public class ServerProtocolProcessor extends NetworkMessageListener
             public void run() 
             {
                 MessageNetworkManager.processInput(pp, conn);
+            }
+        }).start();
+    }
+    
+    private static void runServerFileInputProcess(ProtocolParameters pp, ConnectionHandler conn) 
+    {
+        new Thread(new Runnable() 
+        {
+            public void run() 
+            {
+                FileNetworkManager.processInput(pp, conn);
             }
         }).start();
     }

@@ -1,9 +1,12 @@
 package ui;
 
+import file.FileMessage;
+import java.io.IOException;
 import ui.mainmenu.SideBarChat;
 import ui.mainmenu.MainMenu;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.SwingUtilities;
+import message.ClientMessageStorageManager;
 import message.Message;
 
 /**
@@ -14,15 +17,16 @@ public class ChatManager
 {
     private static ConcurrentHashMap<String, SideBarChat> chats = new ConcurrentHashMap<>(); // Declare a HashMap called chats.  
     private static MainMenu mainMenu; // Declare an instance of MainMenu.
+    
 
     /**
      * Loads locally saved messages to the ui
      * @param mm
      */
-    public static void buildChatViews(MainMenu mm) 
+    public static void buildChatViews(MainMenu mm) throws IOException 
     {
         mainMenu = mm;
-        //TODO load locally saved chats
+        //ClientMessageStorageManager.loadMessages();
     }
 
     /**
@@ -30,19 +34,20 @@ public class ChatManager
      *
      * @param chatName
      */
-    public synchronized static void createChat(String chatName) 
+    public static SideBarChat createChat(String chatName) 
     {
-        SideBarChat newSideBarComp = new SideBarChat(chatName, mainMenu);
-        chats.put(newSideBarComp.getChatName(), newSideBarComp);
-        mainMenu.addChat(newSideBarComp); // Add sidebar chat component to Main Menu form.
+        SideBarChat newSideBarChat = new SideBarChat(chatName, mainMenu);
+        chats.put(chatName, newSideBarChat);
+        mainMenu.addChat(newSideBarChat); // Add sidebar chat component to Main Menu form.
+        return  newSideBarChat;
     }
     
-    private static void createChat(Message message)
+    private static SideBarChat createChat(Message message)
     {
-        SideBarChat newSideBarComp = new SideBarChat(message.getSenderName(), mainMenu);      
-        chats.put(newSideBarComp.getChatName(), newSideBarComp);      
-        mainMenu.addChat(newSideBarComp);
-        newSideBarComp.receiveMessage(message);
+        SideBarChat newSideBarChat = new SideBarChat(message.getChatName(), mainMenu);      
+        chats.put(newSideBarChat.getChatName(), newSideBarChat);      
+        mainMenu.addChat(newSideBarChat);
+        return  newSideBarChat;
     }
 
     /**
@@ -51,23 +56,33 @@ public class ChatManager
      */
     public synchronized static void receiveMessage(Message message) 
     {
+        message.setChatName(message.getSenderName());
         SideBarChat sideBarComp = chats.get(message.getSenderName());
+        forwardToChat(sideBarComp, message);
+    }
+    
+    public synchronized static void addLocalMessage(Message message) 
+    {
+        SideBarChat sideBarComp = chats.get(message.getChatName());
+        forwardToChat(sideBarComp, message);                
+    }
+    
+    private static void forwardToChat(SideBarChat sideBarChat, Message message)
+    {
+        SideBarChat toReceive;
+        if(sideBarChat == null)
+            toReceive = createChat(message);
+        else
+            toReceive = sideBarChat;
+
         SwingUtilities.invokeLater(new Runnable() 
         {
             public void run() 
             {
-                if (sideBarComp == null) 
-                {
-                    ChatManager.createChat(message);
-                } 
-                else 
-                {
-                    sideBarComp.receiveMessage(message);
-                }
+                toReceive.receiveMessage(message);
             }
-        });          
+        });
     }
-
     /**
      * Receives response of message, to update message state.
      * @param chatName
@@ -85,6 +100,24 @@ public class ChatManager
                     chat.receiveResponse(messageId, responseCode);
                 }
             });         
+    }
+
+    public static void receiveFile(FileMessage message)
+    {
+        SideBarChat chat = chats.get(message.getSenderName());
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+                public void run() 
+                {
+                    SideBarChat toReceive;
+                    if(chat == null)
+                        toReceive = createChat(message);
+                    else
+                        toReceive = chat;
+                    toReceive.receiveFile(message);
+
+                }
+        });  
     }
 
 }

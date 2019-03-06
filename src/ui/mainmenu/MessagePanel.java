@@ -15,7 +15,7 @@ import network.server.ServerConnectionHandler;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class MessagePanel extends javax.swing.JPanel 
+public class MessagePanel extends javax.swing.JPanel implements ResponseReceiver
 {
 
     private Message message;
@@ -87,13 +87,14 @@ public class MessagePanel extends javax.swing.JPanel
 
     public int getContentHeight(String content)
     {
-        JEditorPane dummyEditorPane=new JEditorPane();
+        JEditorPane dummyEditorPane = new JEditorPane();
         dummyEditorPane.setSize(txaMessage.getWidth(),Short.MAX_VALUE);
         dummyEditorPane.setText(content);
         
         return dummyEditorPane.getPreferredSize().height;
     }
     
+    @Override
     public void receiveResponse(int responseCode)
     {
         message.setState(responseCode);

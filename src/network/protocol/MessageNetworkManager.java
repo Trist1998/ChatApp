@@ -31,6 +31,7 @@ public class MessageNetworkManager extends NetworkMessageHandler
     public static final String ACTION_SEND = "SEND";
     public static final String ACTION_RECEIVE = "RECEIVE";
     public static final String ACTION_RESPONSE = "RESPONSE";
+    public static final String ACTION_REQUEST = "REQUEST";
     public static final int RESPONSE_READ = 3;
 
     /**
@@ -42,23 +43,16 @@ public class MessageNetworkManager extends NetworkMessageHandler
     public static boolean sendMessage(Message message) 
     {
         ClientConnectionHandler conn = ClientNetworkManager.getConnection();
-        ProtocolParameters pp = new ProtocolParameters();
-        pp.add(PROTOCOL_ACTION, ACTION_SEND);
+        ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_SEND);
+        
         pp.add("Id", String.valueOf(message.getId()));
+        pp.add("ChatName", message.getChatName());
         pp.add("Sender", message.getSenderName());
         pp.add("Receiver", message.getReceiverName());
         pp.add("Text", message.getText());
         pp.add("DateSent", message.getDateSentString());
-        try 
-        {
-            send(HEAD, pp, conn);
-            return true;
-        } 
-        catch (IOException ex)
-        {
-            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+        
+        return send(pp, conn);
     }
 
     /**
@@ -76,6 +70,8 @@ public class MessageNetworkManager extends NetworkMessageHandler
                 return processServerInput(pp, (ServerConnectionHandler) conn);
             case ACTION_RECEIVE:
                 return processClientInput(pp);
+            case ACTION_REQUEST:
+                return retrieveStoredMessages(conn.getUsername(), (ServerConnectionHandler) conn);
             case ACTION_RESPONSE:
                 return processResponse(pp);
             default:
@@ -109,7 +105,7 @@ public class MessageNetworkManager extends NetworkMessageHandler
     {
         try 
         {
-            int responseCode = forwardMessage(HEAD, pp);
+            int responseCode = forwardMessage(pp);
             sendResponse(responseCode, pp, conn);
             return true;
         } 
@@ -131,12 +127,11 @@ public class MessageNetworkManager extends NetworkMessageHandler
      */
     public static void sendResponse(int responseCode, ProtocolParameters pp, ServerConnectionHandler conn) throws IOException 
     {
-        ProtocolParameters rPP = new ProtocolParameters();
-        rPP.add(PROTOCOL_ACTION, ACTION_RESPONSE);
+        ProtocolParameters rPP = new ProtocolParameters(HEAD, ACTION_RESPONSE);
         rPP.add("MessageId", pp.getParameter("Id"));
         rPP.add("Receiver", pp.getParameter("Receiver"));
         rPP.add("ResponseCode", String.valueOf(responseCode));
-        send(HEAD, rPP, conn);
+        send(rPP, conn);
     }
 
     /**
@@ -147,12 +142,11 @@ public class MessageNetworkManager extends NetworkMessageHandler
      * @return
      * @throws IOException
      */
-    private static int forwardMessage(String head, ProtocolParameters pp) throws IOException 
+    private static int forwardMessage(ProtocolParameters pp) throws IOException 
     {
-        pp.replace("Action", ACTION_RECEIVE);
-        String output = buildProtocolString(head, pp);
+        pp.replace(NetworkMessageHandler.PROTOCOL_ACTION, ACTION_RECEIVE);
         NetworkMessage message = new NetworkMessage(pp);
-        message.setText(output);
+        message.setText(pp.buildProtocolString());
         return ConnectionSwitch.switchProtocol(message);
     }
 
@@ -160,24 +154,35 @@ public class MessageNetworkManager extends NetworkMessageHandler
      * Retrieve stored messages from database and send to client.
      * @param username
      * @param conn
-     * @throws SQLException
-     * @throws IOException
      */
-    public static void retrieveStoredMessages(String username, ServerConnectionHandler conn) throws SQLException, IOException 
+    public static boolean retrieveStoredMessages(String username, ServerConnectionHandler conn)
     {
-        ResultSet rs = NetworkMessageQueue.loadUnsentProtocols(username);
-        while (rs.next()) 
+        try 
         {
-            NetworkMessage message = new NetworkMessage(rs);
-            if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED) 
+            ResultSet rs = NetworkMessageQueue.loadUnsentProtocols(username);
+            while (rs.next()) 
             {
-                ProtocolParameters pp = new ProtocolParameters(new Scanner(message.getText()));
-                sendResponse(ServerConnectionHandler.MESSAGE_DELIVERED, pp, conn);
-                rs.deleteRow();
+                NetworkMessage message = new NetworkMessage(rs);
+                if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED)
+                {
+                    ProtocolParameters pp = new ProtocolParameters(new Scanner(message.getText()));
+                    sendResponse(ServerConnectionHandler.MESSAGE_DELIVERED, pp, conn);
+                    rs.deleteRow();
+                }
             }
+            
+            ServerDatabaseConnection.closeQuery(rs);
+            return true;
+        } 
+        catch (SQLException ex)
+        {
+            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        ServerDatabaseConnection.closeQuery(rs);
+        return false;
     }
 
     /**
@@ -185,13 +190,19 @@ public class MessageNetworkManager extends NetworkMessageHandler
      * @param pp
      * @return
      */
-    private static boolean processResponse(ProtocolParameters pp) 
+    public static boolean processResponse(ProtocolParameters pp) 
     {
         int messageId = Integer.parseInt(pp.getParameter("MessageId"));
         int responseCode = Integer.parseInt(pp.getParameter("ResponseCode"));
         String chatName = pp.getParameter("Receiver");
         ChatManager.receiveResponse(chatName, messageId, responseCode);
         return true;
+    }
+
+    public static void requestStoredMessages()
+    {
+        ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_REQUEST);
+        send(pp, ClientNetworkManager.getConnection());
     }
 
 }

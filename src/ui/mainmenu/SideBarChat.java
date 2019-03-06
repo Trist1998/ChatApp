@@ -1,7 +1,7 @@
 package ui.mainmenu;
 
 // Imports
-import ui.mainmenu.MainMenu;
+import file.FileMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
@@ -17,10 +17,12 @@ public class SideBarChat extends javax.swing.JPanel
 {
 
     private MainMenu mainMenu; // Declare an instance of MainMenu.
-    private GenericChat chat; // Declare an instance of GenericChat.
+    public ChatPanel chat; // Declare an instance of GenericChat.
 
     /**
      * Parameterized Constructor for SideBarChat class, creates a chat on the side of the Main Menu form with no content.
+     * @param chatName
+     * @param mm
      */
     public SideBarChat(String chatName, MainMenu mm) 
     {
@@ -37,7 +39,7 @@ public class SideBarChat extends javax.swing.JPanel
         lblLastMessage.setText("No Messages");
         lblLastMessageTime.setText("");
         mainMenu = mm;
-        this.chat = new GenericChat(chatName, this);
+        this.chat = new ChatPanel(chatName, this);
     }
 
     /**
@@ -58,7 +60,7 @@ public class SideBarChat extends javax.swing.JPanel
         lblLastMessage.setText(lastMessage.getText()); // Set last message label to the body of text of the messsage's text.
         lblLastMessageTime.setText("Date"); // Set the message time label.
         mainMenu = mm; // Set MainMenu to MainMenu parameter.
-        this.chat = new GenericChat(chatName, this); // Instantiate GenericChat with the passed in chat name.
+        this.chat = new ChatPanel(chatName, this); // Instantiate GenericChat with the passed in chat name.
     }
 
     /**
@@ -187,5 +189,12 @@ public class SideBarChat extends javax.swing.JPanel
     public void receiveResponse(int messageId, int responseCode) 
     {
         chat.receiveResponse(messageId, responseCode);
+    }
+
+    public void receiveFile(FileMessage message)
+    {
+        setLastMessage(message);
+        lblLastMessage.setText("File: " + message.getFileName());
+        chat.receiveFile(message);
     }
 }

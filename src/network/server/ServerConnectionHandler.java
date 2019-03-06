@@ -10,14 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.NetworkMessage;
 import network.ConnectionHandler;
-import network.client.ClientConnectionHandler;
-import network.protocol.MessageNetworkManager;
 
 /**
  * ServerConnectionHandler class is the connection Handler for server connections.
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class ServerConnectionHandler extends ConnectionHandler {
+public class ServerConnectionHandler extends ConnectionHandler 
+{
 
     /**
      * Constructor.
@@ -25,7 +24,8 @@ public class ServerConnectionHandler extends ConnectionHandler {
      * @throws IOException
      * @throws SQLException
      */
-    public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException {
+    public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException 
+    {
         super(ss.accept());
     }
 
@@ -39,7 +39,6 @@ public class ServerConnectionHandler extends ConnectionHandler {
         {
             if (ServerProtocolProcessor.processInitialConnection(this)) 
             {
-                MessageNetworkManager.retrieveStoredMessages(getUsername(), this);
                 System.out.println("Waiting for data from " + getUsername());
                 while (isConnected()) 
                 {
@@ -53,10 +52,6 @@ public class ServerConnectionHandler extends ConnectionHandler {
         {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     public static final int MESSAGE_DELIVERED = 2;
     public static final int MESSAGE_SAVED = 1;
@@ -80,7 +75,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
             } 
             catch (IOException ex) 
             {
-                Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
                 if(!protocol.isAlreadySaved())
                     try 
                     {

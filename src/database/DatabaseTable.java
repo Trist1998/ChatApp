@@ -67,4 +67,9 @@ public abstract class DatabaseTable
     {
         ServerDatabaseConnection.update(SQL);
     }
+    
+    public ResultSet queryById(int id) throws SQLException
+    {
+        return getObjectResultSet(getLoadAllSQL() + " WHERE id = " + id);
+    }
 }

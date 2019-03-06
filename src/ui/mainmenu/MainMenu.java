@@ -4,12 +4,17 @@ package ui.mainmenu;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import network.client.ClientNetworkManager;
+import network.protocol.MessageNetworkManager;
 import ui.ChatManager;
 
 /**
@@ -19,7 +24,7 @@ import ui.ChatManager;
 public class MainMenu extends javax.swing.JFrame 
 {
 
-    private GenericChat currentChat; // Declare new instance of GenericChat.
+    private ChatPanel currentChat; // Stores reference to GenericChat open in the window
     
     /**
      * Non-Parameterized Constructor for MainMenu Class create the Main Menu form.
@@ -155,24 +160,31 @@ public class MainMenu extends javax.swing.JFrame
     
     public synchronized void addChat(SideBarChat sideBarChat)
     {
-        JPanel pnl = new JPanel();
-        pnl.setLayout(new FlowLayout(FlowLayout.LEFT));
-        pnl.setMaximumSize(new Dimension(pnlChats.getSize().width, sideBarChat.getPreferredSize().height + 10));
-        pnl.setBackground(new Color(95,200,255));
-            sideBarChat.setSize(new Dimension(pnlChats.getWidth(), sideBarChat.getPreferredSize().height));
-            sideBarChat.setVisible(true);
-            pnl.add(sideBarChat);
-            pnlChats.add(Box.createRigidArea(new Dimension(0,5)));
-            pnlChats.add(pnl);
-            pnlChats.revalidate();
-            pnlChats.repaint();
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                JPanel pnl = new JPanel();
+                pnl.setLayout(new FlowLayout(FlowLayout.LEFT));
+                pnl.setMaximumSize(new Dimension(pnlChats.getSize().width, sideBarChat.getPreferredSize().height + 10));
+                pnl.setBackground(new Color(95,200,255));
+                    sideBarChat.setSize(new Dimension(pnlChats.getWidth(), sideBarChat.getPreferredSize().height));
+                    sideBarChat.setVisible(true);
+                    pnl.add(sideBarChat);
+                    pnlChats.add(Box.createRigidArea(new Dimension(0,5)));
+                    pnlChats.add(pnl);
+                    pnlChats.revalidate();
+                    pnlChats.repaint();
+                
+            }
+        });
     }
 
     /**
      * When a user selects a chat, it will be displayed on the MainMenu form.
      * @param chat 
      */
-    public synchronized void setChat(GenericChat chat) 
+    public synchronized void setChat(ChatPanel chat) 
     {
         //System.out.println("added chat on event dispatch thread? " + javax.swing.SwingUtilities.isEventDispatchThread());     
         if (currentChat != chat) 
@@ -184,11 +196,13 @@ public class MainMenu extends javax.swing.JFrame
             currentChat = chat;
             chat.setMaximumSize(pnlChatWindow.getSize());
             chat.setSize(pnlChatWindow.getWidth(), pnlChatWindow.getHeight());
+            chat.setUpButton();
             chat.setVisible(true);
-            pnlChatWindow.setLayout(new BoxLayout(pnlChatWindow,0));
+            pnlChatWindow.setLayout(new BoxLayout(pnlChatWindow, 0));
             pnlChatWindow.add(chat);
             pnlChatWindow.revalidate();
             pnlChatWindow.repaint();
+            chat.hasBeenOpened = true;
         }
     }
 
@@ -201,4 +215,18 @@ public class MainMenu extends javax.swing.JFrame
     private javax.swing.JPanel pnlChats;
     private javax.swing.JScrollPane pnlScrollChats;
     // End of variables declaration//GEN-END:variables
+
+    public void start()
+    {
+        try
+        {
+            ChatManager.buildChatViews(this);                   
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        MessageNetworkManager.requestStoredMessages();
+        this.setVisible(true);
+    }
 }

@@ -29,23 +29,15 @@ public class UserCreationNetworkManager extends NetworkMessageHandler
      */
     public static boolean createUser(String username, String password)
     {
-        ProtocolParameters pp = new ProtocolParameters();
-        pp.add(NetworkMessageHandler.PROTOCOL_ACTION, ACTION_REQUEST);
+        ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_REQUEST);
         pp.add("username", username);
         pp.add("password", new PasswordHelper().clientPasswordHash(password));
         
-        try
+        ClientConnectionHandler conn = ClientNetworkManager.getNewConnection(ClientNetworkManager.SERVER_PORT);
+        if(conn != null)
         {
-            ClientConnectionHandler conn = ClientNetworkManager.getNewConnection(ClientNetworkManager.SERVER_PORT);
-            if(conn != null)
-            {
-                send(HEAD, pp, conn);            
-                return true;//ClientProtocolProcessor.processNewUser(conn);
-            }
-        } 
-        catch (IOException ex)
-        {
-            Logger.getLogger(UserCreationNetworkManager.class.getName()).log(Level.SEVERE, null, ex);             
+            
+            return send(pp, conn);//ClientProtocolProcessor.processNewUser(conn);
         }
         return false; 
     }
@@ -58,9 +50,7 @@ public class UserCreationNetworkManager extends NetworkMessageHandler
     public static void processInput(ProtocolParameters pp, ServerConnectionHandler conn)
     {
         User user = new User(pp.getParameter("username"), pp.getParameter("password"));
-        ProtocolParameters resPP = new ProtocolParameters();
-        resPP.add(NetworkMessageHandler.PROTOCOL_HEAD, HEAD);
-        resPP.add(NetworkMessageHandler.PROTOCOL_ACTION, ACTION_RESPONSE);
+        ProtocolParameters resPP = new ProtocolParameters(HEAD, ACTION_RESPONSE);
         if(user.createUser())
         {          
             resPP.add("Confirmation", "Accepted");
@@ -70,7 +60,7 @@ public class UserCreationNetworkManager extends NetworkMessageHandler
             resPP.add("Confirmation", "Declined");
             resPP.add("Message", "Something wrong XD");
         }
-        conn.send(resPP.toString());           
+        conn.send(resPP.buildProtocolString());           
     }
     
     /**

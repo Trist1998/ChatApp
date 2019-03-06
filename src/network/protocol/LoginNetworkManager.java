@@ -22,7 +22,7 @@ public class LoginNetworkManager extends NetworkMessageHandler
     public static final String HEAD = "LOGIN";
     public static final String ACTION_REQUEST = "REQUEST";
     public static final String ACTION_RESPONSE = "RESPONSE";
-    public static final String[] PARAMETER_NAMES_RESPONSE = new String[]{"Confirmation", "Message"};
+    public static final String LOGIN_ACCEPTED = "ACCEPTED";
     public static final String[] PARAMETER_NAMES_REQUEST = new String[]{"Username", "Password"};
 
     /**
@@ -64,18 +64,10 @@ public class LoginNetworkManager extends NetworkMessageHandler
      */
     public static void loginRequest(String username, String password, ClientConnectionHandler conn) //TODO make boolean for validation
     {
-        ProtocolParameters pp = new ProtocolParameters();
-        pp.add(PROTOCOL_ACTION, ACTION_REQUEST);
+        ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_REQUEST);
         pp.add("Username", username);
         pp.add("Password", password);
-        try 
-        {
-            send(HEAD, pp, conn);
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(LoginNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        send(pp, conn);
     }
 
     /**
@@ -85,35 +77,25 @@ public class LoginNetworkManager extends NetworkMessageHandler
      * @param conn
      * @return
      */
-    private static boolean processServerLogin(ProtocolParameters pp, ConnectionHandler conn) {
-        try 
+    private static boolean processServerLogin(ProtocolParameters pp, ConnectionHandler conn) 
+    {
+        String username = pp.getParameter("Username"); 
+        String password = pp.getParameter("Password");
+        conn.setUsername(username);
+        User user = new User(username, password);
+        ProtocolParameters responsePp = new ProtocolParameters(HEAD, ACTION_RESPONSE);
+        if (user.authenticateLogin() && ConnectionSwitch.addConnection((ServerConnectionHandler) conn)) //Checks username and password and if the user is currently logged in
         {
-            String username = pp.getParameter("Username");
-            String password = pp.getParameter("Password");
             conn.setUsername(username);
-            User user = new User(username, password);
-
-            ProtocolParameters responsePp = new ProtocolParameters();
-            responsePp.add(PROTOCOL_ACTION, ACTION_RESPONSE);
-            if (user.authenticateLogin() && ConnectionSwitch.addConnection((ServerConnectionHandler) conn)) //Checks username and password and if the user is currently logged in
-            {
-                conn.setUsername(username);
-                responsePp.add("Confirmation", "Accepted");
-                responsePp.add("Message", "Login Accepted");
-
-                send(HEAD, responsePp, conn);
-                return true;
-            }
-            responsePp.add("Confirmation", "Declined");
-            responsePp.add("Message", "Login details incorrect");
-
-            send(HEAD, responsePp, conn);
-
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(LoginNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+            responsePp.add("Confirmation", LOGIN_ACCEPTED);
+            responsePp.add("Message", "Login Accepted");
+            
+            send(responsePp, conn);
+            return true;
         }
+        responsePp.add("Confirmation", "Declined");
+        responsePp.add("Message", "Login details incorrect");
+        send(responsePp, conn);
         return false;
     }
 
@@ -126,7 +108,7 @@ public class LoginNetworkManager extends NetworkMessageHandler
     private static boolean processClientLoginResponse(ProtocolParameters pp) 
     {
         String confirmation = pp.getParameter("Confirmation");
-        return confirmation.equals("Accepted");
+        return confirmation.equals(LOGIN_ACCEPTED);
     }
 
 }

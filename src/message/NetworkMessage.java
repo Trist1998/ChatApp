@@ -62,7 +62,7 @@ public class NetworkMessage
     {
         this.senderName = pp.getParameter("Sender");
         this.receiverName = pp.getParameter("Receiver");
-        this.text = pp.toString();
+        this.text = pp.buildProtocolString();
     }
 
     /**

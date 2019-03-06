@@ -17,32 +17,15 @@ public class NetworkMessageHandler
     public static final String PROTOCOL_END = "END_PROTOCOL";
 
     /**
-     * Converts Protocol Parameters to a single string.
-     * @param head
-     * @param parameters
-     * @return 
-     */
-    public static String buildProtocolString(String head, ProtocolParameters parameters) 
-    {
-        parameters.setHead(head);
-        String output = parameters.toString() + "\n";
-        output += PROTOCOL_END + "\n";
-
-        return output;
-    }
-
-    /**
      * Sends Protocol Parameters string to server.
-     * @param head
      * @param parameters
      * @param conn
      * @return
      * @throws IOException 
-     */
-    public static boolean send(String head, ProtocolParameters parameters, ConnectionHandler conn) throws IOException 
+     */  
+    public static boolean send(ProtocolParameters parameters, ConnectionHandler conn)
     {
-        String output = buildProtocolString(head, parameters);
-        conn.send(output);
+        conn.send(parameters.buildProtocolString());
         return true;
     }
 

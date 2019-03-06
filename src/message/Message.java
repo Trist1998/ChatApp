@@ -19,29 +19,13 @@ public class Message
 
     // Variables
     private int id;
+    private String chatName;
     private String senderName;
     private String receiverName;
     private String text;
     private int state;
     private Date received;
     private Date sent;
-
-    /**
-     * Parameterized Constructor for Message class, builds message with passed
-     * in parameters.
-     *
-     * @param senderName
-     * @param receiverName
-     * @param text
-     */
-    public Message(String senderName, String receiverName, String text)
-    {
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.text = text;
-        received = null;
-        state = -1;
-    }
 
     /**
      * Parameterized Constructor for Message class, takes in Protocol Parameters
@@ -51,13 +35,19 @@ public class Message
      */
     public Message(ProtocolParameters pp)
     {
-        this.id = Integer.parseInt(pp.getParameter("Id"));
-        this.senderName = pp.getParameter("Sender");
+        String idString = pp.getParameter("Id");
+        if(idString != null && !idString.equals(""))
+            this.id = Integer.parseInt(idString);
+        this.chatName = pp.getParameter("ChatName");
+        this.senderName = pp.getParameter("Sender");     
         this.receiverName = pp.getParameter("Receiver");
         this.text = pp.getParameter("Text");
         try 
         {
-            this.sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(pp.getParameter("DateSent"));
+            if(pp.getParameter("DateSent") != null)//TODO Do better... just do better...
+                this.sent = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(pp.getParameter("DateSent"));
+            else 
+                this.sent = new Date();
         }
         catch (ParseException ex)
         {
@@ -71,25 +61,57 @@ public class Message
      * to build message.
      *
      * @param id
+     * @param chatName
      * @param senderName
      * @param receiverName
      * @param text
      */
-    public Message(int id, String senderName, String receiverName, String text) 
+    public Message(int id, String chatName, String senderName, String receiverName, String text) 
     {
         this.id = id;
+        this.chatName = chatName;
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.text = text;
+        this.sent = new Date();
         received = null;
         state = -1;
     } 
-    
+    /**
+     * 
+     * @param id
+     * @param chatName
+     * @param senderName
+     * @param receiverName
+     * @param text
+     * @param state
+     * @param received
+     * @param sent 
+     */
+    public Message(int id, String chatName, String senderName, String receiverName, String text, int state, Date received, Date sent)
+    {
+        this.id = id;
+        this.chatName = chatName;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.text = text;
+        this.state = state;
+        this.received = received;
+        this.sent = sent;
+    }
+    /**
+     * 
+     * @return if client is the sender of this message
+     */
     public boolean isUserAlsoSender()
     {
          return getSenderName().equals(ClientNetworkManager.getUsername());
     }
     
+    /**
+     * 
+     * @param responseCode 
+     */
     public synchronized void setState(int responseCode)
     {
         state = Math.max(state, responseCode);
@@ -225,4 +247,16 @@ public class Message
     {
         this.sent = sent;
     }
+
+    public String getChatName()
+    {
+        return chatName;
+    }
+
+    public void setChatName(String chatName)
+    {
+        this.chatName = chatName;
+    }
+    
+    
 }

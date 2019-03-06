@@ -25,6 +25,19 @@ public class ProtocolParameters
         parameterNames = new ArrayList<>();
         parameters = new HashMap<>();
     }
+    
+    /**
+     * 
+     * @param head
+     * @param action 
+     */
+    public ProtocolParameters(String head, String action) 
+    {
+        parameterNames = new ArrayList<>();
+        parameters = new HashMap<>();
+        setHead(head);
+        add(NetworkMessageHandler.PROTOCOL_ACTION, action);
+    }
 
     /**
      * Parameterized Constructor for ProtocolParameters class, used to build ProtocolParameters.
@@ -133,6 +146,19 @@ public class ProtocolParameters
     public void replace(String parameterName, String value) 
     {
         parameters.replace(parameterName, value);
+    }
+    
+    /**
+     * Converts Protocol Parameters to a single string.
+     * @param head
+     * @param parameters
+     * @return 
+     */
+    public String buildProtocolString() 
+    {
+        String output = toString() + "\n";
+        output += NetworkMessageHandler.PROTOCOL_END + "\n";
+        return output;
     }
 
 }

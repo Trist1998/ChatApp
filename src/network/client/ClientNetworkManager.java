@@ -115,6 +115,13 @@ public class ClientNetworkManager
     public static void connectionFailed()
     {
         connection = null;
+        if(loggedIn)
+        {
+            loggedIn = false;
+            login(username, hashedPassword);
+        }
+            
+        
     }
     
     public static boolean hasConnectionFailed()

@@ -1,41 +1,47 @@
 package ui.mainmenu;
 
 // imports
-import ui.mainmenu.SideBarChat;
-import ui.mainmenu.MessagePanel;
+import file.FileMessage;
+import file.FileNetworkManager;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.UIManager;
+import message.ClientMessageStorageManager;
 import message.Message;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageNetworkManager;
 
 /**
- * GenericChat class displays an exchange of text messages between two users on a GUI form.
+ * ChatPanel class displays an exchange of text messages between two users on a GUI form.
  * It allows the user to type a message and send it in the chat.
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class GenericChat extends javax.swing.JPanel 
+public class ChatPanel extends javax.swing.JPanel 
 {
 
-    private static AtomicInteger idCounter = new AtomicInteger(); // Declare and instantiate new Atomic Integer for the ID counter.
+    private static final AtomicInteger idCounter = new AtomicInteger(); // Declare and instantiate new Atomic Integer for the ID counter.
     private String chatName; // // Declare string that stores chat name.
-    private HashMap<Integer, MessagePanel> waitingForResponse; // Declare a HashMap called waitingForResponse.
+    private final HashMap<Integer, ResponseReceiver> waitingForResponse; // Declare a HashMap called waitingForResponse.
     private SideBarChat sidebar; // Declare a SideBarChat object
+    private ArrayList<Message> messageQueue;
+    public boolean hasBeenOpened;
 
     /**
-     * Parameterized Constructor for GenericChat class, creates a chat form to be display on the Main Menu form.
+     * Parameterized Constructor for ChatPanel class, creates a chat form to be display on the Main Menu form.
      * @param chatName
      * @param sidebar 
      */
-    public GenericChat(String chatName, SideBarChat sidebar) 
+    public ChatPanel(String chatName, SideBarChat sidebar) 
     {
         this.chatName = chatName; // Set the chat name to chat name parameter.
         this.sidebar = sidebar; // Set sidebar chat to passed in sidebar parameter.
@@ -48,12 +54,19 @@ public class GenericChat extends javax.swing.JPanel
         {
             e.printStackTrace();
         }
-        
+        messageQueue = new ArrayList<>();
         lblChatName.setText(chatName); // Set chat name to chat name parameter. 
         pnlMessages.setLayout(new BoxLayout(pnlMessages, BoxLayout.Y_AXIS)); // Set message panel layout.
         waitingForResponse = new HashMap<>(); // Initialise HashMap.
+        hasBeenOpened = false;
     }
-
+    
+    public void setUpButton()
+    {
+        if(messageQueue.isEmpty())
+            btnLoadChat.setVisible(false);
+    }
+    
     /**
      * Get the ID of the next message.
      * @return 
@@ -69,7 +82,7 @@ public class GenericChat extends javax.swing.JPanel
      */
     private void saveMessage(Message message) 
     {
-        //TODO save message somewhere 
+        ClientMessageStorageManager.saveMessage(message);
     }
 
     /**
@@ -121,7 +134,10 @@ public class GenericChat extends javax.swing.JPanel
      */
     public synchronized void receiveMessage(Message message) 
     {
-        addMessage(message);
+        if(hasBeenOpened)
+            addMessage(message);
+        else
+            addToQueue(message);
         saveMessage(message);
     }
 
@@ -133,7 +149,7 @@ public class GenericChat extends javax.swing.JPanel
      */
     public void receiveResponse(int messageId, int responseCode) 
     {
-        MessagePanel m = waitingForResponse.get(messageId);
+        ResponseReceiver m = waitingForResponse.get(messageId);
         if (m != null) 
         {
             m.receiveResponse(responseCode);
@@ -155,7 +171,9 @@ public class GenericChat extends javax.swing.JPanel
         pnlMessages = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txaMessage = new javax.swing.JTextArea();
+        btnSendFile = new javax.swing.JButton();
         btnSend = new javax.swing.JButton();
+        btnLoadChat = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(244, 244, 244));
         setMaximumSize(new java.awt.Dimension(704, 599));
@@ -181,6 +199,17 @@ public class GenericChat extends javax.swing.JPanel
         txaMessage.setRows(4);
         jScrollPane2.setViewportView(txaMessage);
 
+        btnSendFile.setBackground(new java.awt.Color(204, 204, 204));
+        btnSendFile.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
+        btnSendFile.setText("Send File");
+        btnSendFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSendFileActionPerformed(evt);
+            }
+        });
+
         btnSend.setBackground(new java.awt.Color(204, 204, 204));
         btnSend.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnSend.setText("Send");
@@ -189,6 +218,15 @@ public class GenericChat extends javax.swing.JPanel
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 btnSendActionPerformed(evt);
+            }
+        });
+
+        btnLoadChat.setText("Load Chat");
+        btnLoadChat.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnLoadChatActionPerformed(evt);
             }
         });
 
@@ -201,26 +239,32 @@ public class GenericChat extends javax.swing.JPanel
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlScrollMessages)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblChatName)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                        .addGap(1, 1, 1)
+                        .addComponent(btnSendFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSend)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSend))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblChatName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLoadChat)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(lblChatName)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblChatName)
+                    .addComponent(btnLoadChat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlScrollMessages, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2)
+                    .addComponent(btnSendFile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -242,16 +286,53 @@ public class GenericChat extends javax.swing.JPanel
      */
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
-        Message message = new Message(getNextMessageId(), ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
+        Message message = new Message(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
         message.setSent(new Date());
         MessageNetworkManager.sendMessage(message);
         saveMessage(message);
         addMessage(message);
+        txaMessage.setText("");
     }//GEN-LAST:event_btnSendActionPerformed
 
+    private void btnSendFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendFileActionPerformed
+    {//GEN-HEADEREND:event_btnSendFileActionPerformed
+        JFileChooser fc = new JFileChooser(getDirectory());
+        fc.showOpenDialog(jPanel1);
+        fc.setVisible(true);
+        File file = fc.getSelectedFile();
+        
+        if(file.exists())
+        {
+            FileMessage fileMessage = new FileMessage(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, file.getName(), file.getAbsoluteFile().toString()); 
+            FileMessagePanel mP = addFileMessage(fileMessage);
+            new Thread(new Runnable()
+            {
+                public void run()
+                {
+                    FileNetworkManager.uploadFile(file, fileMessage, mP.getProgressBar());
+                }
+            }).start();
+        }
+        
+        
+            
+    }//GEN-LAST:event_btnSendFileActionPerformed
+
+    private void btnLoadChatActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoadChatActionPerformed
+    {//GEN-HEADEREND:event_btnLoadChatActionPerformed
+        processQueue();
+        btnLoadChat.setVisible(false);
+    }//GEN-LAST:event_btnLoadChatActionPerformed
+    
+    private static String getDirectory()
+    {
+        return System.getProperty("user.dir") +"/downloads/";
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLoadChat;
     private javax.swing.JButton btnSend;
+    private javax.swing.JButton btnSendFile;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblChatName;
@@ -259,4 +340,61 @@ public class GenericChat extends javax.swing.JPanel
     private javax.swing.JScrollPane pnlScrollMessages;
     private javax.swing.JTextArea txaMessage;
     // End of variables declaration//GEN-END:variables
+
+    public void receiveFile(FileMessage message)
+    {
+        addFileMessage(message);
+        //saveMessage
+    }
+
+    public FileMessagePanel addFileMessage(FileMessage message)
+    {
+        FileMessagePanel fp = new FileMessagePanel(message);
+        
+        JPanel pnl = new JPanel();
+        pnl.setMaximumSize(new Dimension(pnlMessages.getSize().width, fp.getPreferredSize().height));
+        fp.setSize(fp.getPreferredSize());
+        fp.setVisible(true);
+        pnl.setLayout(new FlowLayout(FlowLayout.LEFT));
+        if(message.isUserAlsoSender())
+            pnl.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        
+        pnl.add(fp);
+       
+        pnlMessages.add(Box.createRigidArea(new Dimension(0,5)));
+        pnlMessages.add(pnl);
+        pnl.setVisible(true);
+        pnlMessages.revalidate();
+        pnlMessages.repaint();
+        
+        if (message.getId() > idCounter.get()) 
+        {
+            idCounter.set(message.getId() + 1);
+        }
+        if (message.getSenderName().equals(ClientNetworkManager.getUsername())) 
+        {
+            waitingForResponse.put(message.getId(), fp);
+        }
+        
+        JScrollBar sb = pnlScrollMessages.getVerticalScrollBar();
+        sb.setValue( sb.getMaximum());
+        return fp;
+    }
+
+    private void addToQueue(Message message)
+    {
+        messageQueue.add(message);
+    }
+    
+    public void processQueue()
+    {
+        if(!hasBeenOpened)
+        {
+            hasBeenOpened = true;
+            for (Message message : messageQueue)
+            {
+                addMessage(message);
+            }
+        }  
+    }
 }

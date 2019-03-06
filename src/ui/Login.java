@@ -166,8 +166,7 @@ public class Login extends javax.swing.JFrame
             
             //Open Chat
             MainMenu mm = new MainMenu(); // Declare and instantiate new instance of MainMenu.
-            ChatManager.buildChatViews(mm); // Load locally saved chats onto Main Menu.
-            mm.setVisible(true); // Display MainMenu form.
+            mm.start();
             this.dispose(); // Close this form.
         } 
         else 
