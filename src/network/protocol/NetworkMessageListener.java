@@ -49,5 +49,41 @@ public class NetworkMessageListener
             }
         }
         return pp;
+        
+    }
+    
+    public static ProtocolParameters parseInputStream(BufferedReader reader) throws IOException
+    {
+        ProtocolParameters pp = new ProtocolParameters();
+        String parameter = "";
+        for(;;)
+        {
+            String line;
+            try
+            {
+                line = reader.readLine();
+                if(line != null)
+                    line += "\n";
+                else
+                    return null;
+            } 
+            catch (IOException ex)
+            {
+                System.out.println("File Closed");
+                reader.close();
+                return null;
+            }                         
+            if(line.trim().equals(PROTOCOL_END))
+                break;
+            else
+                parameter += line;
+            if(line.contains(ProtocolParameters.PARAMETER_DELIMITER))
+            {
+                String p = parameter.replaceAll(ProtocolParameters.PARAMETER_DELIMITER, "");
+                pp.add(p.trim());
+                parameter = "";            
+            }
+        }
+        return pp;
     }
 }

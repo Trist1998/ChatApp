@@ -2,6 +2,7 @@ package ui.mainmenu;
 
 import file.FileMessage;
 import file.FileNetworkManager;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,16 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
             pbDownload.setValue(100);
         setStateLabel();
         setButtonText();
+        if(message.isUserAlsoSender())
+        {
+            Color colour = new Color(153,204,255);
+            //pnlContainer.setBackground(colour);
+            pnlContainer.setBackground(colour);
+        }
+        else
+        {
+            pnlContainer.setBackground(new Color(150,255,200));
+        }
     }
     
     public JProgressBar getProgressBar()
@@ -46,17 +57,26 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
     private void initComponents()
     {
 
-        jPanel1 = new javax.swing.JPanel();
+        pnlContainer = new javax.swing.JPanel();
         btnAction = new javax.swing.JButton();
         pbDownload = new javax.swing.JProgressBar();
+        lblFileName = new javax.swing.JLabel();
         lblState = new javax.swing.JLabel();
         lblDateTime = new javax.swing.JLabel();
-        lblFileName = new javax.swing.JLabel();
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(200, 70));
-        jPanel1.setName(""); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(70, 100));
+        setBackground(new java.awt.Color(222, 222, 222));
+        setMinimumSize(new java.awt.Dimension(250, 80));
+        setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(250, 80));
 
+        pnlContainer.setBackground(new java.awt.Color(204, 255, 255));
+        pnlContainer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlContainer.setMinimumSize(new java.awt.Dimension(200, 70));
+        pnlContainer.setName(""); // NOI18N
+        pnlContainer.setPreferredSize(new java.awt.Dimension(70, 100));
+
+        btnAction.setBackground(new java.awt.Color(204, 255, 255));
+        btnAction.setFont(btnAction.getFont());
         btnAction.setText("Download");
         btnAction.addActionListener(new java.awt.event.ActionListener()
         {
@@ -66,58 +86,59 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
             }
         });
 
-        pbDownload.setBackground(new java.awt.Color(204, 204, 204));
-        pbDownload.setForeground(new java.awt.Color(153, 255, 153));
+        pbDownload.setBackground(new java.awt.Color(204, 255, 255));
+        pbDownload.setForeground(new java.awt.Color(153, 255, 255));
+
+        lblFileName.setFont(lblFileName.getFont());
+        lblFileName.setText("fileName");
+
+        javax.swing.GroupLayout pnlContainerLayout = new javax.swing.GroupLayout(pnlContainer);
+        pnlContainer.setLayout(pnlContainerLayout);
+        pnlContainerLayout.setHorizontalGroup(
+            pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContainerLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(btnAction)
+                .addGap(6, 6, 6)
+                .addComponent(lblFileName)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pbDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+        );
+        pnlContainerLayout.setVerticalGroup(
+            pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContainerLayout.createSequentialGroup()
+                .addComponent(pbDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAction)
+                    .addComponent(lblFileName)))
+        );
 
         lblState.setText("lblState");
 
         lblDateTime.setText("lblDateTime");
 
-        lblFileName.setText("fileName");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pbDownload, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblFileName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                        .addComponent(btnAction))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(lblState)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblDateTime)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(pbDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblState)
-                    .addComponent(lblDateTime))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAction)
-                    .addComponent(lblFileName))
-                .addGap(0, 4, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblState)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblDateTime)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblState)
+                    .addComponent(lblDateTime))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -132,11 +153,11 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAction;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDateTime;
     private javax.swing.JLabel lblFileName;
     private javax.swing.JLabel lblState;
     private javax.swing.JProgressBar pbDownload;
+    private javax.swing.JPanel pnlContainer;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -188,20 +209,25 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
     {
         JFileChooser fc = new JFileChooser(getDirectory());
         fc.setSelectedFile(new File(message.getFileName()));
-        fc.showSaveDialog(jPanel1);
+        fc.showSaveDialog(pnlContainer);
         fc.setVisible(true);
+        FileMessagePanel thisPanel = this;
+        
         if(fc.getSelectedFile() != null)
-        new Thread(new Runnable()
         {
-            public void run()
+            message.setFilePath(fc.getSelectedFile().getAbsoluteFile().toString());
+            new Thread(new Runnable()
             {
-                FileNetworkManager.downloadFile(fc.getSelectedFile(), message.getFileId(), getProgressBar());
-            }
-        }).start();
+                public void run()
+                {
+                    FileNetworkManager.downloadFile(fc.getSelectedFile(), message.getFileId(), thisPanel);
+                }
+            }).start();
+        }
         
     }
 
-    private void setButtonText()
+    public void setButtonText()
     {
         if(isDownloaded())
             btnAction.setText("Open");
@@ -212,6 +238,11 @@ public class FileMessagePanel extends javax.swing.JPanel implements ResponseRece
     private static String getDirectory()
     {
         return System.getProperty("user.dir") +"/downloads/";
+    }
+
+    public FileMessage getFileMessage()
+    {
+        return message;
     }
     
 }

@@ -6,7 +6,7 @@ import ui.mainmenu.SideBarChat;
 import ui.mainmenu.MainMenu;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.SwingUtilities;
-import message.ClientMessageStorageManager;
+import message.LocalChatStorage;
 import message.Message;
 
 /**
@@ -26,7 +26,7 @@ public class ChatManager
     public static void buildChatViews(MainMenu mm) throws IOException 
     {
         mainMenu = mm;
-        //ClientMessageStorageManager.loadMessages();
+        LocalChatStorage.loadMessages();
     }
 
     /**
@@ -57,18 +57,7 @@ public class ChatManager
     public synchronized static void receiveMessage(Message message) 
     {
         message.setChatName(message.getSenderName());
-        SideBarChat sideBarComp = chats.get(message.getSenderName());
-        forwardToChat(sideBarComp, message);
-    }
-    
-    public synchronized static void addLocalMessage(Message message) 
-    {
-        SideBarChat sideBarComp = chats.get(message.getChatName());
-        forwardToChat(sideBarComp, message);                
-    }
-    
-    private static void forwardToChat(SideBarChat sideBarChat, Message message)
-    {
+        SideBarChat sideBarChat = chats.get(message.getSenderName());
         SideBarChat toReceive;
         if(sideBarChat == null)
             toReceive = createChat(message);
@@ -80,6 +69,29 @@ public class ChatManager
             public void run() 
             {
                 toReceive.receiveMessage(message);
+            }
+        });
+    }
+    
+    public synchronized static void addLocalMessage(Message message) 
+    {
+        SideBarChat sideBarComp = chats.get(message.getChatName());
+        forwardSavedToChat(sideBarComp, message);                
+    }
+    
+    private static void forwardSavedToChat(SideBarChat sideBarChat, Message message)
+    {
+        SideBarChat toReceive;
+        if(sideBarChat == null)
+            toReceive = createChat(message);
+        else
+            toReceive = sideBarChat;
+
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                toReceive.receiveSavedMessage(message);
             }
         });
     }
@@ -118,6 +130,29 @@ public class ChatManager
 
                 }
         });  
+    }
+
+    public synchronized static void addLocalFileMessage(FileMessage message) 
+    {
+        SideBarChat sideBarComp = chats.get(message.getChatName());
+        forwardSavedFileToChat(sideBarComp, message);                
+    }
+    
+    private static void forwardSavedFileToChat(SideBarChat sideBarChat, FileMessage message)
+    {
+        SideBarChat toReceive;
+        if(sideBarChat == null)
+            toReceive = createChat(message);
+        else
+            toReceive = sideBarChat;
+
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                toReceive.receiveSavedFile(message);
+            }
+        });
     }
 
 }

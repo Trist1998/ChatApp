@@ -8,11 +8,11 @@ import ui.mainmenu.MainMenu;
  *
  * @author Tristan
  */
-public class TestMessage
+public class Test2
 {
     public static void openMessage()
     {
-        if(ClientNetworkManager.login("TestUser", "123456"))
+        if(ClientNetworkManager.login("admin", "admin"))
         {
             MainMenu mm = new MainMenu();
             mm.start();

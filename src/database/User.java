@@ -12,7 +12,8 @@ import java.util.logging.Logger;
  *
  * @author Tristan Wood, Alex Priscu, Zubair Wiener
  */
-public class User extends DatabaseTable {
+public class User extends DatabaseTable 
+{
 
     public static final String TABLE_NAME = "users"; // Set table name.
     public static final String[] FIELDS = new String[] // Set fields of table.
@@ -30,7 +31,8 @@ public class User extends DatabaseTable {
      * @param username
      * @param password
      */
-    public User(String username, String password) {
+    public User(String username, String password) 
+    {
         this.username = username;
         this.password = password;
     }
@@ -41,7 +43,8 @@ public class User extends DatabaseTable {
      * @return
      */
     @Override
-    public String[] getFields() {
+    public String[] getFields() 
+    {
         return FIELDS;
     }
 
@@ -51,7 +54,8 @@ public class User extends DatabaseTable {
      * @return
      */
     @Override
-    public String getTableName() {
+    public String getTableName()
+    {
         return TABLE_NAME;
     }
 
@@ -60,11 +64,14 @@ public class User extends DatabaseTable {
      *
      * @return
      */
-    public boolean authenticateLogin() {
+    public boolean authenticateLogin()
+    {
         String sql = buildLoadAllWhereSQLString("username", username);
-        try {
+        try 
+        {
             ResultSet rs = getObjectResultSet(sql);
-            if (!rs.next()) {
+            if (!rs.next())
+            {
                 return false;
             }
             String passwordToken = rs.getString("password");
@@ -82,7 +89,8 @@ public class User extends DatabaseTable {
      *
      * @return
      */
-    public boolean createUser() {
+    public boolean createUser()
+    {
         return createUser(username, new PasswordHelper().hash(password));
     }
 
@@ -93,7 +101,8 @@ public class User extends DatabaseTable {
      * @param password
      * @return
      */
-    private boolean createUser(String username, String password) {
+    private boolean createUser(String username, String password) 
+    {
         //TODO SQL injection check, better error reporting.
         try {
             sendTableUpdate("INSERT INTO " + TABLE_NAME + " VALUES('" + username + "', '" + password + "')");
@@ -109,7 +118,8 @@ public class User extends DatabaseTable {
      *
      * @return
      */
-    public String getUsername() {
+    public String getUsername() 
+    {
         return username;
     }
 
@@ -118,7 +128,8 @@ public class User extends DatabaseTable {
      *
      * @param username
      */
-    private void setUsername(String username) {
+    private void setUsername(String username) 
+    {
         this.username = username;
     }
 
@@ -127,7 +138,8 @@ public class User extends DatabaseTable {
      *
      * @return
      */
-    public String getPassword() {
+    public String getPassword() 
+    {
         return password;
     }
 
@@ -136,7 +148,8 @@ public class User extends DatabaseTable {
      *
      * @param password
      */
-    private void setPassword(String password) {
+    private void setPassword(String password)
+    {
         this.password = password;
     }
 

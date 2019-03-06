@@ -11,8 +11,10 @@ import java.net.ServerSocket;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import network.ConnectionHandler;
 import network.client.ClientNetworkManager;
+import ui.mainmenu.FileMessagePanel;
 
 /**
  *
@@ -22,12 +24,14 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
 {
     private File file;   
     private boolean sending;//If false client is receiving file 
+    FileMessagePanel panel;
     
-    public ClientFileTransferConnectionHandler(ServerSocket ss, File file, boolean sending) throws IOException, SQLException
+    public ClientFileTransferConnectionHandler(ServerSocket ss, File file, boolean sending , FileMessagePanel panel) throws IOException, SQLException
     {
         super(ss.accept());
         this.sending = sending;
         this.file = file;
+        this.panel = panel;
     }
 
     @Override
@@ -49,6 +53,16 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
             Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    private void updateProgressBar(int value)
+    {
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                panel.getProgressBar().setValue(value);
+            }
+        });
+    }
     
     public void sendFile(File file)
     {
@@ -59,14 +73,20 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
         {
             // Get the size of the file
             long length = file.length();
+            
             byte[] bytes = new byte[1024];
             in = new FileInputStream(file);
             out = getSocket().getOutputStream();
+            long total = 0;
             int count;
             while ((count = in.read(bytes)) > 0)
             {
                 out.write(bytes, 0, count);
-            }   
+                total += 1024;
+                
+                float percent = (total*100.0f)/length;
+                updateProgressBar((int) percent);
+            }
             out.close();
             in.close();
             getSocket().close();
@@ -85,25 +105,33 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
     
     public void receiveFile(File file)
     {
+       
         System.out.println("Receiving");
         InputStream in = null;
         OutputStream out = null;
         try
         {
+
             file.createNewFile();
             // Get the size of the file
-            long length = file.length();
+            long length = panel.getFileMessage().getFileSize();
             byte[] bytes = new byte[1024];
             in = getSocket().getInputStream();
             out = new FileOutputStream(file);
+            int total = 0;
             int count;
             while ((count = in.read(bytes)) > 0) 
             {
                 out.write(bytes, 0, count);
+                total += 1024;             
+                float percent = (total*100.0f)/length;
+                updateProgressBar((int) percent);
             }
+            System.out.println("Done");
             out.close();
             in.close();
             getSocket().close();
+            confirmComplete();
         }
         catch (FileNotFoundException ex)
         {
@@ -114,6 +142,17 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
             Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         } 
         FileNetworkManager.sendClose(ClientNetworkManager.getConnection());
+    }
+
+    private void confirmComplete()
+    {
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                panel.setButtonText();
+            }
+        });
     }
     
 }

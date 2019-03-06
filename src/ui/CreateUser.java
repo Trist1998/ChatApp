@@ -90,7 +90,7 @@ public class CreateUser extends javax.swing.JFrame
 
         txtConfirm.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/Screenshot 2019-03-04 at 14.19.35.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/resources/Screenshot 2019-03-04 at 14.19.35.png"))); // NOI18N
 
         btnBack.setFont(new java.awt.Font("Heiti SC", 0, 13)); // NOI18N
         btnBack.setText("Back");
@@ -106,11 +106,8 @@ public class CreateUser extends javax.swing.JFrame
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(btnBack)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(330, Short.MAX_VALUE)
+                .addContainerGap(339, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,6 +122,10 @@ public class CreateUser extends javax.swing.JFrame
                             .addComponent(btnSubmit, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addComponent(jLabel4))
                 .addGap(326, 326, 326))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnBack)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,9 +146,9 @@ public class CreateUser extends javax.swing.JFrame
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addComponent(btnSubmit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
                 .addComponent(btnBack)
-                .addGap(27, 27, 27))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -174,12 +175,11 @@ public class CreateUser extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnSubmitActionPerformed
         String username = txtUsername.getText(); // Get username.
         String password = txtPassword.getText(); // get password.
-        UserCreationNetworkManager.createUser(username, password); // Call the user creation protocol.
-        if(ClientNetworkManager.login(username, password)) // Attempt to login user.
+        if(UserCreationNetworkManager.createUser(username, password)) // Attempt to login user.
         {
             JOptionPane.showMessageDialog(null, "User Created!");          
             MainMenu mm = new MainMenu(); // Instantiate new Main Menu form.
-            mm.setVisible(true); // Display the Main Menu form. 
+            mm.start(); // Display the Main Menu form. 
             this.dispose(); // Close this form.
         }
         else

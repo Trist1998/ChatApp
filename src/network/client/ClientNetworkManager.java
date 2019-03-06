@@ -4,6 +4,7 @@ package network.client;
 import database.PasswordHelper;
 import java.io.IOException;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 /**
  * ClientNetworkManager class is used to establish a socket and connection. 
@@ -115,10 +116,12 @@ public class ClientNetworkManager
     public static void connectionFailed()
     {
         connection = null;
-        if(loggedIn)
+        if(loggedIn && JOptionPane.showConfirmDialog(null, "Connection haas failed would you like to retry") == 1)
         {
             loggedIn = false;
-            login(username, hashedPassword);
+            if(login(username, hashedPassword))
+                JOptionPane.showMessageDialog(null, "The connection has failed again try again later");
+            System.exit(10);
         }
             
         

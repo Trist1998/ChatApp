@@ -197,4 +197,18 @@ public class SideBarChat extends javax.swing.JPanel
         lblLastMessage.setText("File: " + message.getFileName());
         chat.receiveFile(message);
     }
+
+    public void receiveSavedMessage(Message message)
+    {
+        setLastMessage(message);
+        lblLastMessage.setText(message.getText());
+        chat.receiveSavedMessage(message);
+    }
+    
+    public void receiveSavedFile(FileMessage message)
+    {
+        setLastMessage(message);
+        lblLastMessage.setText("File: " + message.getFileName());
+        chat.receiveSavedFile(message);
+    }
 }

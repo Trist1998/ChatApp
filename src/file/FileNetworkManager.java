@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JProgressBar;
 import message.NetworkMessage;
 import message.ServerFileTransferConnectionHandler;
 import network.ConnectionHandler;
@@ -20,9 +19,10 @@ import network.protocol.ProtocolParameters;
 import network.server.ConnectionSwitch;
 import network.server.ServerConnectionHandler;
 import ui.ChatManager;
+import ui.mainmenu.FileMessagePanel;
 
 /**
- *
+ *	Sorry this file sending is so ugly this was done in a rush
  * @author Tristan
  */
 public class FileNetworkManager extends NetworkMessageHandler
@@ -34,6 +34,7 @@ public class FileNetworkManager extends NetworkMessageHandler
     public static final String ACTION_CLOSE = "CLOSE";
     
     public static final int FILE_TRANSER_PORT = 4444;
+    
     public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn)
     {
         String action = pp.getParameter(NetworkMessageHandler.PROTOCOL_ACTION);
@@ -51,7 +52,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         return true;
     }
     
-    public static void uploadFile(File file, FileMessage message, JProgressBar pb)
+    public static void uploadFile(File file, FileMessage message, FileMessagePanel fp)
     {
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_START_UPLOAD);
         pp.add("Id", String.valueOf(message.getId()));
@@ -61,26 +62,27 @@ public class FileNetworkManager extends NetworkMessageHandler
         pp.add("Text", "");
         pp.add("DateSent", new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").format(new Date()));
         pp.add("FileName", file.getName());
+        pp.add("FileSize", String.valueOf(message.getFileSize()));
         send(pp, ClientNetworkManager.getConnection());
         
-        startFileTranser(file, true, pb);
+        startFileTranser(file, true, fp);
     }
     
-    public static void downloadFile(File file, int fileId, JProgressBar pb)
+    public static void downloadFile(File file, int fileId, FileMessagePanel fp)
     {
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_START_DOWNLOAD);
         pp.add("FileId", String.valueOf(fileId));
         send(pp, ClientNetworkManager.getConnection());       
-        startFileTranser(file, false, pb);
+        startFileTranser(file, false, fp);
     }
         
     /**
      * Client start transfer
      * @param file
      * @param sending 
-     * @param pb 
+     * @param fp 
      */
-    public static void startFileTranser(File file, boolean sending, JProgressBar pb)
+    public static void startFileTranser(File file, boolean sending, FileMessagePanel fp)
     {
         
         ServerSocket myService; // Declare Server's Main socket
@@ -89,7 +91,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         try
         {
             myService = new ServerSocket(FILE_TRANSER_PORT); // Port number must be > 1023
-            ClientFileTransferConnectionHandler tCon = new ClientFileTransferConnectionHandler(myService, file, sending);
+            ClientFileTransferConnectionHandler tCon = new ClientFileTransferConnectionHandler(myService, file, sending, fp);
             new Thread(tCon).start();
             myService.close();
         } 
@@ -100,9 +102,16 @@ public class FileNetworkManager extends NetworkMessageHandler
         catch (SQLException ex)
         {
             Logger.getLogger(FileNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
+
     }
     
+    /**
+     * 
+     * @param pp
+     * @param conn
+     * @param sending 
+     */
     private static void startServerFileTranser(ProtocolParameters pp, ServerConnectionHandler conn, boolean sending)
     {
         FileMessage message = new FileMessage(pp);
@@ -121,12 +130,20 @@ public class FileNetworkManager extends NetworkMessageHandler
         }
     }
 
+    /**
+     * 
+     * @param conn 
+     */
     public static void sendClose(ConnectionHandler conn)
     {
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_CLOSE);
         send(pp, conn);
     }
     
+    /**
+     * 
+     * @param conn 
+     */
     public static void processClose(ConnectionHandler conn)
     {
         try
@@ -138,11 +155,21 @@ public class FileNetworkManager extends NetworkMessageHandler
             Logger.getLogger(FileNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * 
+     * @param pp 
+     */
     public static void clientProcessPending(ProtocolParameters pp)
     {       
         ChatManager.receiveFile(new FileMessage(pp));
     }
     
+    /**
+     * 
+     * @param message
+     * @param conn 
+     */
     public static void sendResponseAndPendingFile(FileMessage message, ServerConnectionHandler conn)
     {
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_DOWNLOAD_PENDING);
@@ -155,7 +182,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         pp.add("FileName", message.getFileName());
         pp.add("FileId", String.valueOf(message.getFileId()));
         pp.add("FilePath", message.getFilePath());
-        
+        pp.add("FileSize", String.valueOf(message.getFileSize()));
         NetworkMessage nM = new NetworkMessage(pp);
         int responseCode = ConnectionSwitch.switchProtocol(nM);
         

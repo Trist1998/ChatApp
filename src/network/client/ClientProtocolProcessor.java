@@ -19,12 +19,15 @@ public class ClientProtocolProcessor extends NetworkMessageListener
 
     public static void processInputStream(ClientConnectionHandler conn) throws IOException 
     {
-        ProtocolParameters pp  = parseInputStream(conn);  
-        String head = pp.getHead();
-        if(head.equals(MessageNetworkManager.HEAD))
-            runMessageInputProcess(pp, conn);
-        else if(head.equals(FileNetworkManager.HEAD))
-                runFileInputProcess(pp, conn);
+        ProtocolParameters pp  = parseInputStream(conn);
+        if(pp != null)
+        {
+            String head = pp.getHead();
+            if(head.equals(MessageNetworkManager.HEAD))
+                runMessageInputProcess(pp, conn);
+            else if(head.equals(FileNetworkManager.HEAD))
+                    runFileInputProcess(pp, conn);
+        }
     }
     
     private static void runMessageInputProcess(ProtocolParameters pp, ConnectionHandler conn)

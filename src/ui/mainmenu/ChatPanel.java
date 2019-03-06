@@ -16,7 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.UIManager;
-import message.ClientMessageStorageManager;
+import message.LocalChatStorage;
 import message.Message;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageNetworkManager;
@@ -82,7 +82,7 @@ public class ChatPanel extends javax.swing.JPanel
      */
     private void saveMessage(Message message) 
     {
-        ClientMessageStorageManager.saveMessage(message);
+        LocalChatStorage.saveMessage(message);
     }
 
     /**
@@ -114,52 +114,24 @@ public class ChatPanel extends javax.swing.JPanel
         pnlMessages.repaint();
         
         sidebar.setLastMessage(message);
-        if (message.getId() > idCounter.get()) 
-        {
-            idCounter.set(message.getId() + 1);
-        }
+        
         if (message.getSenderName().equals(ClientNetworkManager.getUsername())) 
         {
-            waitingForResponse.put(message.getId(), newMessage);
+            
+            if (message.getState() < 2) 
+            {
+                waitingForResponse.put(message.getId(), newMessage);
+            }
+            if (message.getId() > idCounter.get()) 
+            {
+                idCounter.set(message.getId() + 1);
+            }
         }
         
         JScrollBar sb = pnlScrollMessages.getVerticalScrollBar();
-        sb.setValue( sb.getMaximum());
+        sb.setValue(sb.getMaximum());
     }
-
-    /**
-     * Adds received message to chat.
-     *
-     * @param message
-     */
-    public synchronized void receiveMessage(Message message) 
-    {
-        if(hasBeenOpened)
-            addMessage(message);
-        else
-            addToQueue(message);
-        saveMessage(message);
-    }
-
-     /**
-     * Get response from chat with the given message ID and response code.
-     *
-     * @param messageId
-     * @param responseCode
-     */
-    public void receiveResponse(int messageId, int responseCode) 
-    {
-        ResponseReceiver m = waitingForResponse.get(messageId);
-        if (m != null) 
-        {
-            m.receiveResponse(responseCode);
-            if (responseCode == MessageNetworkManager.RESPONSE_READ) 
-            {
-                waitingForResponse.remove(messageId);
-            }
-        }
-    }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
@@ -178,7 +150,7 @@ public class ChatPanel extends javax.swing.JPanel
         setBackground(new java.awt.Color(244, 244, 244));
         setMaximumSize(new java.awt.Dimension(704, 599));
 
-        jPanel1.setBackground(new java.awt.Color(229, 229, 229));
+        jPanel1.setBackground(new java.awt.Color(222, 222, 222));
 
         lblChatName.setFont(new java.awt.Font("Heiti SC", 1, 24)); // NOI18N
         lblChatName.setText("Chat Name");
@@ -239,31 +211,36 @@ public class ChatPanel extends javax.swing.JPanel
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlScrollMessages)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(btnSendFile)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSend))
+                        .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblChatName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLoadChat)))
+                        .addComponent(btnLoadChat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSendFile)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblChatName)
-                    .addComponent(btnLoadChat))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(lblChatName))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSendFile))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnLoadChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlScrollMessages, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                .addComponent(pnlScrollMessages, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2)
-                    .addComponent(btnSendFile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -286,16 +263,22 @@ public class ChatPanel extends javax.swing.JPanel
      */
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
-        Message message = new Message(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
-        message.setSent(new Date());
-        MessageNetworkManager.sendMessage(message);
-        saveMessage(message);
-        addMessage(message);
-        txaMessage.setText("");
+        processQueue();
+        btnLoadChat.setVisible(false);
+        if(!txaMessage.getText().equals(""))
+        {
+            Message message = new Message(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, txaMessage.getText());
+            message.setSent(new Date());
+            MessageNetworkManager.sendMessage(message);
+            saveMessage(message);
+            addMessage(message);
+            txaMessage.setText("");
+        }
     }//GEN-LAST:event_btnSendActionPerformed
 
     private void btnSendFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendFileActionPerformed
     {//GEN-HEADEREND:event_btnSendFileActionPerformed
+        processQueue();
         JFileChooser fc = new JFileChooser(getDirectory());
         fc.showOpenDialog(jPanel1);
         fc.setVisible(true);
@@ -303,15 +286,16 @@ public class ChatPanel extends javax.swing.JPanel
         
         if(file.exists())
         {
-            FileMessage fileMessage = new FileMessage(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, file.getName(), file.getAbsoluteFile().toString()); 
+            FileMessage fileMessage = new FileMessage(getNextMessageId(), chatName, ClientNetworkManager.getUsername(), chatName, file); 
             FileMessagePanel mP = addFileMessage(fileMessage);
             new Thread(new Runnable()
             {
                 public void run()
                 {
-                    FileNetworkManager.uploadFile(file, fileMessage, mP.getProgressBar());
+                    FileNetworkManager.uploadFile(file, fileMessage, mP);
                 }
             }).start();
+            LocalChatStorage.saveFileMessage(fileMessage);
         }
         
         
@@ -341,11 +325,7 @@ public class ChatPanel extends javax.swing.JPanel
     private javax.swing.JTextArea txaMessage;
     // End of variables declaration//GEN-END:variables
 
-    public void receiveFile(FileMessage message)
-    {
-        addFileMessage(message);
-        //saveMessage
-    }
+    
 
     public FileMessagePanel addFileMessage(FileMessage message)
     {
@@ -390,11 +370,73 @@ public class ChatPanel extends javax.swing.JPanel
     {
         if(!hasBeenOpened)
         {
+            btnLoadChat.setVisible(false);
             hasBeenOpened = true;
             for (Message message : messageQueue)
             {
-                addMessage(message);
+                if(message.getText().equals("_FILE_"))
+                    addFileMessage((FileMessage)message);
+                else
+                    addMessage(message);
             }
         }  
+    }
+    
+    /**\
+     * 
+     * @param message 
+     */
+    public void receiveSavedMessage(Message message)
+    {
+        addToQueue(message);
+    }
+    
+    /**
+     *
+     * @param message
+     */
+    public void receiveSavedFile(FileMessage message)
+    {
+        message.setText("_FILE_");
+        addToQueue(message);      
+    }
+    
+    public void receiveFile(FileMessage message)
+    {
+        addFileMessage(message);
+        LocalChatStorage.saveFileMessage(message);
+    }
+    
+    /**
+     * Get response from chat with the given message ID and response code.
+     *
+     * @param messageId
+     * @param responseCode
+     */
+    public void receiveResponse(int messageId, int responseCode) 
+    {
+        ResponseReceiver m = waitingForResponse.get(messageId);
+        if (m != null) 
+        {
+            m.receiveResponse(responseCode);
+            if (responseCode == MessageNetworkManager.RESPONSE_READ) 
+            {
+                waitingForResponse.remove(messageId);
+            }
+        }
+    }
+    
+    /**
+     * Adds received message to chat.
+     *
+     * @param message
+     */
+    public synchronized void receiveMessage(Message message) 
+    {
+        if(hasBeenOpened)
+            addMessage(message);
+        else
+            addToQueue(message);
+        saveMessage(message);
     }
 }

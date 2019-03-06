@@ -35,11 +35,18 @@ public class UserCreationNetworkManager extends NetworkMessageHandler
         
         ClientConnectionHandler conn = ClientNetworkManager.getNewConnection(ClientNetworkManager.SERVER_PORT);
         if(conn != null)
-        {
-            
-            return send(pp, conn);//ClientProtocolProcessor.processNewUser(conn);
+        {            
+            send(pp, conn);//ClientProtocolProcessor.processNewUser(conn);
         }
-        return false; 
+        try
+        {
+            conn.close();
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(UserCreationNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ClientNetworkManager.login(username, password); 
     }
     
     /**

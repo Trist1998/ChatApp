@@ -1,0 +1,11 @@
+Head:MESSAGE#END#
+Action:SAVED#END#
+Id:0#END#
+ChatName:12342#END#
+Sender:12342#END#
+Receiver:admin#END#
+Text:hello admin#END#
+DateSent:2019.03.06 23:35:25 CAT#END#
+State:-1#END#
+
+END_PROTOCOL

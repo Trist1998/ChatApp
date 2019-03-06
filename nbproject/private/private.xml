@@ -3,27 +3,38 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/MainMenu.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/ClientNetworkManager.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/ServerDatabaseConnection.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/Login.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/test/test/TestMessage.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/DatabaseTable.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/mainmenu/FileMessagePanel.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/mainmenu/ChatPanel.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/file/FileMessage.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/ChatManager.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/CreateUser.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/file/ClientFileTransferConnectionHandler.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/User.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/message/LocalChatStorage.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/MessageNetworkManager.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/ServerDatabaseConnection.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/NetworkMessageHandler.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/message/NetworkMessage.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/Server.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/ClientConnectionHandler.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/ProtocolProcessor.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/ProtocolParameters.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/DatabaseTable.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/ProtocolQueue.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/MessagePanel.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/Protocol.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/GenericChat.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/SideBarChat.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/UserCreationProtocol.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/ChatManager.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/mainmenu/MessagePanel.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/file/FileTable.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/file/FileNetworkManager.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/message/ServerFileTransferConnectionHandler.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/mainmenu/SideBarChat.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/LoginNetworkManager.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/protocol/NetworkMessageListener.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/client/ClientProtocolProcessor.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/message/Message.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/CreateUser.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/test/test/Test2.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/ServerConnectionHandler.java</file>
             <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/network/server/ConnectionSwitch.java</file>
-            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/database/User.java</file>
+            <file>file:/A:/trist/Documents/NetBeansProjects/ChatApp/src/ui/mainmenu/MainMenu.java</file>
         </group>
     </open-files>
 </project-private>

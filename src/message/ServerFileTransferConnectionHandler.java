@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.ConnectionHandler;
-import network.client.ClientNetworkManager;
 import network.server.ServerConnectionHandler;
 
 /**
@@ -55,29 +55,31 @@ public class ServerFileTransferConnectionHandler extends ConnectionHandler
     
     private void sendFile()
     {
-        System.out.println("Senfining file");
+        System.out.println("Sending file");
         InputStream in = null;
         OutputStream out = null;
         try 
         {
-            String fileName = "("+ id +")" + new FileTable().loadFileName(id);
+            String fileName = getDirectory()+"("+ id +")" + new FileTable().loadFileName(id);
             // Get the size of the file
+            
             byte[] bytes = new byte[1024];
-            in = new FileInputStream(fileName);
+            in = new FileInputStream(new File(fileName));
             out = getSocket().getOutputStream();
             int count;
             while ((count = in.read(bytes)) > 0)
             {
                 out.write(bytes, 0, count);
-            }   
+            }
             out.close();
             in.close();
             getSocket().close();
+            System.out.println("Done");
         }
         catch (IOException ex)
         {
             Logger.getLogger(ServerFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         
     }
     
@@ -109,7 +111,9 @@ public class ServerFileTransferConnectionHandler extends ConnectionHandler
             System.out.println("Done");
             out.close();
             in.close();
-            getSocket().close();
+            FileNetworkManager.sendClose(parent);
+            TimeUnit.SECONDS.sleep(10);
+            close();
         }
         catch (FileNotFoundException ex)
         {
@@ -123,7 +127,11 @@ public class ServerFileTransferConnectionHandler extends ConnectionHandler
         {
             Logger.getLogger(ServerFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        FileNetworkManager.sendClose(parent);
+        catch (InterruptedException ex)
+        {
+            Logger.getLogger(ServerFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     private static String getDirectory()

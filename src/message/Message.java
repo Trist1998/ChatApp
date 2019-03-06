@@ -99,6 +99,18 @@ public class Message
         this.received = received;
         this.sent = sent;
     }
+    
+    public Message(Message message)
+    {
+        this.id = message.getId();
+        this.chatName = message.getChatName();
+        this.senderName = message.getChatName();
+        this.receiverName = message.getReceiverName();
+        this.text = message.getText();
+        this.state = message.getState();
+        this.received = message.getReceived();
+        this.sent = message.getSent();
+    }
     /**
      * 
      * @return if client is the sender of this message
