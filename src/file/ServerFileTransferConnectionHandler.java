@@ -1,4 +1,4 @@
-package message;
+package file;
 
 import file.*;
 import java.io.File;
@@ -22,6 +22,7 @@ import network.server.ServerConnectionHandler;
  */
 public class ServerFileTransferConnectionHandler extends ConnectionHandler
 {
+    private int connectionId;
     private int id;
     private FileMessage message;
     private boolean sending;//If false client is receiving file 
@@ -34,6 +35,7 @@ public class ServerFileTransferConnectionHandler extends ConnectionHandler
         this.message = message;
         this.sending = sending;
         this.parent = parent;
+        this.connectionId = parent.getNextSubId();
     }
     
     public ServerFileTransferConnectionHandler(Socket socket, int id, ServerConnectionHandler parent) throws IOException

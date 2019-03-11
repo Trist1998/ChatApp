@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.NetworkMessage;
-import message.ServerFileTransferConnectionHandler;
 import network.ConnectionHandler;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageNetworkManager;
@@ -45,7 +44,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         else if(action.equals(ACTION_DOWNLOAD_PENDING))
             clientProcessPending(pp);
         else if(action.equals(ACTION_CLOSE))
-            processClose(conn);
+            processClose(pp, (ServerConnectionHandler)conn);
         else if(action.equals(MessageNetworkManager.ACTION_RESPONSE))
             MessageNetworkManager.processResponse(pp);
                     
@@ -144,16 +143,10 @@ public class FileNetworkManager extends NetworkMessageHandler
      * 
      * @param conn 
      */
-    public static void processClose(ConnectionHandler conn)
+    public static void processClose(ProtocolParameters pp, ServerConnectionHandler conn)
     {
-        try
-        {
-            conn.close();
-        } 
-        catch (IOException ex)
-        {
-            Logger.getLogger(FileNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int id = Integer.parseInt(pp.getParameter("ConnectionId"));
+        conn.removeSubConnection(id);
     }
     
     /**
