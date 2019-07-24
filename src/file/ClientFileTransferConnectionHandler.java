@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import network.ConnectionHandler;
+import network.SubConnectionHandler;
 import network.client.ClientNetworkManager;
 import ui.mainmenu.FileMessagePanel;
 
@@ -20,15 +21,15 @@ import ui.mainmenu.FileMessagePanel;
  *
  * @author Tristan
  */
-public class ClientFileTransferConnectionHandler extends ConnectionHandler
+public class ClientFileTransferConnectionHandler extends SubConnectionHandler
 {
     private File file;   
     private boolean sending;//If false client is receiving file 
     FileMessagePanel panel;
     
-    public ClientFileTransferConnectionHandler(ServerSocket ss, File file, boolean sending , FileMessagePanel panel) throws IOException, SQLException
+    public ClientFileTransferConnectionHandler(ServerSocket ss, File file, boolean sending , FileMessagePanel panel, ConnectionHandler parent) throws IOException, SQLException
     {
-        super(ss.accept());
+        super(parent, ss.accept());
         this.sending = sending;
         this.file = file;
         this.panel = panel;
@@ -37,7 +38,7 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
     @Override
     public void run()
     {
-        
+        System.out.println("Strated transer");
         if(sending)
             sendFile(file);
         else
@@ -48,7 +49,7 @@ public class ClientFileTransferConnectionHandler extends ConnectionHandler
         {
             close();
         } 
-        catch (IOException ex)
+        catch (Exception ex)
         {
             Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -36,7 +36,7 @@ public class Message
     public Message(ProtocolParameters pp)
     {
         String idString = pp.getParameter("Id");
-        if(idString != null && !idString.equals(""))
+        if(idString != null && !idString.equals("") && !idString.equals("null"))
             this.id = Integer.parseInt(idString);
         this.chatName = pp.getParameter("ChatName");
         this.senderName = pp.getParameter("Sender");     

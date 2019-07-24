@@ -1,9 +1,9 @@
 package network.protocol;
 
 // Imports
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * ProtocolParameters class is a container of protocol parameters.
@@ -13,17 +13,14 @@ public class ProtocolParameters
 {
 
     // Variables
-    public static final String PARAMETER_DELIMITER = "#END#";
-    private ArrayList<String> parameterNames;
-    private HashMap<String, String> parameters;
+    private JSONObject theObject;
 
     /**
      * Non-Parameterized Constructor for ProtocolParameters class, creates empty.
      */
     public ProtocolParameters() 
     {
-        parameterNames = new ArrayList<>();
-        parameters = new HashMap<>();
+        theObject = new JSONObject();
     }
     
     /**
@@ -33,8 +30,7 @@ public class ProtocolParameters
      */
     public ProtocolParameters(String head, String action) 
     {
-        parameterNames = new ArrayList<>();
-        parameters = new HashMap<>();
+        theObject = new JSONObject();
         setHead(head);
         add(NetworkMessageHandler.PROTOCOL_ACTION, action);
     }
@@ -43,27 +39,9 @@ public class ProtocolParameters
      * Parameterized Constructor for ProtocolParameters class, used to build ProtocolParameters.
      * @param reader
      */
-    public ProtocolParameters(Scanner reader) 
+    public ProtocolParameters(String in) throws ParseException 
     {
-        parameterNames = new ArrayList<>();
-        parameters = new HashMap<>();
-        String in = "";
-        while (reader.hasNextLine()) 
-        {
-            in += reader.nextLine() + "\n";
-        }
-
-        String[] pairs = in.split(PARAMETER_DELIMITER);
-
-        for (String pair : pairs) 
-        {
-            String cleanPair = pair.trim();
-            if (!cleanPair.contains(":")) 
-            {
-                break;
-            }
-            add(cleanPair);
-        }
+        theObject = (JSONObject) new JSONParser().parse(in);
     }
 
     /**
@@ -73,8 +51,7 @@ public class ProtocolParameters
      */
     public void add(String parameterName, String parameterValue) 
     {
-        parameterNames.add(parameterName);
-        parameters.put(parameterName, parameterValue);
+        theObject.put(parameterName, parameterValue);
     }
 
     /**
@@ -84,7 +61,8 @@ public class ProtocolParameters
      */
     public String getParameter(String name) 
     {
-        return parameters.get(name);
+        if(theObject.get(name) == null) return null;
+        return String.valueOf(theObject.get(name));
     }
 
     /**
@@ -94,12 +72,7 @@ public class ProtocolParameters
     @Override
     public String toString() 
     {
-        String output = NetworkMessageHandler.PROTOCOL_HEAD + ":" + getHead() + PARAMETER_DELIMITER + "\n";
-        for (String name : parameterNames) 
-        {
-            output += name + ":" + parameters.get(name) + PARAMETER_DELIMITER + "\n";
-        }
-        return output;
+        return theObject.toJSONString();
     }
 
     /**
@@ -108,7 +81,7 @@ public class ProtocolParameters
      */
     public void setHead(String head) 
     {
-        parameters.put(NetworkMessageHandler.PROTOCOL_HEAD, head);
+        theObject.put(NetworkMessageHandler.PROTOCOL_HEAD, head);
     }
 
     /**
@@ -117,25 +90,7 @@ public class ProtocolParameters
      */
     public String getHead() 
     {
-        return parameters.get(NetworkMessageHandler.PROTOCOL_HEAD);
-    }
-
-    /**
-     * Converts line into protocol parameters. 
-     * @param line
-     */
-    public void add(String line) 
-    {
-        if (!line.equals("")) 
-        {
-            String name = line.substring(0, line.indexOf(":"));
-            String data = line.substring(line.indexOf(":") + 1);
-            if (!name.equals(NetworkMessageHandler.PROTOCOL_HEAD)) 
-            {
-                parameterNames.add(name);
-            }
-            parameters.put(name, data.trim());
-        }
+        return String.valueOf(theObject.get(NetworkMessageHandler.PROTOCOL_HEAD));
     }
 
     /**
@@ -145,7 +100,7 @@ public class ProtocolParameters
      */
     public void replace(String parameterName, String value) 
     {
-        parameters.replace(parameterName, value);
+        theObject.replace(parameterName, value);
     }
     
     /**

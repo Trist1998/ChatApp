@@ -9,6 +9,7 @@ import network.protocol.LoginNetworkManager;
 import network.protocol.MessageNetworkManager;
 import network.protocol.UserCreationNetworkManager;
 import network.protocol.ProtocolParameters;
+import org.json.simple.parser.ParseException;
 
 /**
  * 
@@ -17,7 +18,7 @@ import network.protocol.ProtocolParameters;
 public class ClientProtocolProcessor extends NetworkMessageListener
 {
 
-    public static void processInputStream(ClientConnectionHandler conn) throws IOException 
+    public static void processInputStream(ClientConnectionHandler conn) throws IOException, ParseException 
     {
         ProtocolParameters pp  = parseInputStream(conn);
         if(pp != null)
@@ -54,7 +55,7 @@ public class ClientProtocolProcessor extends NetworkMessageListener
             ).start();   
     }
   
-    public static boolean processLogin(ClientConnectionHandler conn) throws IOException 
+    public static boolean processLogin(ClientConnectionHandler conn) throws IOException, ParseException 
     {
         ProtocolParameters pp = parseInputStream(conn);
       
@@ -66,7 +67,7 @@ public class ClientProtocolProcessor extends NetworkMessageListener
         return false;
     }
     
-    public static boolean processNewUser(ClientConnectionHandler conn) throws IOException
+    public static boolean processNewUser(ClientConnectionHandler conn) throws IOException, ParseException
     {
         ProtocolParameters pp = parseInputStream(conn);
       

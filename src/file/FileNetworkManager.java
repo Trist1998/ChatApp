@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.NetworkMessage;
-import message.ServerFileTransferConnectionHandler;
 import network.ConnectionHandler;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageNetworkManager;
@@ -37,6 +36,7 @@ public class FileNetworkManager extends NetworkMessageHandler
     
     public static boolean processInput(ProtocolParameters pp, ConnectionHandler conn)
     {
+        System.out.println("JSON " + pp.toString());
         String action = pp.getParameter(NetworkMessageHandler.PROTOCOL_ACTION);
         if(action.equals(ACTION_START_UPLOAD))
             startServerFileTranser(pp, (ServerConnectionHandler) conn, false);
@@ -87,11 +87,11 @@ public class FileNetworkManager extends NetworkMessageHandler
         
         ServerSocket myService; // Declare Server's Main socket
         
-        System.out.println("Waiting for connection");
+        System.out.println("Waiting for file transfer connection");
         try
         {
             myService = new ServerSocket(FILE_TRANSER_PORT); // Port number must be > 1023
-            ClientFileTransferConnectionHandler tCon = new ClientFileTransferConnectionHandler(myService, file, sending, fp);
+            ClientFileTransferConnectionHandler tCon = new ClientFileTransferConnectionHandler(myService, file, sending, fp, ClientNetworkManager.getConnection());
             new Thread(tCon).start();
             myService.close();
         } 
@@ -103,7 +103,6 @@ public class FileNetworkManager extends NetworkMessageHandler
         {
             Logger.getLogger(FileNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         } 
-
     }
     
     /**

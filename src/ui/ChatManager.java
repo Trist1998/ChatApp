@@ -116,7 +116,8 @@ public class ChatManager
 
     public static void receiveFile(FileMessage message)
     {
-        SideBarChat chat = chats.get(message.getSenderName());
+        message.setChatName(message.getSenderName());
+        SideBarChat chat = chats.get(message.getChatName());
         SwingUtilities.invokeLater(new Runnable() 
         {
                 public void run() 

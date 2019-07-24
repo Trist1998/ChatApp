@@ -43,7 +43,7 @@ public class FileMessage extends Message
     {
         super(pp);
         String idString = pp.getParameter("FileId");
-        if(idString != null && !idString.equals(""))
+        if(idString != null && !idString.equals("") && !idString.equals("null"))
             this.fileId = Integer.parseInt(idString);
         this.fileName = pp.getParameter("FileName");
         this.filePath = pp.getParameter("FilePath");

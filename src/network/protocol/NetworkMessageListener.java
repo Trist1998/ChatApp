@@ -4,6 +4,7 @@ package network.protocol;
 import java.io.BufferedReader;
 import java.io.IOException;
 import network.ConnectionHandler;
+import org.json.simple.parser.ParseException;
 
 /**
  * NetworkMessageListener class used to listen to Network messages.
@@ -18,43 +19,16 @@ public class NetworkMessageListener
      * @param conn
      * @return
      * @throws IOException 
+     * @throws org.json.simple.parser.ParseException 
      */
-    public static ProtocolParameters parseInputStream(ConnectionHandler conn) throws IOException
+    public static ProtocolParameters parseInputStream(ConnectionHandler conn) throws IOException, ParseException
     {
         BufferedReader reader = conn.getInputStream();
-        ProtocolParameters pp = new ProtocolParameters();
-        String parameter = "";
-        for(;;)
-        {
-            String line;
-            try
-            {
-                line = reader.readLine() + "\n";
-            } 
-            catch (IOException ex)
-            {
-                System.out.println("Connection Closed");
-                conn.close();
-                return null;
-            }                         
-            if(line.trim().equals(PROTOCOL_END))
-                break;
-            else
-                parameter += line;
-            if(line.contains(ProtocolParameters.PARAMETER_DELIMITER))
-            {
-                String p = parameter.replaceAll(ProtocolParameters.PARAMETER_DELIMITER, "");
-                pp.add(p.trim());
-                parameter = "";            
-            }
-        }
-        return pp;
-        
+        return parseInputStream(reader);
     }
     
-    public static ProtocolParameters parseInputStream(BufferedReader reader) throws IOException
+    public static ProtocolParameters parseInputStream(BufferedReader reader) throws IOException, ParseException
     {
-        ProtocolParameters pp = new ProtocolParameters();
         String parameter = "";
         for(;;)
         {
@@ -77,13 +51,7 @@ public class NetworkMessageListener
                 break;
             else
                 parameter += line;
-            if(line.contains(ProtocolParameters.PARAMETER_DELIMITER))
-            {
-                String p = parameter.replaceAll(ProtocolParameters.PARAMETER_DELIMITER, "");
-                pp.add(p.trim());
-                parameter = "";            
-            }
         }
-        return pp;
+        return new ProtocolParameters(parameter);
     }
 }

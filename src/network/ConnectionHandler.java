@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,7 +16,7 @@ import java.util.logging.Logger;
  * ConnectionHandler used to manage input and output streams of sockets as well
  * as write from output streams.
  *
- * @author Tristan Wood, Alex Priscu, Zubair Wiener
+ * @author Tristan Wood
  */
 public abstract class ConnectionHandler implements Runnable 
 {
@@ -25,6 +27,8 @@ public abstract class ConnectionHandler implements Runnable
     private BufferedWriter outputStream;
     private boolean closed;
     private String username;
+    private HashMap<Integer, SubConnectionHandler> subConnections;
+    private AtomicInteger idCounter;
 
     /**
      * Parameterized Constructor for ProtocolMessage class, creates input and output stream for a socket.
@@ -38,6 +42,7 @@ public abstract class ConnectionHandler implements Runnable
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         closed = false;
+        idCounter = new AtomicInteger(0);
     }
 
     /**
@@ -135,5 +140,20 @@ public abstract class ConnectionHandler implements Runnable
     public String getUsername() 
     {
         return username;
+    }
+    
+    public int getNextConnectionId()
+    {
+        return idCounter.getAndIncrement();
+    }
+    
+    public void addSubConnection(SubConnectionHandler subConn)
+    {
+        subConnections.put(subConn.getConnectionid(), subConn);
+    }
+    
+    public void removeSubConnection(SubConnectionHandler subConn)
+    {
+        subConnections.remove(subConn.getConnectionid());
     }
 }

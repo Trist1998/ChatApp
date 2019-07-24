@@ -16,6 +16,7 @@ import network.client.ClientConnectionHandler;
 import network.client.ClientNetworkManager;
 import network.server.ConnectionSwitch;
 import network.server.ServerConnectionHandler;
+import org.json.simple.parser.ParseException;
 import ui.ChatManager;
 
 /**
@@ -165,7 +166,7 @@ public class MessageNetworkManager extends NetworkMessageHandler
                 NetworkMessage message = new NetworkMessage(rs);
                 if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED)
                 {
-                    ProtocolParameters pp = new ProtocolParameters(new Scanner(message.getText()));
+                    ProtocolParameters pp = new ProtocolParameters(message.getText());
                     sendResponse(ServerConnectionHandler.MESSAGE_DELIVERED, pp, conn);
                     rs.deleteRow();
                 }
@@ -179,6 +180,10 @@ public class MessageNetworkManager extends NetworkMessageHandler
             Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         } 
         catch (IOException ex)
+        {
+            Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (ParseException ex)
         {
             Logger.getLogger(MessageNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
         }

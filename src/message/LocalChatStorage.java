@@ -14,6 +14,7 @@ import network.client.ClientNetworkManager;
 import network.protocol.NetworkMessageListener;
 
 import network.protocol.ProtocolParameters;
+import org.json.simple.parser.ParseException;
 import ui.ChatManager;
 
 /**
@@ -72,7 +73,7 @@ public class LocalChatStorage
         }
     }
     
-    public static void loadMessages()
+    public static void loadMessages() throws ParseException
     {
         BufferedReader reader = null;
         try

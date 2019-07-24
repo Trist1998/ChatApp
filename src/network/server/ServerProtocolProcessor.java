@@ -9,6 +9,7 @@ import network.protocol.MessageNetworkManager;
 import network.protocol.NetworkMessageListener;
 import network.protocol.ProtocolParameters;
 import network.protocol.UserCreationNetworkManager;
+import org.json.simple.parser.ParseException;
 
 
 /**
@@ -23,7 +24,7 @@ public class ServerProtocolProcessor extends NetworkMessageListener
      * @param conn
      * @throws IOException
      */
-    public static void processServerInputStream(ConnectionHandler conn) throws IOException 
+    public static void processServerInputStream(ConnectionHandler conn) throws IOException, ParseException 
     {
         ProtocolParameters pp = parseInputStream(conn);
         
@@ -73,7 +74,7 @@ public class ServerProtocolProcessor extends NetworkMessageListener
      * @return
      * @throws IOException
      */
-    public static boolean processInitialConnection(ServerConnectionHandler conn) throws IOException 
+    public static boolean processInitialConnection(ServerConnectionHandler conn) throws IOException, ParseException 
     {
         ProtocolParameters pp = parseInputStream(conn);
         
