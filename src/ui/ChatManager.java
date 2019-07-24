@@ -23,7 +23,7 @@ public class ChatManager
      * Loads locally saved messages to the ui
      * @param mm
      */
-    public static void buildChatViews(MainMenu mm) throws IOException 
+    public static void buildChatViews(MainMenu mm) throws Exception
     {
         mainMenu = mm;
         LocalChatStorage.loadMessages();

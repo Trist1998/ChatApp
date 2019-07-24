@@ -1,0 +1,12 @@
+{"Sender":"TestUser","Head":"MESSAGE","Action":"SAVED","DateSent":"2019.07.24 14:43:58 CAT","State":"-1","ChatName":"admin","Receiver":"admin","Text":"Hello","Id":"0"}
+END_PROTOCOL
+{"FilePath":"A:\\trist\\Documents\\SOLIDitech Work Experience Program Report.pdf","Head":"FILEMESSAGE","Action":"SAVED","ChatName":"admin","FileName":"SOLIDitech Work Experience Program Report.pdf","Receiver":"admin","Text":"","Sender":"TestUser","DateSent":"2019.07.24 14:44:48 CAT","State":"-1","FileId":"0","Id":"1","FileSize":"431123"}
+END_PROTOCOL
+{"FilePath":"A:\\trist\\Documents\\PS G12 P1 Sep 2015 FINAL CORRECTED.pdf","Head":"FILEMESSAGE","Action":"SAVED","ChatName":"admin","FileName":"PS G12 P1 Sep 2015 FINAL CORRECTED.pdf","Receiver":"admin","Text":"","Sender":"TestUser","DateSent":"2019.07.24 14:45:03 CAT","State":"-1","FileId":"0","Id":"2","FileSize":"1192427"}
+END_PROTOCOL
+{"Sender":"TestUser","Head":"MESSAGE","Action":"SAVED","DateSent":"2019.07.24 14:45:15 CAT","State":"-1","ChatName":"admin","Receiver":"admin","Text":"hi","Id":"4"}
+END_PROTOCOL
+{"Sender":"admin","Head":"MESSAGE","Action":"SAVED","DateSent":"2019.07.24 14:45:27 CAT","State":"-1","ChatName":"admin","Receiver":"TestUser","Text":"Hi","Id":"2"}
+END_PROTOCOL
+{"Sender":"admin","Head":"MESSAGE","Action":"SAVED","DateSent":"2019.07.24 14:48:09 CAT","State":"-1","ChatName":"admin","Receiver":"TestUser","Text":"Hi","Id":"3"}
+END_PROTOCOL

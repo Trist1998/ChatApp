@@ -48,7 +48,7 @@ public class ServerConnectionHandler extends ConnectionHandler
             ConnectionSwitch.removeConnection(this);
             close();
         } 
-        catch (IOException ex) 
+        catch (Exception ex)
         {
             Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         } 

@@ -138,7 +138,6 @@ public class MessageNetworkManager extends NetworkMessageHandler
     /**
      * Sends message from server to receiver client.
      *
-     * @param head
      * @param pp
      * @return
      * @throws IOException

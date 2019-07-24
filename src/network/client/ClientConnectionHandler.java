@@ -63,7 +63,7 @@ public class ClientConnectionHandler extends ConnectionHandler
             }
             ClientNetworkManager.connectionFailed();
         } 
-        catch (IOException ex) 
+        catch (Exception ex)
         {
             Logger.getLogger(ClientConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

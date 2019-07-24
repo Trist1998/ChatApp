@@ -243,7 +243,7 @@ public class MainMenu extends javax.swing.JFrame
         {
             ChatManager.buildChatViews(this);                   
         } 
-        catch (IOException ex)
+        catch (Exception ex)
         {
             Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
