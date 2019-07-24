@@ -37,10 +37,12 @@ public class ProtocolParameters
 
     /**
      * Parameterized Constructor for ProtocolParameters class, used to build ProtocolParameters.
-     * @param reader
+     * @param in
      */
     public ProtocolParameters(String in) throws ParseException 
     {
+        in.replaceAll(NetworkMessageListener.PROTOCOL_END, "");
+        in.replaceAll("END__", "END_");
         theObject = (JSONObject) new JSONParser().parse(in);
     }
 
@@ -105,13 +107,11 @@ public class ProtocolParameters
     
     /**
      * Converts Protocol Parameters to a single string.
-     * @param head
-     * @param parameters
      * @return 
      */
     public String buildProtocolString() 
     {
-        String output = toString() + "\n";
+        String output = toString().replaceAll("END_", "END__") + "\n";
         output += NetworkMessageHandler.PROTOCOL_END + "\n";
         return output;
     }

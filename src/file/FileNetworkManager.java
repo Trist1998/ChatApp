@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.NetworkMessage;
 import network.ConnectionHandler;
+import network.SubConnectionHandler;
 import network.client.ClientNetworkManager;
 import network.protocol.MessageNetworkManager;
 import network.protocol.NetworkMessageHandler;
@@ -39,15 +40,14 @@ public class FileNetworkManager extends NetworkMessageHandler
         System.out.println("JSON " + pp.toString());
         String action = pp.getParameter(NetworkMessageHandler.PROTOCOL_ACTION);
         if(action.equals(ACTION_START_UPLOAD))
-            startServerFileTranser(pp, (ServerConnectionHandler) conn, false);
+            startServerFileTransfer(pp, (ServerConnectionHandler) conn, false);
         else if(action.equals(ACTION_START_DOWNLOAD))
-            startServerFileTranser(pp, (ServerConnectionHandler) conn, true);
+            startServerFileTransfer(pp, (ServerConnectionHandler) conn, true);
         else if(action.equals(ACTION_DOWNLOAD_PENDING))
             clientProcessPending(pp);
-        else if(action.equals(ACTION_CLOSE))
-            processClose(conn);
         else if(action.equals(MessageNetworkManager.ACTION_RESPONSE))
             MessageNetworkManager.processResponse(pp);
+        System.out.println("NONE OF THE ABOVE");
                     
         return true;
     }
@@ -65,7 +65,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         pp.add("FileSize", String.valueOf(message.getFileSize()));
         send(pp, ClientNetworkManager.getConnection());
         
-        startFileTranser(file, true, fp);
+        startFileTransfer(file, true, fp);
     }
     
     public static void downloadFile(File file, int fileId, FileMessagePanel fp)
@@ -73,7 +73,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_START_DOWNLOAD);
         pp.add("FileId", String.valueOf(fileId));
         send(pp, ClientNetworkManager.getConnection());       
-        startFileTranser(file, false, fp);
+        startFileTransfer(file, false, fp);
     }
         
     /**
@@ -82,7 +82,7 @@ public class FileNetworkManager extends NetworkMessageHandler
      * @param sending 
      * @param fp 
      */
-    public static void startFileTranser(File file, boolean sending, FileMessagePanel fp)
+    public static void startFileTransfer(File file, boolean sending, FileMessagePanel fp)
     {
         
         ServerSocket myService; // Declare Server's Main socket
@@ -92,6 +92,7 @@ public class FileNetworkManager extends NetworkMessageHandler
         {
             myService = new ServerSocket(FILE_TRANSER_PORT); // Port number must be > 1023
             ClientFileTransferConnectionHandler tCon = new ClientFileTransferConnectionHandler(myService, file, sending, fp, ClientNetworkManager.getConnection());
+            ClientNetworkManager.getConnection().addSubConnection(tCon);
             new Thread(tCon).start();
             myService.close();
         } 
@@ -111,17 +112,20 @@ public class FileNetworkManager extends NetworkMessageHandler
      * @param conn
      * @param sending 
      */
-    private static void startServerFileTranser(ProtocolParameters pp, ServerConnectionHandler conn, boolean sending)
+    private static void startServerFileTransfer(ProtocolParameters pp, ServerConnectionHandler conn, boolean sending)
     {
         FileMessage message = new FileMessage(pp);
         try
         {
             String ipAddress = conn.getSocket().getRemoteSocketAddress().toString();
             Socket fileTransferSocket = new Socket(ipAddress.substring(1,ipAddress.indexOf(":")), FILE_TRANSER_PORT);
+            ServerFileTransferConnectionHandler sCon = null;
             if(sending)
-                new Thread(new ServerFileTransferConnectionHandler(fileTransferSocket, message.getFileId(), conn)).start();
+                sCon = new ServerFileTransferConnectionHandler(fileTransferSocket, message.getFileId(), conn);
             else
-                new Thread(new ServerFileTransferConnectionHandler(fileTransferSocket, message, false, conn)).start();
+                sCon = new ServerFileTransferConnectionHandler(fileTransferSocket, message, false, conn);
+            conn.addSubConnection(sCon);
+            new Thread(sCon).start();
         } 
         catch (IOException ex)
         {
@@ -133,26 +137,10 @@ public class FileNetworkManager extends NetworkMessageHandler
      * 
      * @param conn 
      */
-    public static void sendClose(ConnectionHandler conn)
+    public static void sendClose(SubConnectionHandler conn)
     {
         ProtocolParameters pp = new ProtocolParameters(HEAD, ACTION_CLOSE);
         send(pp, conn);
-    }
-    
-    /**
-     * 
-     * @param conn 
-     */
-    public static void processClose(ConnectionHandler conn)
-    {
-        try
-        {
-            conn.close();
-        } 
-        catch (IOException ex)
-        {
-            Logger.getLogger(FileNetworkManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     /**

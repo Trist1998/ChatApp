@@ -165,6 +165,7 @@ public class MessageNetworkManager extends NetworkMessageHandler
                 NetworkMessage message = new NetworkMessage(rs);
                 if (conn.send(message) == ServerConnectionHandler.MESSAGE_DELIVERED)
                 {
+                    System.out.println(message.getText() + " GOt text");
                     ProtocolParameters pp = new ProtocolParameters(message.getText());
                     sendResponse(ServerConnectionHandler.MESSAGE_DELIVERED, pp, conn);
                     rs.deleteRow();

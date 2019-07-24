@@ -142,7 +142,7 @@ public class ClientFileTransferConnectionHandler extends SubConnectionHandler
         {
             Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        FileNetworkManager.sendClose(ClientNetworkManager.getConnection());
+        FileNetworkManager.sendClose(this);
     }
 
     private void confirmComplete()

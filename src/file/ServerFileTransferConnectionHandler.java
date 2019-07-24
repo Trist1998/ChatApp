@@ -14,7 +14,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.SubConnectionHandler;
+import network.protocol.NetworkMessageListener;
+import network.protocol.ProtocolParameters;
 import network.server.ServerConnectionHandler;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -68,9 +71,15 @@ public class ServerFileTransferConnectionHandler extends SubConnectionHandler
             {
                 out.write(bytes, 0, count);
             }
-            out.close();
-            in.close();
-            getSocket().close();
+            try
+            {
+                ProtocolParameters pp = NetworkMessageListener.parseInputStream(this);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            close();
             System.out.println("Done");
         }
         catch (IOException ex)
@@ -106,25 +115,11 @@ public class ServerFileTransferConnectionHandler extends SubConnectionHandler
             message.setFileId(fileId);
             FileNetworkManager.sendResponseAndPendingFile(message, (ServerConnectionHandler)getParentConnection());
             System.out.println("Done");
-            out.close();
-            in.close();
-            FileNetworkManager.sendClose((ServerConnectionHandler)getParentConnection());
-            TimeUnit.SECONDS.sleep(10);
+            FileNetworkManager.sendClose(this);
+            Thread.sleep(10);
             close();
         }
-        catch (FileNotFoundException ex)
-        {
-            Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(ClientFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(ServerFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (InterruptedException ex)
+        catch (Exception ex)
         {
             Logger.getLogger(ServerFileTransferConnectionHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

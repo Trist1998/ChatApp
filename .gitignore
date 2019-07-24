@@ -41,4 +41,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-/users/admin.msgs
+/users/
+/serverfiles/
+*.msgs

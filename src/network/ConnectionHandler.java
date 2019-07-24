@@ -43,6 +43,7 @@ public abstract class ConnectionHandler implements Runnable
         outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         closed = false;
         idCounter = new AtomicInteger(0);
+        subConnections = new HashMap<>();
     }
 
     /**
