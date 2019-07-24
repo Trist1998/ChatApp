@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.*;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.NetworkMessage;
@@ -17,16 +19,20 @@ import network.ConnectionHandler;
  */
 public class ServerConnectionHandler extends ConnectionHandler 
 {
-
+    private AtomicInteger idCounter;
+    private HashMap<Integer,ConnectionHandler> activeSubConnections;
     /**
      * Constructor.
      * @param ss
      * @throws IOException
      * @throws SQLException
      */
+
     public ServerConnectionHandler(ServerSocket ss) throws IOException, SQLException 
     {
         super(ss.accept());
+        idCounter = new AtomicInteger(0);
+        activeSubConnections = new HashMap<>();
     }
 
     /**
@@ -91,5 +97,19 @@ public class ServerConnectionHandler extends ConnectionHandler
             return MESSAGE_LOST;
         }      
     }
-
+    public void addSubConnection(int id, ConnectionHandler conn)
+    {
+        activeSubConnections.put(id, conn);
+    }
+    
+    
+    public void removeSubConnection(int id)
+    {
+        activeSubConnections.remove(id);
+    }
+    
+    public int getNextSubId()
+    {
+        return idCounter.getAndIncrement();             
+    }
 }
